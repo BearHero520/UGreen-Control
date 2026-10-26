@@ -1,0 +1,10 @@
+node_modules/
+__pycache__/
+*.py[cod]
+.env
+.env.*
+!.env.example
+/dist/
+/.work*/
+*.trace
+!/app/server/bin/ugreen_leds_cli

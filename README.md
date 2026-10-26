@@ -1,5 +1,7 @@
 # UGREEN工具箱
 
+Linux / TrueNAS 版在本仓库 `linux-app` 分支的 [linux/](linux/README.md) 中开发，目前处于迁移阶段。
+
 适用于飞牛 fnOS 的绿联 NAS 灯光、硬件监控与 BIOS 管理应用。
 
 当前版本：**3.0.0**

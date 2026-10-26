@@ -1,0 +1,8 @@
+{
+  "repository": "https://github.com/BearHero520/LLLED_FPK",
+  "branch": "almighty",
+  "commit": "c55300b58913e5e0c5b987cbf35a57861de37627",
+  "application_version": "3.0.0",
+  "hardware_release": "almighty-preview-20261026-923fdaa",
+  "status": "migration-scaffold"
+}
