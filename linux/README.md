@@ -45,8 +45,10 @@ cd ..
 python -m unittest discover -s tests -p test_almighty_import.py
 ```
 
-前端构建不表示服务已可部署。需要重新导入硬件载荷时运行
-`python scripts/build_ugreenctl.py`；私有上游需要已认证的 `gh` 读取权限。
+前端构建不表示服务已可部署。当前固定使用上游 Almighty `2026-10-27-n76-direct` 分支构建（源码 `aff7991`，资产 `7d36cc7`）。
+N76 直控尚未通过本应用的兼容 LED 入口开放，现有驱动依赖仍保留。
+需要重新导入硬件载荷时运行
+`python scripts/build_ugreenctl.py`；当前公开资产按提交下载并验证 SHA256；旧私有 Release 才需要 `gh` 读取权限。
 
 ## 来源与许可证
 

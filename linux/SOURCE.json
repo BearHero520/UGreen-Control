@@ -3,6 +3,8 @@
   "branch": "almighty",
   "commit": "c55300b58913e5e0c5b987cbf35a57861de37627",
   "application_version": "3.0.0",
-  "hardware_release": "almighty-preview-20261026-923fdaa",
-  "status": "migration-scaffold"
+  "hardware_release": "almighty-20261027-n76-direct",
+  "status": "migration-scaffold",
+  "hardware_source_commit": "aff7991ee58709ad34b5afbc2787f0d21300368d",
+  "hardware_artifact_commit": "7d36cc702445ce5439cecec207e052914a349f23"
 }
