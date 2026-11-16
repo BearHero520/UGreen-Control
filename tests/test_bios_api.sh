@@ -419,7 +419,10 @@ grep -Fq ' <--force> <--apply> <power> <rtc-wake> <clear>' "$CALLS" || fail "EM2
 
 export UGREEN_PRODUCT_VERSION="DXP2800 V1.2 251215"
 json=$(request /bios/status)
-assert_contains "$json" '"supported":false'
+assert_contains "$json" '"available":false'
+assert_contains "$json" '"startup_available":false'
+assert_contains "$json" '"wol_supported":true'
+assert_contains "$json" '"rtc_supported":true'
 unset UGREEN_PRODUCT_VERSION
 
 fi
