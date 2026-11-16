@@ -17,6 +17,9 @@ bios_load_wake_profiles() {
     local product id name details rest wol_records rtc_records complete=true
     product=$(hardware_detected_product_name) || return 1
     [[ -n "$product" ]] || return 1
+    if [[ "$product" == 'Default string' && "$(bios_detected_profile)" == idx6012 ]]; then
+        product='iDX6011/iDX6012 OEM V3.0'
+    fi
     [[ "$BIOS_WAKE_CACHE_KEY" == "$product" ]] && return 0
     BIOS_WOL_SUPPORTED=false; BIOS_RTC_SUPPORTED=false; BIOS_WOL_AUTOMATIC=false; BIOS_WAKE_MODEL=""
     # Do not cache failures: the backend may be temporarily unavailable.
@@ -42,8 +45,16 @@ bios_wol_interface_valid() {
 }
 
 bios_selected_wol_interface() {
-    local selection product
+    local selection product identity saved_identity policy interface
     declare -F settings_get >/dev/null && [[ -n "${SETTINGS_FILE:-}" ]] || return 0
+    selection=$(settings_get "$SETTINGS_FILE" bios wol_selection '')
+    if [[ -n "$selection" ]] && identity=$(bios_saved_identity); then
+        IFS='|' read -r saved_identity policy interface <<< "$selection"
+        if [[ "$saved_identity" == "$identity" ]] && bios_wol_interface_valid "$interface"; then
+            printf '%s' "$interface"
+            return 0
+        fi
+    fi
     selection=$(settings_get "$SETTINGS_FILE" bios wol_interface_selection '')
     product=$(hardware_detected_product_name)
     [[ "$selection" == "$product|"* ]] || return 0
@@ -56,16 +67,6 @@ bios_wol_cli() {
     bios_wol_interface_valid "$interface" || { echo '网卡名称无效' >&2; return 1; }
     if [[ -n "$interface" ]]; then bios_wake_cli "$@" --interface "$interface"
     else bios_wake_cli "$@"; fi
-}
-
-bios_set_wol_saved() {
-    local policy="$1" interface="$2" product
-    bios_wol_interface_valid "$interface" || { BIOS_LAST_ERROR='网卡名称无效'; return 1; }
-    bios_set_wol "$policy" "$interface" || return 1
-    product=$(hardware_detected_product_name) || return 1
-    settings_set "$SETTINGS_FILE" bios wol_interface_selection "$product|$interface" || {
-        BIOS_LAST_ERROR='WOL 已写入，但网卡选择保存失败，请重新保存'; return 1;
-    }
 }
 
 bios_wol_query_json() {

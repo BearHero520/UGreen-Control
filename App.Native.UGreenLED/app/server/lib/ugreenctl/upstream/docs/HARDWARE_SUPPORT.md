@@ -27,6 +27,13 @@ Supported and explicitly guarded reverse-engineered plugins may provide write
 commands. A placeholder must never map plausible-looking registers or reuse a
 controller map from another model.
 
+## DXP4800 GT
+
+For the distinct AMD DXP4800 GT, see [the firmware audit](DXP4800GT_HARDWARE_AUDIT.zh-CN.md).
+Its stock IT55xx EC fan and AC-recovery paths are not covered by the IT8613 plugins;
+an experimental GT fan/power plugin follows the stock EC protocol. Stock AC-policy reads are cached and
+the accepted `last` command is a no-op, so neither is sufficient for verified writes.
+
 ## DXP4800 Plus / DXP4800 Pro
 
 The dxp4800plus plugin supports DMI product names DXP4800 Plus and DXP4800
@@ -231,3 +238,26 @@ The independent register evidence is from UGOS 1.20.0.0142;
 All existing owner, locking, chip identity, PWM 40..255 and readback guards apply.
 Other 8800 variants are not aliases. Physical validation remains pending.
 See [DXP8800 Pro evidence and audit](DXP8800_PRO_AUDIT.zh-CN.md).
+
+DXP4800 GT follow-up: an experimental EC plugin now exists (`ec/it55_dxp4800gt.c`).
+It supports manual PWM, stock-4800gt eight-point software control, and startup on/off with unknown persistent readback.
+The user authorized a GT-only exact-DMI plus stable-EC-version identity exception on 2026-11-14; the numeric chip ID remains unknown. Mock and QEMU tests are not physical validation. See the audit follow-up section.
+
+## iDX6012 (experimental, qualified OEM board)
+
+The `idx6012` plugin matches the documented UGREEN OEM board revision through
+`core/identity.c`; a generic `Default string` never authorizes hardware access.
+The ITE5571 EC backend supports two paired system fans (PWM 40..198), RPM,
+manual readback and return to EC intelligent mode. The software watchdog supports
+custom curves and an explicitly labeled DXP6800 Pro compatibility preset capped
+at 198; the latter is not a recovered iDX6012 factory curve.
+
+AC startup on/off uses the vendor MMIO register with exact board/BIOS and Intel
+8086:7e02 checks, owner checks, a lock, readback and rollback. Restore-last-state
+is unsupported. Independent WOL profiles use two physical PCI Ethernet ports;
+RTC is not enabled. Register/driver readback was tested on the authorized device;
+actual power-loss recovery, shutdown WOL and long-term thermal behavior remain
+unverified. See [iDX6012 evidence](IDX6012_EC_INTAKE.zh-CN.md).
+
+Application UI, telemetry and application setting persistence remain in LLLED_FPK.
+The independent LED backend is unchanged by this integration.

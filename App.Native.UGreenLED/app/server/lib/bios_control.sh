@@ -81,6 +81,7 @@ bios_detected_profile() {
         "DX4600"|"DX4600+"|"DX4600 PRO") echo "dx4600" ;;
         "DXP480T PLUS"|"UGREEN DXP480T PLUS") echo "dxp480t_plus" ;;
         "DXP4800") echo "dxp4800" ;;
+        "DXP4800 GT") echo "dxp4800gt" ;;
         "DXP4800S") echo "dxp4800s" ;;
         "DXP4800 PLUS"|"UGREEN DXP4800 PLUS") echo "dxp4800_plus" ;;
         "DXP4800 PRO"|"UGREEN DXP4800 PRO") echo "dxp4800_pro" ;;
@@ -88,13 +89,21 @@ bios_detected_profile() {
         "DXP6800 PLUS") echo "dxp6800plus" ;;
         "DXP6800 PRO") echo "dxp6800pro" ;;
         "DXP8800 PRO") echo "dxp8800pro" ;;
-        *) echo "unknown" ;;
+        "DEFAULT STRING"|"IDX6012")
+            # Resolve the compound OEM identity in upstream; no local register/DMI bypass.
+            local binary resolved directory
+            binary=$(bios_ugreenctl_binary) || { echo unknown; return; }
+            directory="${BIOS_UGREENCTL_PLUGIN_DIR:-${SERVER_DIR:-}/lib/ugreenctl/models}"
+            resolved=$("$binary" --plugin-dir "$directory" model 2>/dev/null) || resolved=unknown
+            [[ "$resolved" == idx6012 ]] && echo idx6012 || echo unknown
+            ;;
+        *) echo unknown ;;
     esac
 }
 
 bios_supported_model() {
     case "$(bios_detected_profile)" in
-        dxp2800|dx4600|dxp4800|dxp4800_plus|dxp4800_pro|dxp4800s|dxp480t_plus|dxp6800|dxp6800pro|dxp6800plus|dxp8800pro) return 0 ;;
+        idx6012|dxp2800|dx4600|dxp4800|dxp4800_plus|dxp4800_pro|dxp4800s|dxp480t_plus|dxp6800|dxp6800pro|dxp6800plus|dxp8800pro|dxp4800gt) return 0 ;;
         *) return 1 ;;
     esac
 }
@@ -103,8 +112,15 @@ bios_wol_supported_model() {
     bios_load_wake_profiles && "$BIOS_WOL_SUPPORTED"
 }
 
+bios_wol_requires_interface() {
+    bios_load_wake_profiles && "$BIOS_WOL_SUPPORTED" && ! "$BIOS_WOL_AUTOMATIC"
+}
+
+
+
 bios_direct_fan_fallback_active() {
     local test_path="${BIOS_TEST_IT87_MODULE_PATH:-}"
+    case "$(bios_detected_profile)" in dxp4800gt|idx6012) return 1 ;; esac
 
     if [[ -n "$test_path" ]]; then
         [[ ! -e "$test_path" ]]
@@ -114,14 +130,12 @@ bios_direct_fan_fallback_active() {
 }
 
 bios_write_confirmation_required() {
-    bios_wol_supported_model && return 0
-    bios_rtc_supported_model && return 0
     case "$(bios_detected_profile)" in
         # These models retain firmware-reversed writes requiring acknowledgement.
-        dxp2800) return 0 ;;
-        dx4600|dxp4800|dxp4800_plus|dxp4800_pro|dxp4800s|dxp480t_plus|dxp6800|dxp6800pro|dxp6800plus|dxp8800pro) return 0 ;;
+        dxp2800|idx6012) return 0 ;;
+        dx4600|dxp4800|dxp4800_plus|dxp4800_pro|dxp4800s|dxp480t_plus|dxp6800|dxp6800pro|dxp6800plus|dxp8800pro|dxp4800gt) return 0 ;;
     esac
-    bios_direct_fan_fallback_active
+    bios_wol_supported_model || bios_rtc_supported_model || bios_direct_fan_fallback_active
 }
 
 bios_ugreenctl_binary() {
@@ -156,6 +170,8 @@ bios_ugreenctl_plugin_dir() {
             if [[ "$(bios_detected_profile)" == "dxp6800" && ! -r "$candidate/dxp6800.so" ]]; then continue; fi
             if [[ "$(bios_detected_profile)" == "dxp6800plus" && ! -r "$candidate/dxp6800plus.so" ]]; then continue; fi
             if [[ "$(bios_detected_profile)" == "dxp8800pro" && ! -r "$candidate/dxp8800pro.so" ]]; then continue; fi
+            if [[ "$(bios_detected_profile)" == "dxp4800gt" && ! -r "$candidate/dxp4800gt.so" ]]; then continue; fi
+            if [[ "$(bios_detected_profile)" == "idx6012" && ! -r "$candidate/idx6012.so" ]]; then continue; fi
             if [[ "$(bios_detected_profile)" == "dxp2800" && ! -r "$candidate/dxp2800.so" ]]; then continue; fi
             printf '%s\n' "$candidate"
             return 0
@@ -184,6 +200,8 @@ bios_fan_curve_stock_profile_for_model() {
         dxp6800pro) echo "stock-6800pro" ;;
         dxp6800plus) echo "stock-6800plus" ;;
         dxp8800pro) echo "stock-8800pro" ;;
+        idx6012) echo "stock-idx6012-compat" ;;
+        dxp4800gt) echo "stock-4800gt" ;;
         *) return 1 ;;
     esac
 }
@@ -234,6 +252,15 @@ bios_fan_curve_stock_json() {
         printf '{"available":false,"profile":"%s"}' "$(json_str "$profile")"
         return 0
     }
+    if [[ "$profile" == "stock-4800gt" ]]; then
+        local record="$(dirname "$document")/../models/dxp4800gt-fan-curve.json"
+        if [[ -r "$record" && ! -L "$record" ]]; then
+            tr -d '\r\n' < "$record"
+        else
+            printf '{"available":false,"profile":"stock-4800gt"}'
+        fi
+        return 0
+    fi
     row=$(awk -F'|' -v profile="\`$profile\`" '$0 ~ profile { print; exit }' "$document")
     [[ -n "$row" ]] || {
         printf '{"available":false,"profile":"%s"}' "$(json_str "$profile")"
@@ -254,7 +281,7 @@ bios_fan_curve_running() {
     pid_file=$(bios_fan_curve_pid_path)
     [[ -f "$pid_file" ]] || return 1
     pid=$(cat "$pid_file" 2>/dev/null || true)
-    [[ "$pid" =~ ^[0-9]+$ ]] && kill -0 "$pid" 2>/dev/null
+    [[ "$pid" =~ ^[0-9]+$ ]] && bios_process_alive "$pid"
 }
 
 bios_fan_curve_csv_thresholds_valid() {
@@ -270,11 +297,11 @@ bios_fan_curve_csv_thresholds_valid() {
 }
 
 bios_fan_curve_csv_pwm_valid() {
-    local value="$1" minimum="$2" part previous=-1 count=0
+    local value="$1" minimum="$2" maximum="${3:-255}" part previous=-1 count=0
     IFS=',' read -r -a parts <<< "$value"
     [[ ${#parts[@]} -eq 4 ]] || return 1
     for part in "${parts[@]}"; do
-        [[ "$part" =~ ^[0-9]+$ ]] && (( 10#$part >= 10#$minimum && 10#$part <= 255 && 10#$part >= previous )) || return 1
+        [[ "$part" =~ ^[0-9]+$ ]] && (( 10#$part >= 10#$minimum && 10#$part <= maximum && 10#$part >= previous )) || return 1
         previous=$((10#$part))
         ((count += 1))
     done
@@ -305,7 +332,7 @@ bios_fan_curve_status_json() {
     cpu_curve=$(sed -n 's/^cpu=//p' "$config" 2>/dev/null | tail -n 1); cpu_curve="${cpu_curve:-50,55,75,80,90}"
     hdd_curve=$(sed -n 's/^hdd=//p' "$config" 2>/dev/null | tail -n 1); hdd_curve="${hdd_curve:-40,45,50,55,70}"
     ssd_curve=$(sed -n 's/^ssd=//p' "$config" 2>/dev/null | tail -n 1); ssd_curve="${ssd_curve:-45,50,60,65,70}"
-    pwm_curve=$(sed -n 's/^pwm=//p' "$config" 2>/dev/null | tail -n 1); pwm_curve="${pwm_curve:-64,128,204,255}"
+    pwm_curve=$(sed -n 's/^pwm=//p' "$config" 2>/dev/null | tail -n 1); pwm_curve="${pwm_curve:-$(if [[ "$(bios_detected_profile)" == idx6012 ]]; then echo 64,128,170,198; else echo 64,128,204,255; fi)}"
     timestamp=$(bios_fan_curve_read_state timestamp 0); model=$(bios_fan_curve_read_state model unknown)
     status=$(bios_fan_curve_read_state status stopped); cpu=$(bios_fan_curve_read_state cpu_celsius -1)
     cpu_peak=$(bios_fan_curve_read_state cpu_peak_celsius -1)
@@ -328,38 +355,64 @@ bios_fan_curve_status_json() {
         "$(json_str "$model")" "$(json_str "$status")" "$cpu" "$cpu_peak" "$hdd" "$ssd" "$desired" "$applied" "$desired_cpu" "$desired_system" "$applied_cpu" "$applied_system" "$(json_str "$detail")"
 }
 
+bios_process_alive() {
+    local pid="$1" state
+    kill -0 "$pid" 2>/dev/null || return 1
+    if [[ -r "/proc/$pid/stat" ]]; then
+        state=$(cat "/proc/$pid/stat" 2>/dev/null) || return 1
+        state="${state##*) }"
+        [[ "$state" != Z* && "$state" != X* ]] || return 1
+    fi
+}
+
 bios_fan_curve_stop() {
-    local preserve_enabled="${1:-false}" pid_file pid
+    local preserve_enabled="${1:-false}" pid_file pid attempt
     pid_file=$(bios_fan_curve_pid_path)
     if [[ -f "$pid_file" ]]; then
         pid=$(cat "$pid_file" 2>/dev/null || true)
-        if [[ "$pid" =~ ^[0-9]+$ ]] && kill -0 "$pid" 2>/dev/null; then
+        if [[ "$pid" =~ ^[0-9]+$ ]] && bios_process_alive "$pid"; then
             kill -TERM "$pid" 2>/dev/null || true
+            for ((attempt=0; attempt<100; attempt++)); do
+                bios_process_alive "$pid" || break
+                sleep 0.05
+            done
+            if bios_process_alive "$pid"; then
+                BIOS_LAST_ERROR="自动温控仍在退出，未切换风扇模式，请稍后重试"
+                return 1
+            fi
         fi
         rm -f "$pid_file"
     fi
-    [[ "$preserve_enabled" == "true" ]] || settings_set "$SETTINGS_FILE" fan_curve enabled false
+    [[ "$preserve_enabled" == "true" ]] || settings_set "$SETTINGS_FILE" fan_curve enabled false || return 1
     _bios_log_info "bios.fan_curve_stopped" "温控曲线守护进程已停止"
 }
 
 bios_fan_curve_start() {
     local profile="$1" interval="$2" downshift="$3" minimum="$4" cpu="$5" hdd="$6" ssd="$7" pwm="$8" require_storage="$9" confirmed="${10:-false}"
-    local config state pid log binary daemon plugins model stock_profile allow_unvalidated=false
+    local config state pid log binary daemon plugins model stock_profile allow_unvalidated=false failsafe=255
     local -a command
 
     BIOS_LAST_ERROR=""
     bios_supported_model || { BIOS_LAST_ERROR="当前机型不支持受保护的风扇温控曲线"; return 1; }
     model=$(bios_detected_profile)
+    if [[ "$model" == idx6012 ]]; then
+        failsafe=198
+        [[ "$profile" == stock-idx6012-compat ]] && minimum=64
+    fi
+    if [[ "$model" == "dxp4800gt" ]]; then
+        [[ "$profile" == "stock-4800gt" ]] || { BIOS_LAST_ERROR="GT 自动温控仅支持官方八点曲线"; return 1; }
+        minimum=40; failsafe=198
+    fi
     stock_profile=$(bios_fan_curve_stock_profile_for_model) || stock_profile=""
     [[ "$profile" == "custom" || ( -n "$stock_profile" && "$profile" == "$stock_profile" ) ]] || {
         BIOS_LAST_ERROR="原厂兼容曲线必须与检测到的精确机型匹配"; return 1;
     }
     [[ "$interval" =~ ^[0-9]+$ ]] && (( 10#$interval >= 2 && 10#$interval <= 300 )) || { BIOS_LAST_ERROR="检测间隔必须为 2 到 300 秒"; return 1; }
     [[ "$downshift" =~ ^[0-9]+$ ]] && (( 10#$downshift <= 3600 )) || { BIOS_LAST_ERROR="降速延迟必须为 0 到 3600 秒"; return 1; }
-    [[ "$minimum" =~ ^[0-9]+$ ]] && (( 10#$minimum >= 40 && 10#$minimum <= 255 )) || { BIOS_LAST_ERROR="最低 PWM 必须在 40 到 255 之间"; return 1; }
+    [[ "$minimum" =~ ^[0-9]+$ ]] && (( 10#$minimum >= 40 && 10#$minimum <= failsafe )) || { BIOS_LAST_ERROR="最低 PWM 必须在 40 到 ${failsafe} 之间"; return 1; }
     [[ "$require_storage" =~ ^(true|false)$ ]] || { BIOS_LAST_ERROR="存储温度保护参数无效"; return 1; }
     if [[ "$profile" == "custom" ]]; then
-        bios_fan_curve_csv_thresholds_valid "$cpu" && bios_fan_curve_csv_thresholds_valid "$hdd" && bios_fan_curve_csv_thresholds_valid "$ssd" && bios_fan_curve_csv_pwm_valid "$pwm" "$minimum" || {
+        bios_fan_curve_csv_thresholds_valid "$cpu" && bios_fan_curve_csv_thresholds_valid "$hdd" && bios_fan_curve_csv_thresholds_valid "$ssd" && bios_fan_curve_csv_pwm_valid "$pwm" "$minimum" "$failsafe" || {
             BIOS_LAST_ERROR="曲线阈值或 PWM 档位无效"; return 1;
         }
     fi
@@ -372,14 +425,14 @@ bios_fan_curve_start() {
     plugins=$(bios_ugreenctl_plugin_dir) || { BIOS_LAST_ERROR="未找到内置机型插件"; return 1; }
     config=$(bios_fan_curve_config_path); state=$(bios_fan_curve_state_path); pid=$(bios_fan_curve_pid_path); log=$(bios_fan_curve_log_path)
     mkdir -p "$(dirname "$config")" "$(dirname "$state")" "$(dirname "$log")" || { BIOS_LAST_ERROR="无法创建温控运行目录"; return 1; }
-    bios_fan_curve_stop true
+    bios_fan_curve_stop true || return 1
     umask 077
     cat > "${config}.tmp" <<EOF
 profile=${profile}
 interval_seconds=${interval}
 downshift_delay_seconds=${downshift}
 minimum_pwm=${minimum}
-failsafe_pwm=255
+failsafe_pwm=${failsafe}
 require_storage_sensor=${require_storage}
 allow_unvalidated_writes=${allow_unvalidated}
 cpu=${cpu}
@@ -389,7 +442,7 @@ pwm=${pwm}
 EOF
     mv "${config}.tmp" "$config" || { BIOS_LAST_ERROR="无法保存温控曲线配置"; return 1; }
     command=("$daemon" --config "$config" --state "$state" --ugreenctl "$binary" --plugin-dir "$plugins")
-    nohup "${command[@]}" < /dev/null >> "$log" 2>&1 &
+    nohup "${command[@]}" 8>&- < /dev/null >> "$log" 2>&1 &
     echo $! > "$pid"
     sleep 0.05
     if ! bios_fan_curve_running; then
@@ -397,7 +450,8 @@ EOF
         settings_set "$SETTINGS_FILE" fan_curve enabled false
         return 1
     fi
-    settings_set "$SETTINGS_FILE" fan_curve enabled true
+    settings_set "$SETTINGS_FILE" bios fixed_selection "" || { BIOS_LAST_ERROR="无法清除旧固定转速配置"; bios_fan_curve_stop true; return 1; }
+    settings_set "$SETTINGS_FILE" fan_curve enabled true || { BIOS_LAST_ERROR="无法保存自动温控配置"; bios_fan_curve_stop true; return 1; }
     _bios_log_info "bios.fan_curve_started" "温控曲线守护进程已启动" \
         "model=$model" "profile=$profile" "interval=$interval" "downshift=$downshift" "minimum_pwm=$minimum" \
         "require_storage=$require_storage" "allow_unvalidated=$allow_unvalidated"
@@ -491,6 +545,7 @@ bios_read_cli_fans() {
     fi
 
     BIOS_CHIP_ID=$BIOS_IT8613_ID
+    case "$(bios_detected_profile)" in dxp4800gt|idx6012) BIOS_CHIP_ID="" ;; esac
     BIOS_REVISION=0
     while IFS= read -r line; do
         case "$line" in
@@ -567,9 +622,25 @@ bios_read_cli_startup() {
         "model=$(bios_detected_profile)" "policy=$BIOS_STARTUP_POLICY"
 }
 
+bios_wol_interfaces_json() {
+    local output name first=true
+    if ! bios_wol_supported_model; then printf '[]'; return; fi
+    output=$(bios_wake_cli network wol interfaces 2>/dev/null) || { printf '[]'; return; }
+    printf '['
+    while IFS= read -r name; do
+        [[ "$name" =~ ^[a-zA-Z0-9_.-]{1,15}$ && "$name" != . && "$name" != .. ]] || continue
+        $first || printf ','; first=false
+        printf '"%s"' "$(json_str "$name")"
+    done <<< "$output"
+    printf ']'
+}
+
 bios_read_cli_wol() {
     local output policy interface="${1-$(bios_selected_wol_interface)}"
-
+    if [[ -z "$interface" ]] && bios_wol_requires_interface; then
+        BIOS_WOL_ERROR="请选择用于网络唤醒的物理有线网卡"
+        return 1
+    fi
     if ! output=$(bios_wol_cli "$interface" network wol get 2>&1); then
         bios_set_error_from_output "$output" "读取网络唤醒状态失败"
         BIOS_WOL_ERROR="$BIOS_LAST_ERROR"
@@ -790,6 +861,7 @@ bios_read_status() {
     BIOS_MODEL=$(bios_detected_profile)
     BIOS_EXPERIMENTAL=false
     BIOS_MIN_PWM=40
+    BIOS_MAX_PWM=255
     BIOS_FAN_WRITE_TARGET="sys"
     BIOS_CHIP_ID=""
     BIOS_REVISION=0
@@ -829,7 +901,21 @@ bios_read_status() {
         return 0
     fi
     BIOS_SUPPORTED=true
-    if ! "$fan_supported"; then BIOS_MODEL="$BIOS_WAKE_MODEL"; BIOS_CPU_FAN_PRESENT=false; BIOS_EXPERIMENTAL=true; fi
+    if ! "$fan_supported"; then
+        BIOS_MODEL="$BIOS_WAKE_MODEL"
+        BIOS_CPU_FAN_PRESENT=false
+        BIOS_EXPERIMENTAL=true
+    fi
+    if [[ "$BIOS_MODEL" == "idx6012" ]]; then
+        BIOS_MAX_PWM=198
+        BIOS_EXPERIMENTAL=true
+        BIOS_CPU_FAN_PRESENT=false
+        BIOS_FAN_MODE_WRITABLE=true
+    fi
+    if [[ "$BIOS_MODEL" == "dxp4800gt" ]]; then
+        BIOS_MAX_PWM=198
+        BIOS_EXPERIMENTAL=true
+    fi
     if [[ "$BIOS_MODEL" == "dxp480t_plus" ]]; then
         BIOS_FAN_WRITE_TARGET="all"
     elif [[ "$BIOS_MODEL" == "dxp2800" || "$BIOS_MODEL" == "dx4600" || "$BIOS_MODEL" == "dxp4800" || "$BIOS_MODEL" == "dxp4800s" ]]; then
@@ -847,7 +933,9 @@ bios_read_status() {
         BIOS_WRITE_CONFIRMATION_REQUIRED=true
     fi
     BIOS_BACKEND=$(bios_backend)
-    if bios_ugreenctl_binary >/dev/null && { "$BIOS_WOL_SUPPORTED" || "$BIOS_RTC_SUPPORTED"; }; then BIOS_BACKEND=ugreenctl; fi
+    if bios_ugreenctl_binary >/dev/null && { "$BIOS_WOL_SUPPORTED" || "$BIOS_RTC_SUPPORTED"; }; then
+        BIOS_BACKEND=ugreenctl
+    fi
     if [[ "$BIOS_BACKEND" != "ugreenctl" ]]; then
         BIOS_LAST_ERROR="内置 UGREEN-NAS-Hardware 控制程序或机型插件不可用"
         if declare -F ugreen_log_rate_limited >/dev/null; then
@@ -882,9 +970,17 @@ bios_set_fan() {
     # ugreenctl still requires exact DMI, chip-ID and owner checks.
     local -a args=(--force --apply)
     BIOS_LAST_ERROR=""
-    bios_supported_model || { BIOS_LAST_ERROR="BIOS 控制支持 DXP2800 EM26、DX4600 / DX4600+ / DX4600 Pro、DXP4800、DXP4800 Plus / Pro、DXP4800S、DXP480T Plus 与 DXP6800 / Plus / Pro、DXP8800 Pro"; return 1; }
+    bios_supported_model || { BIOS_LAST_ERROR="BIOS 控制支持 DXP2800 EM26、DX4600 / DX4600+ / DX4600 Pro、DXP4800、DXP4800 Plus / Pro、DXP4800S、DXP480T Plus 与 DXP6800 / Plus / Pro、DXP8800 Pro、DXP4800 GT"; return 1; }
     model=$(bios_detected_profile)
     case "$model" in
+        idx6012)
+            [[ "$pwm" =~ ^[0-9]+$ ]] && (( pwm >= 40 && pwm <= 198 )) || { BIOS_LAST_ERROR="iDX6012 PWM 必须在 40 到 198 之间"; return 1; }
+            [[ "$channel" == sys ]] || { BIOS_LAST_ERROR="iDX6012 仅支持两路系统风扇同步调速"; return 1; }
+            ;;
+        dxp4800gt)
+            [[ "$pwm" =~ ^[0-9]+$ ]] && (( pwm >= 40 && pwm <= 198 )) || { BIOS_LAST_ERROR="DXP4800 GT PWM 必须在 40 到 198 之间"; return 1; }
+            [[ "$channel" == "cpu" || "$channel" == "sys" ]] || { BIOS_LAST_ERROR="DXP4800 GT 仅支持 CPU 或系统风扇"; return 1; }
+            ;;
         dxp2800|dx4600|dxp4800|dxp4800s)
             [[ "$pwm" =~ ^[0-9]+$ ]] && (( pwm >= 40 && pwm <= 255 )) || {
                 BIOS_LAST_ERROR="单风扇机型 PWM 必须在 40 到 255 之间"
@@ -940,6 +1036,14 @@ bios_set_fan() {
 bios_set_fan_mode() {
     local channel="$1" mode="$2"
     BIOS_LAST_ERROR=""
+    if [[ "$(bios_detected_profile)" == idx6012 && "$channel" == sys && "$mode" == auto ]]; then
+        local output
+        if ! output=$(bios_cli --force --apply fan mode sys auto 2>&1); then
+            bios_set_error_from_output "$output" "恢复智能模式失败"
+            return 1
+        fi
+        return 0
+    fi
     BIOS_LAST_ERROR="暂时只开放手动 PWM 写入；pwm*_enable=2 不是原厂 hwmonitor 软件温控曲线"
     _bios_log_debug "bios.fan_mode_rejected" "$BIOS_LAST_ERROR" \
         "channel=$channel" "mode=$mode"
@@ -955,7 +1059,11 @@ bios_set_startup() {
     # DXP4800 Plus / Pro use the firmware-recovered IT8613 AC-recovery
     # path too.  Keep the app adapter aligned with ugreenctl: every
     # protected startup-policy write carries both explicit write guards.
-    [[ "$model" == "dxp2800" || "$model" == "dx4600" || "$model" == "dxp4800" || "$model" == "dxp4800_plus" || "$model" == "dxp4800_pro" || "$model" == "dxp4800s" || "$model" == "dxp6800" || "$model" == "dxp6800pro" || "$model" == "dxp6800plus" || "$model" == "dxp8800pro" ]] && args=(--force --apply)
+    [[ "$model" == "dxp2800" || "$model" == "dx4600" || "$model" == "dxp4800" || "$model" == "dxp4800_plus" || "$model" == "dxp4800_pro" || "$model" == "dxp4800s" || "$model" == "dxp6800" || "$model" == "dxp6800pro" || "$model" == "dxp6800plus" || "$model" == "dxp8800pro" || "$model" == "dxp4800gt" ]] && args=(--force --apply)
+    if [[ "$model" == "dxp4800gt" || "$model" == idx6012 ]]; then
+        args=(--force --apply)
+        [[ "$policy" == "on" || "$policy" == "off" ]] || { BIOS_LAST_ERROR="当前机型不支持恢复断电前状态"; return 1; }
+    fi
     case "$policy" in
         on|off) upstream_policy="$policy" ;;
         last) upstream_policy="restore" ;;
@@ -967,9 +1075,11 @@ bios_set_startup() {
             "model=$model" "policy=$policy" "upstream_policy=$upstream_policy" "output=$output"
         return 1
     fi
-    _bios_log_info "bios.startup_set" "来电启动策略写入成功" \
+    local result_message="来电启动策略写入成功"
+    [[ "$model" == "dxp4800gt" ]] && result_message="来电启动命令已发送；持久化策略无法回读"
+    _bios_log_info "bios.startup_set" "$result_message" \
         "model=$model" "policy=$policy" "upstream_policy=$upstream_policy" \
-        "forced=$([[ "$model" == "dxp2800" || "$model" == "dx4600" || "$model" == "dxp4800" || "$model" == "dxp4800_plus" || "$model" == "dxp4800_pro" || "$model" == "dxp4800s" || "$model" == "dxp6800" || "$model" == "dxp6800pro" || "$model" == "dxp6800plus" || "$model" == "dxp8800pro" ]] && echo true || echo false)"
+        "forced=$([[ "$model" == "dxp2800" || "$model" == "dx4600" || "$model" == "dxp4800" || "$model" == "dxp4800_plus" || "$model" == "dxp4800_pro" || "$model" == "dxp4800s" || "$model" == "dxp6800" || "$model" == "dxp6800pro" || "$model" == "dxp6800plus" || "$model" == "dxp8800pro" || "$model" == "dxp4800gt" ]] && echo true || echo false)"
 }
 
 # The upstream command writes and verifies live registers, not BIOS NVRAM.
@@ -1022,24 +1132,114 @@ bios_startup_restore() {
 }
 
 bios_set_wol() {
-    local policy="$1" output model interface="${2-$(bios_selected_wol_interface)}"
-
+    local policy="$1" interface="${2:-}" output
     BIOS_LAST_ERROR=""
-    model=$(bios_detected_profile)
-    bios_wol_supported_model || {
-        BIOS_LAST_ERROR="当前机型没有上游已实现的网络唤醒路径"
-        return 1
-    }
-    [[ "$policy" =~ ^(on|off)$ ]] || {
-        BIOS_LAST_ERROR="未知网络唤醒策略"
-        return 1
-    }
-    if ! output=$(bios_wol_cli "$interface" --force --apply network wol set "$policy" 2>&1); then
-        bios_set_error_from_output "$output" "设置网络唤醒失败"
-        _bios_log_error "bios.wol_set_failed" "$BIOS_LAST_ERROR" \
-            "model=$model" "policy=$policy" "output=$output"
+    bios_wol_supported_model || { BIOS_LAST_ERROR="当前机型没有可用的网络唤醒适配"; return 1; }
+    [[ "$policy" =~ ^(on|off)$ ]] || { BIOS_LAST_ERROR="未知网络唤醒策略"; return 1; }
+    if ! bios_wol_interface_valid "$interface" || { [[ -z "$interface" ]] && bios_wol_requires_interface; }; then
+        BIOS_LAST_ERROR="请选择有效的物理有线网卡"
         return 1
     fi
-    _bios_log_info "bios.wol_set" "网络唤醒策略写入成功" \
-        "model=$model" "policy=$policy" "forced=true"
+    if ! output=$(bios_wol_cli "$interface" --force --apply network wol set "$policy" 2>&1); then
+        bios_set_error_from_output "$output" "设置网络唤醒失败"
+        _bios_log_error "bios.wol_set_failed" "$BIOS_LAST_ERROR" "policy=$policy" "output=$output"
+        return 1
+    fi
+    _bios_log_info "bios.wol_set" "网络唤醒策略写入成功" "policy=$policy" "forced=true"
+}
+
+# Persist application choices only; all hardware operations remain upstream.
+bios_saved_identity() {
+    local model product revision
+    model=$(bios_detected_profile)
+    if [[ "$model" == unknown ]]; then
+        bios_load_wake_profiles && "$BIOS_WOL_SUPPORTED" || return 1
+        model="$BIOS_WAKE_MODEL"
+    fi
+    product=$(hardware_detected_product_name) || return 1
+    revision=$(hardware_detected_product_version) || return 1
+    [[ -n "$product" && "$product$revision" != *'|'* ]] || return 1
+    printf '%s:%s:%s' "$model" "$product" "$revision"
+}
+
+bios_set_fan_saved() {
+    local channel="$1" pwm="$2" identity saved old cpu sys all
+    identity=$(bios_saved_identity) || { BIOS_LAST_ERROR="无法绑定精确机型，未写入固定转速"; return 1; }
+    saved=$(settings_get "$SETTINGS_FILE" bios fixed_selection "") || return 1
+    IFS='|' read -r old cpu sys all <<< "$saved"
+    [[ "$old" == "$identity" ]] || { cpu=""; sys=""; all=""; }
+    bios_set_fan "$channel" "$pwm" || return 1
+    case "$channel" in cpu) cpu="$pwm" ;; sys) sys="$pwm" ;; all) all="$pwm" ;; esac
+    if ! settings_set "$SETTINGS_FILE" bios fixed_selection "$identity|$cpu|$sys|$all" ||
+       ! settings_set "$SETTINGS_FILE" fan_curve enabled false; then
+        BIOS_LAST_ERROR="固定转速已写入，但保存失败；重启恢复未确认"; return 1
+    fi
+}
+
+bios_fixed_restore() {
+    local identity saved old cpu sys all
+    [[ "$(settings_get "$SETTINGS_FILE" fan_curve enabled false)" != true ]] || return 0
+    saved=$(settings_get "$SETTINGS_FILE" bios fixed_selection "") || return 1
+    [[ -n "$saved" ]] || return 0
+    identity=$(bios_saved_identity) || return 1
+    IFS='|' read -r old cpu sys all <<< "$saved"
+    [[ "$old" == "$identity" ]] || return 0
+    bios_fan_curve_stop true || return 1
+    [[ -z "$cpu" ]] || bios_set_fan cpu "$cpu" || return 1
+    [[ -z "$sys" ]] || bios_set_fan sys "$sys" || return 1
+    [[ -z "$all" ]] || bios_set_fan all "$all" || return 1
+}
+
+bios_set_wol_saved() {
+    local policy="$1" interface="${2:-}" identity product
+    identity=$(bios_saved_identity) || { BIOS_LAST_ERROR="无法绑定精确机型，未写入 WOL"; return 1; }
+    if [[ -z "$interface" ]] && bios_wol_requires_interface; then
+        interface=$(bios_selected_wol_interface)
+    fi
+    bios_set_wol "$policy" "$interface" || return 1
+    product=$(hardware_detected_product_name)
+    if ! settings_apply_updates "$SETTINGS_FILE" <<EOF
+bios.wol_selection=$identity|$policy|$interface
+bios.wol_interface_selection=$product|$interface
+EOF
+    then
+        BIOS_LAST_ERROR="网络唤醒已写入，但保存失败；重启恢复未确认"; return 1
+    fi
+}
+
+bios_wol_restore() {
+    local saved identity old policy interface
+    saved=$(settings_get "$SETTINGS_FILE" bios wol_selection "") || return 1
+    [[ -n "$saved" ]] || return 0
+    identity=$(bios_saved_identity) || return 1
+    IFS='|' read -r old policy interface <<< "$saved"
+    [[ "$old" == "$identity" ]] || return 0
+    bios_set_wol "$policy" "$interface"
+}
+
+bios_restore_runtime_choices() (
+    mkdir -p "$(dirname "$(bios_fan_curve_pid_path)")" || return 1
+    exec 8>"$(dirname "$(bios_fan_curve_pid_path)")/bios-write.lock" || return 1
+    flock -w 15 8 || return 1
+    bios_wol_restore || _bios_log_error "bios.wol_restore_failed" "$BIOS_LAST_ERROR"
+    if [[ "$(settings_get "$SETTINGS_FILE" fan_curve enabled false)" == true ]]; then
+        bios_fan_curve_restore
+    else
+        bios_fixed_restore
+    fi
+)
+
+bios_set_auto_saved() {
+    local was_running=false error
+    bios_fan_curve_running && was_running=true
+    bios_fan_curve_stop true || return 1
+    if ! bios_set_fan_mode sys auto; then
+        error="$BIOS_LAST_ERROR"
+        $was_running && bios_fan_curve_restore >/dev/null 2>&1
+        BIOS_LAST_ERROR="$error"; return 1
+    fi
+    settings_set "$SETTINGS_FILE" bios fixed_selection "" &&
+    settings_set "$SETTINGS_FILE" fan_curve enabled false || {
+        BIOS_LAST_ERROR="智能模式已写入，但保存失败"; return 1;
+    }
 }

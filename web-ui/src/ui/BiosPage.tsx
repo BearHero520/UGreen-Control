@@ -1,6 +1,3 @@
-import { BrightnessSlider } from "./BrightnessSlider";
-import { TimePicker } from "./TimePicker";
-import { GlassSelect } from "./GlassSelect";
 import { lazy, Suspense, useEffect, useMemo, useState } from "react";
 import { api } from "../lib/api";
 import { boundedInt } from "../lib/ini";
@@ -20,7 +17,6 @@ type BiosData = Record<string, unknown>;
 type FanCurve = Record<string, unknown>;
 type Toast = (message: string, type?: "ok" | "err") => void;
 type FanMode = "custom" | "fixed" | "stock";
-type WolProbe = { interface: string; available: boolean; policy: string; error?: string };
 type TemperatureCurveKey = "cpu" | "hdd" | "ssd";
 
 const policyLabels: Record<string, string> = {
@@ -180,10 +176,8 @@ export function BiosPage({
   const [cpuPwm, setCpuPwm] = useState(120);
   const [sysPwm, setSysPwm] = useState(100);
   const [startup, setStartup] = useState("");
-  const [wol, setWol] = useState("on");
+  const [wol, setWol] = useState("");
   const [wolInterface, setWolInterface] = useState("");
-  const [wolManual, setWolManual] = useState(false);
-  const [wolProbe, setWolProbe] = useState<WolProbe | null>(null);
   const [schedule, setSchedule] = useState({
     enabled: false,
     days: new Set<string>(),
@@ -195,6 +189,7 @@ export function BiosPage({
   const info = bios || {};
   const system = hardware;
   const minPwm = Math.max(40, Number(info.min_pwm) || 40);
+  const maxPwm = Math.min(255, Number(info.max_pwm) || 255);
   const writeRequired = Boolean(info.write_confirmation_required);
   const writeReady =
     !writeRequired ||
@@ -202,11 +197,12 @@ export function BiosPage({
     Boolean(info.write_confirmation_acknowledged);
   const available = Boolean(info.available);
   const supported = Boolean(info.supported);
-  const selectedInterface = wolManual ? wolInterface.trim() : "";
-  const validInterface = !wolManual || (/^[a-zA-Z0-9_.-]{1,15}$/.test(selectedInterface) && ![".", ".."].includes(selectedInterface));
-  const wolReady = validInterface && (wolProbe?.interface === selectedInterface
-    ? wolProbe.available
-    : selectedInterface === String(info.wol_interface || "") && Boolean(info.wol_available));
+  const wolInterfaces = Array.isArray(info.wol_interfaces) ? info.wol_interfaces.map(String) : [];
+  const wolNeedsInterface = Boolean(info.wol_interface_required) && !info.wol_interface;
+  const wolInterfaceValid = wolInterface
+    ? /^[a-zA-Z0-9_.-]{1,15}$/.test(wolInterface) && ![".", ".."].includes(wolInterface)
+    : !info.wol_interface_required;
+  const wakeAvailable = Boolean(info.wol_available || (info.power_schedule as Record<string, unknown> | undefined)?.available);
   const startupLabel = info.startup_available
     ? policyLabels[String(info.startup)] || "当前策略未知"
     : "不可用";
@@ -214,15 +210,11 @@ export function BiosPage({
   const reportedFanCurve = (info.fan_curve || {}) as FanCurve;
   const effectiveFanCurve = fanCurve || reportedFanCurve;
   const stockCurve = (effectiveFanCurve.stock_curve || {}) as StockFanCurveData;
-  const proCompatibleCurve = ["stock-6800", "stock-6800plus"].includes(String(stockCurve.profile));
-  const curveEditable = available && writeReady && mode === "custom";
-
-  useEffect(() => {
-    const selected = String(info.wol_interface || "");
-    setWolInterface(selected);
-    setWolManual(Boolean(selected));
-    setWolProbe(null);
-  }, [info.product_name, info.wol_interface]);
+  const proCompatibleCurve = ["stock-6800", "stock-6800plus", "stock-idx6012-compat"].includes(String(stockCurve.profile));
+  const isGt = info.model === "dxp4800gt";
+  const isIdx6012 = info.model === "idx6012";
+  const curveEditable = available && writeReady && !isGt && mode === "custom";
+  useEffect(() => { if (isGt) setMode("stock"); }, [isGt]);
 
   useEffect(() => {
     if (hidden) return;
@@ -232,13 +224,9 @@ export function BiosPage({
   }, [hidden]);
   useEffect(() => {
     if (!bios) return;
-    setCpuPwm(boundedInt(info.cpu_pwm as string | number, minPwm, 255, 120));
-    setSysPwm(boundedInt(info.sys_pwm as string | number, minPwm, 255, 100));
-  }, [info.cpu_pwm, info.sys_pwm, minPwm, info.product_name]);
-  useEffect(() => { setWol(String(info.wol || "on")); }, [info.wol, info.product_name]);
-  const remoteSchedule = (info.power_schedule || {}) as Record<string, unknown>;
-  useEffect(() => {
-    const remote = remoteSchedule;
+    setCpuPwm(boundedInt(info.cpu_pwm as string | number, minPwm, maxPwm, 120));
+    setSysPwm(boundedInt(info.sys_pwm as string | number, minPwm, maxPwm, 100));
+    const remote = (info.power_schedule || {}) as Record<string, unknown>;
     setSchedule({
       enabled: Boolean(remote.enabled),
       days: new Set(
@@ -249,8 +237,20 @@ export function BiosPage({
       wake: String(remote.wake_time || "07:00"),
       shutdown: String(remote.shutdown_time || "23:00"),
     });
-  }, [remoteSchedule.enabled, remoteSchedule.days, remoteSchedule.wake_time,
-    remoteSchedule.shutdown_time, info.product_name]);
+  }, [
+    bios,
+    info.cpu_pwm,
+    info.power_schedule,
+    info.startup,
+    info.sys_pwm,
+    minPwm,
+    maxPwm,
+  ]);
+  useEffect(() => setWolInterface(String(info.wol_interface || "")), [info.wol_interface, info.product_name]);
+  useEffect(() => {
+    const policy = info.wol;
+    setWol(policy === "on" || policy === "off" ? policy : "");
+  }, [info.wol, info.wol_interface, info.product_name]);
   // Polling must not erase an explicit choice while the reported policy is
   // unchanged. Unknown is not a default policy and requires a user selection.
   useEffect(() => {
@@ -259,7 +259,6 @@ export function BiosPage({
   }, [info.startup, info.product_name]);
   useEffect(() => {
     if (!fanCurve) return;
-    if (String(fanCurve.profile || "").startsWith("stock-")) setMode("stock");
     setCurve({
       interval: boundedInt(
         fanCurve.interval_seconds as string | number,
@@ -276,7 +275,7 @@ export function BiosPage({
       minimum: boundedInt(
         fanCurve.minimum_pwm as string | number,
         minPwm,
-        255,
+        maxPwm,
         defaultCurve.minimum,
       ),
       cpu: String(fanCurve.cpu_curve || defaultCurve.cpu),
@@ -285,7 +284,16 @@ export function BiosPage({
       pwm: String(fanCurve.pwm_curve || defaultCurve.pwm),
       requireStorage: Boolean(fanCurve.require_storage_sensor),
     });
-  }, [fanCurve, minPwm]);
+  }, [fanCurve, minPwm, maxPwm, isGt]);
+
+  // Refresh the selected mode only when the actual running mode changes.
+  useEffect(() => {
+    if (fanCurve?.running) {
+      setMode(String(fanCurve.profile || "").startsWith("stock-") ? "stock" : "custom");
+    } else if (info.sys_manual || info.cpu_manual) {
+      setMode("fixed");
+    }
+  }, [Boolean(fanCurve?.running), fanCurve?.running ? fanCurve.profile : "", Boolean(info.sys_manual), Boolean(info.cpu_manual)]);
 
   const run = async (name: string, action: () => Promise<void>) => {
     setBusy(name);
@@ -348,7 +356,8 @@ export function BiosPage({
             <span className="soft-badge">非适用机型</span>
           </div>
           <p className="surface-help">
-            当前机型没有上游已实现的风扇、来电恢复或唤醒映射。
+            此入口支持 DXP2800 EM26 风扇，以及已验证映射的 DXP4800 系列、DXP480T Plus、DXP6800 / Plus / Pro 与 DXP8800 Pro
+            开放。当前机型不会执行 BIOS 写入。
           </p>
         </article>
       </section>
@@ -362,22 +371,21 @@ export function BiosPage({
           <div className="section-heading">
             <div>
               <span className="section-kicker">
-                {String(info.model || "SUPPORTED MODEL").toUpperCase()}
+                {String(info.model || "SUPPORTED MODEL").toUpperCase()} · {isIdx6012 ? "ITE5571 EC" : isGt ? "IT55xx EC" : "IT8613"}
               </span>
               <h2>BIOS 控制器</h2>
             </div>
             <span className="soft-badge">
               {available
-                ? "风扇控制就绪"
+                ? "风扇 hwmon 就绪"
                 : info.startup_available
                   ? "仅来电启动就绪"
-                  : info.wol_available || (info.power_schedule as Record<string, unknown> | undefined)?.available
-                    ? "唤醒控制就绪" : "控制接口未就绪"}
+                  : wakeAvailable ? "唤醒控制就绪" : "控制器不可用"}
             </span>
           </div>
           <p className="surface-help" role="status">
-            {(available || info.startup_available || info.wol_available || (info.power_schedule as Record<string, unknown> | undefined)?.available)
-              ? "已检测到可用控制接口。写入由 UGREEN-NAS-Hardware 负责，所有变更都会进行保护和回读校验。"
+            {(available || info.startup_available || wakeAvailable)
+              ? (isGt ? "已检测到 GT 实验性控制接口。风扇写后回读；来电启动仅确认命令状态，持久化策略未知。" : "已检测到可用控制接口。写入由 UGREEN-NAS-Hardware 负责，所有变更都会进行保护和回读校验。")
               : String(
                   info.fan_error ||
                     info.error ||
@@ -422,7 +430,7 @@ export function BiosPage({
               <h2>支持机型保护</h2>
               <p>
                 写入仅由 UGREEN-NAS-Hardware
-                在模型、芯片、锁与回读校验均通过时执行。前端不会直接访问寄存器或硬件接口。
+                {isGt ? "GT 使用精确机型和稳定 EC 版本检查，芯片 ID 未知；保留冲突检查、锁和风扇回读。" : "在模型、芯片、锁与回读校验均通过时执行。"}前端不会直接访问寄存器或硬件接口。
               </p>
               {writeRequired &&
               !riskAccepted &&
@@ -576,7 +584,7 @@ export function BiosPage({
               <h2>风扇运行模式</h2>
             </div>
             <span className="soft-badge">
-              {fanCurve?.running
+              {isIdx6012 && !info.sys_manual && !info.sys2_manual ? "设备智能模式" : fanCurve?.running
                 ? "自动温控运行中"
                 : mode === "fixed"
                   ? "固定转速"
@@ -584,8 +592,7 @@ export function BiosPage({
             </span>
           </div>
           <p className="surface-help">
-            风扇控制通过受保护的硬件服务完成。固定转速不看温度；两种自动模式按下方温度—PWM
-            参数调速。
+            {isIdx6012 ? "两路风扇同步调速，PWM 范围 40–198。自定义自动按下方温度曲线调速，固定转速保持指定 PWM。" : "风扇控制通过受保护的硬件服务完成。固定转速不看温度；两种自动模式按下方温度—PWM 参数调速。"}
           </p>
           <div className="fan-curve-live">
             <div>
@@ -628,11 +635,11 @@ export function BiosPage({
               </strong>
               <small>{effectiveFanCurve.running ? "曲线目标" : "未写入"}</small>
             </div>
-            <div>
+            {info.cpu_fan_present !== false && <div>
               <span>CPU 风扇</span>
               <strong>{metric(telemetry.cpuRpm ?? info.cpu_rpm)}</strong>
               <small>RPM</small>
-            </div>
+            </div>}
             <div>
               <span>系统风扇</span>
               <strong>{metric(telemetry.sysRpm ?? info.sys_rpm)}</strong>
@@ -665,7 +672,7 @@ export function BiosPage({
               />
               <span>
                 <strong>{proCompatibleCurve ? "原厂兼容自动（采用 Pro 参数）" : "原厂兼容自动"}</strong>
-                <small>{stockCurve.available ? (proCompatibleCurve ? "采用 DXP6800 Pro 温度曲线；保留本机风扇映射与保护。" : "使用已恢复机型的安全温度—PWM 参数。") : "当前机型尚无已确认的原厂曲线，请使用自定义或固定转速。"}</small>
+                <small>{stockCurve.available ? (proCompatibleCurve ? "采用 DXP6800 Pro 温度曲线；保留本机风扇映射与保护。" : "使用已恢复机型的安全温度—PWM 参数。") : "当前机型尚未接入原厂曲线，请使用可用的调速模式。"}</small>
               </span>
             </label>
             <label
@@ -675,11 +682,12 @@ export function BiosPage({
                 type="radio"
                 name="reactFanMode"
                 checked={mode === "custom"}
+                disabled={isGt}
                 onChange={() => setMode("custom")}
               />
               <span>
                 <strong>自定义自动</strong>
-                <small>按下方曲线参数自动调速。</small>
+                <small>{isGt ? "GT 自动模式使用官方八点曲线，暂不开放五点自定义。" : "按下方曲线参数自动调速。"}</small>
               </span>
             </label>
             <label
@@ -704,7 +712,7 @@ export function BiosPage({
                   <span className="section-kicker">FIXED FAN SPEED</span>
                   <h3>固定转速设置</h3>
                 </div>
-                <span className="soft-badge">{minPwm}–255</span>
+                <span className="soft-badge">{minPwm}–{maxPwm}</span>
               </div>
               <div className="bios-safety-note" role="note">
                 <i className="bi bi-exclamation-triangle" aria-hidden="true" />
@@ -713,7 +721,7 @@ export function BiosPage({
                 </p>
               </div>
               <div className="bios-fan-grid">
-                <section className="bios-fan-card">
+                {info.cpu_fan_present !== false && <section className="bios-fan-card">
                   <div className="bios-fan-head">
                     <span className="bios-fan-icon">
                       <i className="bi bi-cpu" aria-hidden="true" />
@@ -729,18 +737,28 @@ export function BiosPage({
                   </div>
                   <div className="bios-control-state">
                     <span>当前 PWM</span>
-                    <strong>{String(info.cpu_pwm ?? "—")}</strong>
+                    <strong>{metric(info.cpu_pwm)}</strong>
                     <small>最低 {minPwm}</small>
                   </div>
                   <div className="bios-pwm-control">
-                    <BrightnessSlider label="CPU 风扇 PWM" prefix="PWM " min={minPwm} value={cpuPwm}
-                      disabled={!writeReady || info.cpu_fan_present === false} onChange={setCpuPwm} />
+                    <input
+                      type="range"
+                      min={minPwm}
+                      max={maxPwm}
+                      value={cpuPwm}
+                      disabled={!writeReady || info.cpu_fan_present === false}
+                      onChange={(event) =>
+                        setCpuPwm(
+                          boundedInt(event.target.value, minPwm, maxPwm, cpuPwm),
+                        )
+                      }
+                    />
                   </div>
                   <div className="bios-fan-write-status">
                     <i className="bi bi-lightning-charge" aria-hidden="true" />
                     <span>PWM {cpuPwm}</span>
                   </div>
-                </section>
+                </section>}
                 <section className="bios-fan-card">
                   <div className="bios-fan-head">
                     <span className="bios-fan-icon">
@@ -760,12 +778,22 @@ export function BiosPage({
                   </div>
                   <div className="bios-control-state">
                     <span>当前 PWM</span>
-                    <strong>{String(info.sys_pwm ?? "—")}</strong>
+                    <strong>{metric(info.sys_pwm)}</strong>
                     <small>最低 {minPwm}</small>
                   </div>
                   <div className="bios-pwm-control">
-                    <BrightnessSlider label="系统风扇 PWM" prefix="PWM " min={minPwm} value={sysPwm}
-                      disabled={!writeReady} onChange={setSysPwm} />
+                    <input
+                      type="range"
+                      min={minPwm}
+                      max={maxPwm}
+                      value={sysPwm}
+                      disabled={!writeReady}
+                      onChange={(event) =>
+                        setSysPwm(
+                          boundedInt(event.target.value, minPwm, maxPwm, sysPwm),
+                        )
+                      }
+                    />
                   </div>
                   <div className="bios-fan-write-status">
                     <i className="bi bi-lightning-charge" aria-hidden="true" />
@@ -900,7 +928,7 @@ export function BiosPage({
                 <NumberField
                   label="最低 PWM"
                   min={minPwm}
-                  max={255}
+                  max={maxPwm}
                   value={curve.minimum}
                   disabled={!curveEditable}
                   onChange={(value) =>
@@ -913,6 +941,7 @@ export function BiosPage({
                   <FanCurveEditor
                     draft={curve}
                     minPwm={minPwm}
+                    maxPwm={maxPwm}
                     disabled={!curveEditable}
                     onChange={(next) =>
                       setCurve((current) => ({ ...current, ...next }))
@@ -979,7 +1008,7 @@ export function BiosPage({
                             <input
                               type="number"
                               min={minPwm}
-                              max="255"
+                              max={maxPwm}
                               step="1"
                               value={value}
                               aria-label={`${curveStages[index + 1]} PWM`}
@@ -994,7 +1023,7 @@ export function BiosPage({
                                     4,
                                     defaultCurve.pwm,
                                     minPwm,
-                                    255,
+                                    maxPwm,
                                   ),
                                 }))
                               }
@@ -1006,7 +1035,7 @@ export function BiosPage({
                   </tbody>
                 </table>
               </div>
-              <label className="fan-curve-storage-check native-check">
+              <label className="fan-curve-storage-check">
                 <input
                   type="checkbox"
                   checked={curve.requireStorage}
@@ -1021,7 +1050,7 @@ export function BiosPage({
                 <span>
                   <strong>存储温度缺失时保护性满速</strong>
                   <small>
-                    开启后，未读取到任意 HDD/NVMe 温度时会写入 PWM 255。
+                    开启后，未读取到任意 HDD/NVMe 温度时会写入 PWM {maxPwm}。
                   </small>
                 </span>
               </label>
@@ -1055,7 +1084,7 @@ export function BiosPage({
                   <button
                     type="button"
                     className="primary-button"
-                    disabled={busy === "curve" || !writeReady}
+                    disabled={isGt || busy === "curve" || !writeReady}
                     onClick={() =>
                       void run("curve", () =>
                         guarded(async () => {
@@ -1077,8 +1106,8 @@ export function BiosPage({
             </section>
           )}
         </article>
-        <div className="bios-power-sections">
-          <div className="bios-power-section-group">
+        <div className="bios-card-waterfall">
+          <div className="bios-card-column">
             <article className="glass-surface bios-startup-surface">
               <div className="section-heading">
                 <div>
@@ -1095,7 +1124,9 @@ export function BiosPage({
               </p>
               {info.startup_available && info.startup === "unknown" ? (
                 <p className="surface-help" role="status">
-                  当前策略未识别，但来电启动可以设置。请选择所需策略并保存，保存后会校验实际结果。
+                  {info.startup_readback === false
+                    ? "此机型可发送来电开机／关机命令，但无法读取持久化策略。保存后仍显示未知，实际效果需断电验证。"
+                    : "当前策略未识别，但来电启动可以设置。请选择所需策略并保存，保存后会校验实际结果。"}
                 </p>
               ) : !info.startup_available ? (
                 <p className="surface-help" role="status">
@@ -1123,14 +1154,14 @@ export function BiosPage({
                   icon="bi-moon"
                   onChange={setStartup}
                 />
-                <PolicyChoice
+                {info.startup_restore_supported !== false && <PolicyChoice
                   checked={startup === "last"}
                   value="last"
                   title="恢复断电前状态"
                   copy="按断电前状态恢复"
                   icon="bi-arrow-repeat"
                   onChange={setStartup}
-                />
+                />}
               </div>
               <div className="bios-startup-actions">
                 <button
@@ -1158,10 +1189,11 @@ export function BiosPage({
                 </button>
               </div>
             </article>
-            {Boolean(info.rtc_supported) || Boolean(
-              (info.power_schedule as Record<string, unknown> | undefined)?.available,
+            {Boolean(
+              (info.power_schedule as Record<string, unknown> | undefined)
+                ?.available,
             ) ? (
-              <article className="glass-surface bios-startup-surface bios-schedule-surface">
+              <article className="glass-surface bios-startup-surface">
                 <div className="section-heading">
                   <div>
                     <span className="section-kicker">SCHEDULED POWER</span>
@@ -1172,18 +1204,14 @@ export function BiosPage({
                   </span>
                 </div>
                 <p className="surface-help">
-                  按每周计划自动开关机。关机前会设置下一次 RTC 唤醒，时间以 NAS 系统时区为准。
+                  定时关机前会设置下一次 RTC 唤醒，然后调用系统安全关机。
                 </p>
-                {(info.power_schedule as Record<string, unknown> | undefined)?.error ? (
-                  <p className="surface-help" role="status">{String((info.power_schedule as Record<string, unknown>).error)}</p>
-                ) : null}
-                <div className="bios-schedule-settings">
+                <div className="bios-policy-grid">
                   <label
-                    className="bios-schedule-toggle"
+                    className={`bios-policy-choice${schedule.enabled ? " active" : ""}`}
                   >
                     <input
                       type="checkbox"
-                      role="switch"
                       checked={schedule.enabled}
                       onChange={(event) =>
                         setSchedule((current) => ({
@@ -1198,28 +1226,46 @@ export function BiosPage({
                       <small>未启用时会移除计划并清除 RTC 唤醒。</small>
                     </span>
                   </label>
-                  <div className="bios-schedule-clock">
+                  <label className="bios-policy-choice">
                     <i className="bi bi-clock-history" aria-hidden="true" />
                     <span>
                       <strong>定时开机</strong>
                       <small>
-                        <TimePicker label="定时开机" value={schedule.wake}
-                          onChange={(value) => setSchedule((current) => ({ ...current, wake: value }))} />
+                        <input
+                          className="bios-schedule-time"
+                          type="time"
+                          value={schedule.wake}
+                          onChange={(event) =>
+                            setSchedule((current) => ({
+                              ...current,
+                              wake: event.target.value,
+                            }))
+                          }
+                        />
                       </small>
                     </span>
-                  </div>
-                  <div className="bios-schedule-clock">
+                  </label>
+                  <label className="bios-policy-choice">
                     <i className="bi bi-power" aria-hidden="true" />
                     <span>
                       <strong>定时关机</strong>
                       <small>
-                        <TimePicker label="定时关机" value={schedule.shutdown}
-                          onChange={(value) => setSchedule((current) => ({ ...current, shutdown: value }))} />
+                        <input
+                          className="bios-schedule-time"
+                          type="time"
+                          value={schedule.shutdown}
+                          onChange={(event) =>
+                            setSchedule((current) => ({
+                              ...current,
+                              shutdown: event.target.value,
+                            }))
+                          }
+                        />
                       </small>
                     </span>
-                  </div>
+                  </label>
                 </div>
-                <fieldset className="bios-schedule-days"><legend>重复日期</legend><div className="bios-weekday-options">
+                <div className="bios-policy-grid">
                   {[
                     ["1", "周一"],
                     ["2", "周二"],
@@ -1231,7 +1277,7 @@ export function BiosPage({
                   ].map(([day, label]) => (
                     <label
                       key={day}
-                      className={`bios-weekday${schedule.days.has(day) ? " active" : ""}`}
+                      className={`bios-policy-choice${schedule.days.has(day) ? " active" : ""}`}
                     >
                       <input
                         type="checkbox"
@@ -1240,16 +1286,16 @@ export function BiosPage({
                       />
                       <span>
                         <strong>{label}</strong>
-
+                        <small>重复执行</small>
                       </span>
                     </label>
                   ))}
-                </div></fieldset>
+                </div>
                 <div className="bios-startup-actions">
                   <button
                     type="button"
                     className="primary-button"
-                    disabled={Boolean(busy) || !writeReady || !(info.power_schedule as Record<string, unknown> | undefined)?.available}
+                    disabled={busy === "schedule" || !writeReady}
                     onClick={() =>
                       void run("schedule", () =>
                         guarded(async () => {
@@ -1288,8 +1334,8 @@ export function BiosPage({
               </article>
             ) : null}
           </div>
-          <div className="bios-power-section-group">
-            <article className="glass-surface bios-startup-surface bios-wake-surface">
+          <div className="bios-card-column">
+            <article className="glass-surface bios-startup-surface">
               <div className="section-heading">
                 <div>
                   <span className="section-kicker">WAKE-ON-LAN</span>
@@ -1300,42 +1346,44 @@ export function BiosPage({
                     ? String(info.wol) === "on"
                       ? "已启用"
                       : "已关闭"
-                    : "不可用"}
+                    : wolNeedsInterface ? "待选择网口" : "不可用"}
                 </span>
               </div>
               <p className="surface-help">
-                可自动匹配已映射的物理网口，或指定飞牛及其他 Linux 的实际网卡名称。设置后回读确认；实际关机唤醒仍需验证。
+                {info.wol_interface_required
+                  ? "选择连接网线的物理网口和唤醒策略，保存后会回读该网口的设置。"
+                  : "网络唤醒会按经过验证的网卡拓扑配置魔术包唤醒并回读确认。"}
               </p>
-              <div className="bios-wol-interface-grid">
-                <label><span>唤醒网卡</span>
-                  <GlassSelect label="唤醒网卡选择方式" value={wolManual ? "manual" : "auto"}
-                    disabled={busy === "wol" || busy === "wol-check"}
-                    options={[
-                      { value: "auto", label: "自动匹配物理网口", description: "使用当前机型已映射的网口", icon: "bi-ethernet" },
-                      { value: "manual", label: "指定网卡名称", description: "手动填写 enp3s0、eno1 等名称", icon: "bi-input-cursor-text" },
-                    ]}
-                    onValueChange={(value) => { setWolManual(value === "manual"); setWolProbe(null); }} />
+              {info.wol_supported ? (
+                <label className="bios-policy-choice bios-wol-interface">
+                  <i className="bi bi-ethernet" aria-hidden="true" />
+                  <span>
+                    <strong>唤醒网卡</strong>
+                    <small>
+                      {wolInterfaces.length > 0 ? (
+                        <select
+                          className="hardware-select"
+                          aria-label="用于网络唤醒的物理有线网卡"
+                          value={wolInterface}
+                          onChange={(event) => setWolInterface(event.target.value)}
+                          disabled={busy === "wol"}
+                        >
+                          <option value="">{info.wol_interface_required ? "请选择物理有线网卡" : "自动匹配物理网口"}</option>
+                          {wolInterfaces.map((name) => <option key={name} value={name}>{name}</option>)}
+                        </select>
+                      ) : (
+                        <input className="bios-wol-interface-input" aria-label="WOL 网卡名称"
+                          value={wolInterface} maxLength={15} disabled={busy === "wol"}
+                          placeholder={info.wol_interface_required ? "例如 enp3s0" : "留空自动匹配"}
+                          onChange={(event) => setWolInterface(event.target.value.trim())} />
+                      )}
+                    </small>
+                  </span>
                 </label>
-                {wolManual ? <label><span>网卡名称</span>
-                  <input className="bios-wol-interface-input" aria-label="WOL 网卡名称" value={wolInterface} maxLength={15} placeholder="例如 enp3s0、eno1"
-                    disabled={busy === "wol" || busy === "wol-check"}
-                    onChange={(event) => { setWolInterface(event.target.value); setWolProbe(null); }} />
-                </label> : null}
-              </div>
-              {!wolManual && info.wol_supported && !info.wol_automatic ? <p className="surface-help">此机型需要指定实际物理网卡名称。</p> : null}
-              <div className="bios-startup-actions">
-                <button type="button" className="secondary-button" disabled={Boolean(busy) || !validInterface || !info.wol_supported}
-                  onClick={() => void run("wol-check", async () => {
-                    const result = await api<WolProbe>("/bios/wol", { query: `interface=${encodeURIComponent(selectedInterface)}` });
-                    setWolProbe(result);
-                    if (result.available) { setWol(result.policy); onToast("网卡支持 WOL，已读取当前状态"); }
-                    else onToast(result.error || "所选网卡不可用于 WOL", "err");
-                  })}>检测网卡与当前状态</button>
-              </div>
-              {(wolProbe?.interface === selectedInterface ? wolProbe.error : info.wol_error) ?
-                <p className="surface-help" role="status">{String(wolProbe?.interface === selectedInterface ? wolProbe.error : info.wol_error)}</p> : null}
+              ) : null}
+              {info.wol_error ? <p className="surface-help">{String(info.wol_error)}</p> : null}
               <div
-                className="bios-policy-grid bios-wake-policies"
+                className="bios-policy-grid"
                 role="radiogroup"
                 aria-label="网络唤醒策略"
               >
@@ -1351,7 +1399,7 @@ export function BiosPage({
                   checked={wol === "off"}
                   value="off"
                   title="关闭网络唤醒"
-                  copy="禁用板载网口的魔术包唤醒"
+                  copy={info.wol_interface_required ? "禁用所选网口的魔术包唤醒" : "禁用板载网口的魔术包唤醒"}
                   icon="bi-broadcast"
                   onChange={setWol}
                 />
@@ -1361,14 +1409,15 @@ export function BiosPage({
                   type="button"
                   className="primary-button"
                   disabled={
-                    Boolean(busy) || !wolReady || !writeReady
+                    busy === "wol" || !writeReady || (wol !== "on" && wol !== "off") ||
+                    !wolInterfaceValid
                   }
                   onClick={() =>
                     void run("wol", () =>
                       guarded(async () => {
                         await api("/bios/wol", {
                           method: "POST",
-                          query: `policy=${wol}&interface=${encodeURIComponent(selectedInterface)}&${confirmation()}`,
+                          query: `policy=${wol}&interface=${encodeURIComponent(wolInterface)}&${confirmation()}`,
                           body: "",
                         });
                         await sync("网络唤醒策略已更新");

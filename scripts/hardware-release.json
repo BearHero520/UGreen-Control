@@ -1,15 +1,15 @@
 {
   "repository": "BearHero520/UGREEN-NAS-Hardware",
-  "tag": "fnos-3.0.9",
-  "version": "0.3.0",
+  "tag": "fnos-3.2.0",
+  "version": "0.4.0",
   "branch": "main",
-  "commit": "abfe71a07e5b10e79d78bc637dfec14eba514de0",
-  "archive": "ugreenctl-fnos-3.0.9-linux-x86_64.tar.gz",
-  "manifest": "ugreenctl-fnos-3.0.9-linux-x86_64.manifest.json",
-  "archive_sha256": "8b10ff32c048e64f524ad9ff8b26d6aeb27cf32c78eef4c7f1211ce98ca6c780",
-  "manifest_sha256": "9a1dc314f456f1c3ce96f60fc02c625c8435b6604ea7440f60d5dfb0b49a324c",
-  "checksums_sha256": "aac2f3fe15140364d0d0f4e16ea9661e07b26710e21808628b3cf3b5d63e2852",
+  "commit": "a3cbdfbb132b070f19715e0ef978f00e17e0bb08",
+  "archive": "ugreenctl-fnos-3.2.0-linux-x86_64.tar.gz",
+  "manifest": "ugreenctl-fnos-3.2.0-linux-x86_64.manifest.json",
   "source_type": "application-local-artifact",
   "release_channel": "application",
-  "artifact_path": "artifacts/hardware/fnos-3.0.9"
+  "artifact_path": "artifacts/hardware/fnos-3.2.0",
+  "archive_sha256": "b8cf6487aa9c5a71638faee3d5472a1f7c70490c76b660ff6fcd29184a6c872d",
+  "manifest_sha256": "bf4256135dda11320e08e53e9056f38208a08dbe836f21d6fadf4fb2f8f3e7d3",
+  "checksums_sha256": "91a7255f201266abdd62d19b49566b88062a88ea083c1432cd48e5d645eb4966"
 }

@@ -1,71 +1,89 @@
-Test project E:/工作台/UGREEN-NAS-Hardware/firmware-inbox/work/main-release-v0.3.0-preview.1/build-aarch64
-      Start 11: disk-mapping
-      Start  9: led-holder
- 1/33 Test  #9: led-holder .......................   Passed    6.04 sec
-      Start  2: package-policy
- 2/33 Test #11: disk-mapping .....................   Passed    9.21 sec
-      Start  8: led
- 3/33 Test  #2: package-policy ...................   Passed    5.81 sec
-      Start 12: identity
- 4/33 Test  #8: led ..............................   Passed    3.58 sec
-      Start 14: it8613-hwmon
- 5/33 Test #12: identity .........................   Passed    3.01 sec
-      Start 13: hardware-cli
- 6/33 Test #14: it8613-hwmon .....................   Passed    3.13 sec
-      Start  7: led-holder-help
- 7/33 Test #13: hardware-cli .....................   Passed    3.29 sec
-      Start 21: wol-dxp4800
- 8/33 Test  #7: led-holder-help ..................   Passed    3.15 sec
-      Start 29: wake-profiles
- 9/33 Test #21: wol-dxp4800 ......................   Passed    3.07 sec
-      Start 22: wol-runtime
-10/33 Test #29: wake-profiles ....................   Passed    3.24 sec
-      Start 28: thermal-curve
-11/33 Test #22: wol-runtime ......................   Passed    3.25 sec
-      Start 19: it8613-dx4600
-12/33 Test #28: thermal-curve ....................   Passed    3.32 sec
-      Start 25: it8613-dxp6800pro
-13/33 Test #19: it8613-dx4600 ....................   Passed    3.20 sec
-      Start  4: cli-help
-14/33 Test #25: it8613-dxp6800pro ................   Passed    3.15 sec
-      Start 17: it8613-dxp4800
-15/33 Test  #4: cli-help .........................   Passed    3.39 sec
-      Start  6: led-compat-help
-16/33 Test #17: it8613-dxp4800 ...................   Passed    3.29 sec
-      Start 23: rtc-wake
-17/33 Test  #6: led-compat-help ..................   Passed    3.23 sec
-      Start 18: it8613-dxp4800s
-18/33 Test #23: rtc-wake .........................   Passed    3.35 sec
-      Start 27: it8613-dxp6800
-19/33 Test #18: it8613-dxp4800s ..................   Passed    3.32 sec
-      Start  5: led-cli-help
-20/33 Test #27: it8613-dxp6800 ...................   Passed    3.28 sec
-      Start 10: led-cs201x
-21/33 Test  #5: led-cli-help .....................   Passed    3.29 sec
-      Start 33: dxp6800-plugin
-22/33 Test #10: led-cs201x .......................   Passed    3.26 sec
-      Start 26: it8613-dxp6800plus
-23/33 Test #33: dxp6800-plugin ...................   Passed    3.31 sec
-      Start 30: wake-cli
-24/33 Test #26: it8613-dxp6800plus ...............   Passed    3.39 sec
-      Start 15: it8613-direct
-25/33 Test #30: wake-cli .........................   Passed    3.12 sec
-      Start 20: dx4600-plugin
-26/33 Test #15: it8613-direct ....................   Passed    3.30 sec
-      Start 16: it8613-power
-27/33 Test #20: dx4600-plugin ....................   Passed    3.38 sec
-      Start 24: it8613-dxp480t
-28/33 Test #16: it8613-power .....................   Passed    3.36 sec
-      Start 32: wol-interface
-29/33 Test #24: it8613-dxp480t ...................   Passed    3.55 sec
-      Start 31: rtc-runtime
-30/33 Test #32: wol-interface ....................   Passed    3.48 sec
-      Start  3: startup-state
-31/33 Test  #3: startup-state ....................   Passed    0.25 sec
-      Start  1: package-runtime
-32/33 Test  #1: package-runtime ..................   Passed    0.17 sec
-33/33 Test #31: rtc-runtime ......................   Passed    3.37 sec
+Test project E:/工作台/UGREEN-NAS-Hardware/firmware-inbox/work/main-build-v0.4.0/build-aarch64
+      Start 13: disk-mapping
+      Start 11: led-holder
+      Start  3: package-policy
+      Start 10: led
+ 1/42 Test #10: led ..............................   Passed    3.57 sec
+      Start 26: it8613-dxp480t
+ 2/42 Test #11: led-holder .......................   Passed    6.13 sec
+      Start 27: it8613-dxp6800pro
+ 3/42 Test #26: it8613-dxp480t ...................   Passed    2.94 sec
+      Start 25: rtc-wake
+ 4/42 Test  #3: package-policy ...................   Passed    6.60 sec
+      Start 28: it8613-dxp6800plus
+ 5/42 Test #27: it8613-dxp6800pro ................   Passed    3.19 sec
+      Start 23: wol-dxp4800
+ 6/42 Test #13: disk-mapping .....................   Passed    9.54 sec
+      Start 16: it8613-hwmon
+ 7/42 Test #25: rtc-wake .........................   Passed    3.19 sec
+      Start 21: it8613-dx4600
+ 8/42 Test #28: it8613-dxp6800plus ...............   Passed    3.18 sec
+      Start 15: hardware-cli
+ 9/42 Test #23: wol-dxp4800 ......................   Passed    3.31 sec
+      Start 24: wol-runtime
+10/42 Test #16: it8613-hwmon .....................   Passed    3.24 sec
+      Start 22: dx4600-plugin
+11/42 Test #21: it8613-dx4600 ....................   Passed    3.29 sec
+      Start 17: it8613-direct
+12/42 Test #15: hardware-cli .....................   Passed    3.31 sec
+      Start 35: dxp6800-plugin
+13/42 Test #22: dx4600-plugin ....................   Passed    3.13 sec
+      Start 14: identity
+14/42 Test #24: wol-runtime ......................   Passed    3.34 sec
+      Start 39: test-it8613-dxp8800pro
+15/42 Test #17: it8613-direct ....................   Passed    3.41 sec
+      Start 40: it55-dxp4800gt
+16/42 Test #35: dxp6800-plugin ...................   Passed    3.34 sec
+      Start 18: it8613-power
+17/42 Test #14: identity .........................   Passed    3.44 sec
+      Start 33: rtc-runtime
+18/42 Test #39: test-it8613-dxp8800pro ...........   Passed    3.37 sec
+      Start 36: dxp2800-plugin
+19/42 Test #40: it55-dxp4800gt ...................   Passed    3.42 sec
+      Start 34: wol-interface
+20/42 Test #18: it8613-power .....................   Passed    3.48 sec
+      Start 38: test-dxp8800pro-plugin
+21/42 Test #33: rtc-runtime ......................   Passed    4.01 sec
+      Start 31: wake-profiles
+22/42 Test #36: dxp2800-plugin ...................   Passed    4.02 sec
+      Start  9: led-holder-help
+23/42 Test #34: wol-interface ....................   Passed    3.96 sec
+      Start 12: led-cs201x
+24/42 Test #38: test-dxp8800pro-plugin ...........   Passed    3.93 sec
+      Start  8: led-compat-help
+25/42 Test  #9: led-holder-help ..................   Passed    3.93 sec
+      Start 37: it8613-dxp2800
+26/42 Test #31: wake-profiles ....................   Passed    4.09 sec
+      Start  1: idx6012-ec
+27/42 Test #12: led-cs201x .......................   Passed    4.02 sec
+      Start 30: thermal-curve
+28/42 Test  #8: led-compat-help ..................   Passed    3.96 sec
+      Start 19: it8613-dxp4800
+29/42 Test #37: it8613-dxp2800 ...................   Passed    3.88 sec
+      Start 29: it8613-dxp6800
+30/42 Test  #1: idx6012-ec .......................   Passed    3.94 sec
+      Start 32: wake-cli
+31/42 Test #19: it8613-dxp4800 ...................   Passed    3.87 sec
+      Start 20: it8613-dxp4800s
+32/42 Test #30: thermal-curve ....................   Passed    4.04 sec
+      Start  7: led-cli-help
+33/42 Test #29: it8613-dxp6800 ...................   Passed    4.21 sec
+      Start 41: idx6012-curve
+34/42 Test #32: wake-cli .........................   Passed    4.11 sec
+      Start  6: cli-help
+35/42 Test #20: it8613-dxp4800s ..................   Passed    4.06 sec
+      Start 42: idx6012-power
+36/42 Test  #7: led-cli-help .....................   Passed    4.11 sec
+      Start  4: idx6012-probe
+37/42 Test  #4: idx6012-probe ....................   Passed    0.33 sec
+      Start  5: startup-state
+38/42 Test  #5: startup-state ....................   Passed    0.28 sec
+      Start  2: package-runtime
+39/42 Test  #2: package-runtime ..................   Passed    0.21 sec
+40/42 Test #41: idx6012-curve ....................   Passed    3.67 sec
+41/42 Test  #6: cli-help .........................   Passed    3.63 sec
+42/42 Test #42: idx6012-power ....................   Passed    3.53 sec
 
-100% tests passed out of 33
+100% tests passed out of 42
 
-Total Test time (real) =  57.65 sec
+Total Test time (real) =  39.30 sec

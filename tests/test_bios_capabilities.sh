@@ -7,10 +7,14 @@ trap 'rm -rf "$TMP"' EXIT
 source "$SERVER_DIR/lib/bios_control.sh"
 fail() { echo "FAIL: $*" >&2; exit 1; }
 hardware_detected_product_name() { printf '%s' "$PRODUCT"; }
+hardware_detected_product_version() { echo fixture; }
 json_str() { printf '%s' "$1"; }
 settings_get() { if [[ "$3" == wol_interface_selection ]]; then cat "$TMP/selection" 2>/dev/null || true; else printf '%s' "$4"; fi; }
-settings_set() { printf '%s' "$4" > "$TMP/selection"; }
-settings_apply_updates() { cat > "$TMP/settings"; }
+settings_apply_updates() {
+    cat > "$TMP/settings"
+    sed -n 's/^bios\.wol_interface_selection=//p' "$TMP/settings" > "$TMP/next-selection"
+    if [[ -s "$TMP/next-selection" ]]; then mv "$TMP/next-selection" "$TMP/selection"; fi
+}
 SETTINGS_FILE="$TMP/settings"
 BIOS_SCHEDULE_CRON_FILE="$TMP/power.cron"
 FAIL_WOL_MODELS=false

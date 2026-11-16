@@ -1735,6 +1735,100 @@
           "scope": "CPU and paired system PWM, three tachometers, AC recovery. Curve from 1.17 dxp8800.conf. No physical validation."
         }
       ]
+    },
+    {
+      "id": "dxp4800gt",
+      "plugin": "dxp4800gt.so",
+      "marketing_names": [
+        "UGREEN DXP4800 GT"
+      ],
+      "dmi_product_names": [
+        "DXP4800 GT"
+      ],
+      "support_level": "reverse-engineered",
+      "write_requirements": [
+        "Exact manufacturer UGREEN and product DXP4800 GT",
+        "User-authorized GT-only exception (2026-11-14): exact DMI plus stable EC firmware version; numeric chip ID remains unknown",
+        "--force --apply",
+        "No vendor/ACPI EC owner; exclusive process lock",
+        "Manual PWM 40..198; mode and PWM readback"
+      ],
+      "controller": {
+        "transport": "guarded EC ports 0x62/0x66",
+        "chip": "ITE IT55xx (stock driver label)",
+        "chip_id": null
+      },
+      "capabilities": {
+        "fan_rpm": "reverse-engineered",
+        "fan_cpu_pwm_write": "reverse-engineered",
+        "fan_system_pwm_write": "reverse-engineered",
+        "fan_pwm_readback": "unverified",
+        "fan_automatic_service": "software-eight-point-1.21.1.0016-recovered",
+        "power_recovery": "reverse-engineered",
+        "power_recovery_readback": "blocked",
+        "power_recovery_restore": "blocked"
+      },
+      "known_conflicts": [
+        "Vendor /proc/it86 or ug_4800gt_sio, ec_sys, active ACPI EC resource ownership; no driver unloading"
+      ],
+      "evidence": [
+        {
+          "firmware": "UGOS Pro 1.21.1.0016, kernel 6.18.15",
+          "input_sha256": "ca2e91fa9e9d23a738b4689b8bb39f199cad60786253add81435559a48c27ff0",
+          "method": "docs/DXP4800GT_HARDWARE_AUDIT.zh-CN.md",
+          "scope": "Manual PWM, stock-4800gt eight-point standard software policy, startup on/off; mock and QEMU tests, no physical validation"
+        }
+      ]
+    },
+    {
+      "id": "idx6012",
+      "plugin": "idx6012.so",
+      "marketing_names": [
+        "UGREEN iDX6012"
+      ],
+      "dmi_product_names": [
+        "iDX6012"
+      ],
+      "oem_identity": {
+        "manufacturer": "UGREEN",
+        "product_name": "Default string",
+        "product_version": "iDX6011_iDX6012 V3.0 241112",
+        "canonical": "iDX6011/iDX6012 OEM V3.0"
+      },
+      "support_level": "reverse-engineered",
+      "controller": {
+        "transport": "guarded EC ports 0x62/0x66",
+        "chip": "ITE5571 (official source; silicon ID not read)",
+        "chip_id": null
+      },
+      "capabilities": {
+        "fan_rpm": "verified",
+        "fan_mode_read": "verified",
+        "fan_pwm_readback": "verified",
+        "fan_pwm_write": "verified",
+        "fan_automatic_write": "verified",
+        "power_recovery": "reverse-engineered",
+        "power_recovery_restore": "blocked",
+        "power_recovery_readback": "verified",
+        "wake_on_lan": "reverse-engineered"
+      },
+      "write_requirements": [
+        "User authorized iDX6012-only silicon-ID exception 2026-11-15: exact UGREEN + confirmed board revision + BIOS 5.32 dated 11/12/2024",
+        "--force --apply; no vendor or active ACPI EC owner; exclusive process lock",
+        "Paired sys fans only; PWM 40..198; duty before enable; per-register readback and rollback",
+        "AC recovery requires exact board/BIOS, Intel 8086:7e02, unclaimed reserved MMIO 0xfe001020, lock, bit-0 readback and rollback; WOL uses two physical PCI Ethernet ports and driver readback"
+      ],
+      "known_conflicts": [
+        "Vendor EC drivers, active ACPI EC, occupied ports; built-in idle ec_sys requires explicit absence of instances"
+      ],
+      "evidence": [
+        {
+          "firmware": "UGOS Pro 1.17.0.0095, kernel 6.12.30+",
+          "input_sha256": "7bb2746324ac852475727cf23f7016517996b91dfb293d2292d531c1e71581b0",
+          "method": "docs/IDX6012_EC_INTAKE.zh-CN.md",
+          "scope": "Fan PWM/auto and AC on/off register readback, WOL off/on driver readback verified on device. Actual power-loss recovery and shutdown WOL not tested."
+        }
+      ]
     }
   ]
 }

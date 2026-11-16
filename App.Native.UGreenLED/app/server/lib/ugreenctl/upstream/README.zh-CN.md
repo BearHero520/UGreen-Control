@@ -1,21 +1,41 @@
-# ugreenctl
+# UGREEN NAS Hardware
 
-当前 `main` 已合入 Almighty 实现，以及后续独立 WOL/RTC、DXP6800 和兼容温控曲线。远端 `Almighty` 分支已删除，源码与使用说明统一以 `main` 为准。配套应用的开发与更新位于 [UGreen-Control/main](https://github.com/BearHero520/UGreen-Control/tree/main)，详见[迁移说明](docs/UGREEN_CONTROL_MIGRATION.zh-CN.md)。
+`ugreenctl` 是面向绿联 NAS 的开源 Linux 用户态硬件管理工具，提供命令行接口，
+用于查看硬件状态，以及控制兼容机型的灯光、风扇、来电启动和唤醒设置。
+适合通过 SSH 使用，也可作为其他应用的硬件控制后端。
 
-N76 已改为显式用户态实验直控，不含驱动编译功能；见 [直控说明与未验证项](docs/N76_DIRECT_CONTROL.zh-CN.md)。
+[English](README.md) · [下载版本](https://github.com/BearHero520/UGREEN-NAS-Hardware/releases) ·
+[兼容性目录](docs/COMPATIBILITY.zh-CN.md) · [问题反馈](https://github.com/BearHero520/UGREEN-NAS-Hardware/issues)
 
-ugreenctl 是一个面向绿联 NAS 的开源、用户态、插件化硬件管理工具。
+## 主要功能
 
-[English](README.md) · [兼容性目录](docs/COMPATIBILITY.zh-CN.md) ·
-[Compatibility catalog](docs/COMPATIBILITY.md)
+| 功能 | 可以做什么 |
+| --- | --- |
+| 机型与硬件识别 | 按精确机型选择控制路径，查看可用插件、控制器和功能。 |
+| 风扇与温度 | 读取风扇转速、PWM 和 CPU／硬盘／NVMe 温度，设置受保护的手动 PWM。 |
+| 自动温控 | 使用 `ugreenctl-fand` 按温度调整 PWM，支持已恢复的原厂软件曲线及自定义配置。 |
+| 电源与唤醒 | 管理来电启动策略、网络唤醒（WOL）和 RTC 定时唤醒。 |
+| LED 灯光 | 按机型控制灯光开关、颜色、亮度、闪烁或呼吸，并提供可选的 `ugreen_leds_cli` 参数兼容入口。 |
+| 盘位映射与定位 | 查看物理 SATA／NVMe 盘位映射，通过对应指示灯定位已确认映射的硬盘。 |
 
-当前实现包含原生 LED 控制、物理盘位映射及 `ugreen_leds_cli` 参数兼容入口。
-快速开始与逐机型限制见 [灯光与盘位说明](docs/LED_CONTROL.zh-CN.md)。
-各 Linux NAS 的运行库、持久目录和服务要求见 [部署指南](docs/LINUX_DEPLOYMENT.zh-CN.md)。
+每项功能的可用范围和验证状态按机型分别记录；目录覆盖 25 款目标机型，不代表全部功能
+均已实机验证。请先查看兼容性目录，再读取本机状态。风扇／来电启动使用机型 `.so` 插件，
+LED／盘位及 WOL／RTC 使用各自的内置档案。
 
-它按照 NAS 机型加载独立的 .so 插件。已实机验证的机型开放正常写入；仅完成固件逆向
-的机型只能在保留全部保护并明确确认风险时开放受限写入。models/ 中存在某机型的插件，
-不代表该机型已被支持。
+LED 命令由本仓库内置的 C 后端执行；可选的 `ugreen_leds_cli` 兼容入口也由本仓库编译，
+无需另外安装外部 LED 命令行工具。
+
+如果你希望在飞牛 fnOS 中通过图形界面管理这些功能，可使用配套的
+[UGreen Control](https://github.com/BearHero520/UGreen-Control)。
+
+## 运行环境
+
+- Linux x86/x86_64 或 ARM64；ARM64 不提供 x86 Super I/O 端口访问能力。
+- 硬件访问通常需要 root 或相应设备权限。
+- 源码构建需要 C11 编译器、CMake 3.20+ 和 Make／Ninja；Python 3.10+ 用于打包及相关测试。
+
+fnOS、Debian/Ubuntu、PVE、Unraid 和 TrueNAS SCALE 的运行库、持久目录与服务部署方式，
+请参阅 [Linux NAS 部署指南](docs/LINUX_DEPLOYMENT.zh-CN.md)。这些部署说明不等于各系统均已完成实机验证。
 
 ## 下载与快速开始
 
@@ -56,7 +76,8 @@ ARM64 使用文件名和目录名中的 `aarch64` 版本。每包包含四个程
 | DXP6800 Pro (`dxp6800pro`) | UGOS Pro `1.17.0.0095`，Build `20260630.111337`，内核 `6.12.30+` | CPU/成对系统风扇、来电启动、WOL、计划唤醒 | 已按固件实现，尚无实机写入验证；所有写入均需 `--force --apply`。 |
 | DXP6800 Plus (`dxp6800plus`) | UGOS Pro `1.20.0.0142` | CPU/成对系统风扇、来电恢复、WOL、计划唤醒 | 用户报告已验证，但详细范围未知；写入仍需 `--force --apply`，实际唤醒尚未验证。 |
 | DXP6800 (`dxp6800`) | UGOS Pro `1.20.0.0142` | CPU/成对系统风扇、来电恢复；独立内置 WOL/RTC 命令 | 已按固件实现，实机验证待补；`stock-6800` 采用 Pro 参数，原厂曲线未知。写入需 `--force --apply`。 |
-| DXP2800 / DXP8800 Plus | 上游 LED 协议记录 | 型号识别与有条件的内置 LED 档案 | 风扇/电源插件仍为占位；LED 写入为实验性。 |
+| DXP2800 EM26 (`dxp2800`) | UGOS Pro 1.20.0.0142；精确 `EM_DXP2800_V1.0.26` | 单系统风扇调速/转速、来电恢复、自定义温控；独立 WOL/RTC | 已按固件实现；实机验证待补；PWM 40..255，写入需 `--force --apply`。[证据](docs/DXP2800_EM26_SUPPORT.md)。 |
+| DXP8800 Plus | 机型记录 | 型号识别 | 风扇/电源插件仍为占位。 |
 
 风扇/电源写入要求精确 DMI；ARM 灯光使用经固件证实的精确设备树型号、
 compatible 和控制器身份。新增 LED 命令使用独立的内置协议档案，
@@ -280,16 +301,33 @@ DXP4800 Plus / Pro 等已支持机型不能仅靠替换二进制获得应用生�
 新增机型前请使用 [新机型接入模板](docs/NEW_MODEL_TEMPLATE.md)。禁止因为外观、
 CPU 或主板“看起来相近”就复用另一个机型的写寄存器映射。
 
-## 插件 ABI
+## 文档导航
 
-需要风扇模式控制的机型可导出 ABI version 3，同时保留 ABI version 2 兼容入口：
+- [灯光、盘位与 CLI 兼容入口](docs/LED_CONTROL.zh-CN.md)：LED 参数、盘位定位及逐机型限制。
+- [自动温控曲线](docs/FAN_CURVE.md)：`ugreenctl-fand` 的配置、运行方式和状态输出。
+- [来电策略持久化](docs/AC_RECOVERY_PERSISTENCE.zh-CN.md)：保存策略及服务启动、停止时的恢复行为。
+- [Linux NAS 部署](docs/LINUX_DEPLOYMENT.zh-CN.md)：运行库、安装目录和常驻服务。
+- [N76 实验直控](docs/N76_DIRECT_CONTROL.zh-CN.md)：显式用户态入口及仍未验证的输出。
+- [硬件支持与证据](docs/HARDWARE_SUPPORT.md)：控制器映射、固件依据和实机验证范围。
+- [架构与插件开发](docs/ARCHITECTURE.md)、[构建复现](docs/BUILD_REPRODUCIBILITY.zh-CN.md)：开发与验证方法。
 
-    const struct ugreenctl_plugin *ugreenctl_plugin_v3(void);
+## 参与和反馈
 
-    const struct ugreenctl_plugin *ugreenctl_plugin_v2(void);
+欢迎通过 [Issues](https://github.com/BearHero520/UGREEN-NAS-Hardware/issues) 反馈问题、补充机型验证，
+或提交 Pull Request 改进代码和文档。反馈时请附上精确机型、系统与内核版本、工具版本、
+执行的命令及相关输出；日志中的序列号、MAC 地址等个人信息请先脱敏。
 
-ABI 定义在 include/ugreenctl.h。核心程序优先加载 ABI version 3，无法找到时回退到
-ABI version 2，并通过 DMI 产品名或 --model 选择机型。
+## 支持作者
+
+如果这个项目对你有帮助，欢迎点一颗 ⭐ **Star**，让更多人发现它。
+愿意的话，也可以请作者喝杯咖啡，为后续适配、测试和维护添一点动力。
+打赏完全自愿，量力随心；你的使用、反馈和分享，同样是很好的支持。谢谢你！
+
+| 支付宝 | 微信支付 |
+| --- | --- |
+| ![支付宝自愿打赏二维码](https://raw.githubusercontent.com/BearHero520/UGREEN-NAS-Hardware/main/docs/assets/donate/alipay.jpg) | ![微信支付自愿打赏二维码](https://raw.githubusercontent.com/BearHero520/UGREEN-NAS-Hardware/main/docs/assets/donate/wechat.png) |
+
+点击图片可查看原图。
 
 ## 许可、原厂固件与证据
 

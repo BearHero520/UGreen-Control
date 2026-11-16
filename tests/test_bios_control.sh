@@ -28,9 +28,16 @@ cat > "$BIN" <<'EOF'
 #!/bin/sh
 printf '%s\n' "$@" > "$UGREENCTL_ARGS"
 case " $* " in
-  *" network wol models "*|*" power rtc-wake models "*)
-    for product in 'DX4600' 'DX4600+' 'DX4600 Pro' 'DXP4800' 'DXP4800S' 'UGREEN DXP4800 Plus' 'UGREEN DXP4800 Pro' 'UGREEN DXP480T Plus' 'DXP6800 Pro' 'DXP6800 Plus'; do
+  *" network wol models "*)
+    for product in 'DX4600' 'DX4600+' 'DX4600 Pro' 'DXP4800' 'DXP4800S' 'DXP4800 Plus' 'DXP4800 Pro' 'DXP480T Plus' 'DXP6800 Pro' 'DXP6800 Plus'; do
       printf 'mock\t%s\twol=automatic-or-explicit\n' "$product"
+    done
+    for product in 'DXP2800' 'DXP4800 GT' 'DXP6800' 'DXP8800 Pro'; do
+      printf 'mock\t%s\twol=explicit-interface-required\n' "$product"
+    done ;;
+  *" power rtc-wake models "*)
+    for product in 'DX4600' 'DX4600+' 'DX4600 Pro' 'DXP2800' 'DXP4800' 'DXP4800S' 'DXP4800 Plus' 'DXP4800 Pro' 'DXP4800 GT' 'DXP480T Plus' 'DXP6800' 'DXP6800 Plus' 'DXP6800 Pro' 'DXP8800 Pro'; do
+      printf 'mock\t%s\trtc=rtc_cmos\n' "$product"
     done ;;
   *" info "*) cat "$UGREENCTL_STATUS" ;;
   *" fan status "*) sed -n 's/^fan /fan /p' "$UGREENCTL_STATUS" ;;
@@ -112,6 +119,8 @@ assert_eq "$(tr '\n' ' ' < "$ARGS")" "--plugin-dir $PLUGINS --force --apply fan 
 ! bios_set_fan_mode cpu auto || fail "fan auto mode must remain unavailable"
 bios_set_startup last
 assert_eq "$(tr '\n' ' ' < "$ARGS")" "--plugin-dir $PLUGINS --force --apply power startup set restore "
+! bios_set_wol on || fail "WOL requires the upstream exact DMI"
+UGREEN_PRODUCT_NAME="DXP4800 Plus"
 bios_set_wol on
 assert_eq "$(tr '\n' ' ' < "$ARGS")" "--force --apply network wol set on "
 
@@ -256,9 +265,8 @@ assert_eq "$(tr '\n' ' ' < "$ARGS")" "--plugin-dir $PLUGINS --force --apply fan 
 bios_set_startup last
 assert_eq "$(tr '\n' ' ' < "$ARGS")" "--plugin-dir $PLUGINS --force --apply power startup set restore "
 
-bios_wol_supported_model || fail "Plus firmware-mapped WOL must be available"
-bios_set_wol on
-assert_eq "$(tr '\n' ' ' < "$ARGS")" "--force --apply network wol set on "
+bios_wol_supported_model || fail "DXP6800 Plus must expose its upstream WOL profile"
+! bios_wol_requires_interface || fail "DXP6800 Plus should allow upstream automatic matching"
 assert_eq "$(bios_fan_curve_stock_profile_for_model)" "stock-6800plus"
 
 UGREEN_PRODUCT_NAME="DXP6800"
@@ -292,7 +300,8 @@ assert_eq "$(tr '\n' ' ' < "$ARGS")" "--plugin-dir $PLUGINS --force --apply fan 
 bios_set_startup last
 assert_eq "$(tr '\n' ' ' < "$ARGS")" "--plugin-dir $PLUGINS --force --apply power startup set restore "
 
-! bios_wol_supported_model || fail "Plus must not inherit unverified WOL"
+bios_wol_supported_model || fail "DXP6800 must expose its upstream WOL profile"
+bios_wol_requires_interface || fail "DXP6800 requires an explicit interface"
 assert_eq "$(bios_fan_curve_stock_profile_for_model)" "stock-6800"
 
 UGREEN_PRODUCT_NAME="UGREEN DXP480T Plus"
@@ -323,6 +332,8 @@ assert_eq "$(tr '\n' ' ' < "$ARGS")" "--plugin-dir $PLUGINS --force --apply fan 
 ! bios_set_fan all 39 || fail "DXP480T PWM below 40 must be rejected"
 bios_set_startup on
 assert_eq "$(tr '\n' ' ' < "$ARGS")" "--plugin-dir $PLUGINS --apply power startup set on "
+! bios_set_wol off || fail "480T WOL requires the upstream exact DMI"
+UGREEN_PRODUCT_NAME="DXP480T Plus"
 bios_set_wol off
 assert_eq "$(tr '\n' ' ' < "$ARGS")" "--force --apply network wol set off "
 

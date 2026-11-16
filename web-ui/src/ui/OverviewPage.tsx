@@ -15,10 +15,17 @@ export type StatusData = {
 export type MappingItem = {
   device?: string;
   led?: string;
+  transport?: string;
+  slot_name?: string;
   state?: string;
   read_kbps?: number;
   write_kbps?: number;
 };
+
+export function diskLedLabel(item: MappingItem) {
+  if (item.led) return item.transport === 'u2' ? `${item.led} · U.2` : item.led;
+  return item.transport === 'nvme' && item.slot_name ? '无独立灯' : '未映射';
+}
 
 const modeLabels: Record<string, string> = { off: '关闭全部', on: '开启全部', smart: '智能模式' };
 const networkLabels: Record<string, string> = { disconnected: '断网', connected: '联网', vpn: '外网' };
@@ -61,7 +68,7 @@ export function OverviewPage({
         <div className="status-facts">
           <div><span>当前模式</span><strong>{modeLabels[status?.mode || ''] || status?.mode || '—'}</strong></div>
           <div><span>网络状态</span><strong>{network}</strong></div>
-          <div><span>已映射硬盘</span><strong>{mapping.length} 块</strong></div>
+          <div><span>已映射硬盘</span><strong>{mapping.filter((item) => item.led).length} 块</strong></div>
         </div>
       </div>
 
@@ -96,7 +103,7 @@ export function OverviewPage({
               <tbody>
                 {mapping.length ? mapping.map((item, index) => (
                   <tr key={`${item.device || 'disk'}-${index}`}>
-                    <td>{item.device || '—'}</td><td>{item.led || '—'}</td><td><StateChip state={item.state} /></td>
+                    <td>{item.device || '—'}</td><td>{diskLedLabel(item)}</td><td><StateChip state={item.state} /></td>
                     <td>{formatRate(item.read_kbps)}</td><td>{formatRate(item.write_kbps)}</td>
                   </tr>
                 )) : <tr><td className="empty-row" colSpan={5}>暂未检测到硬盘映射</td></tr>}

@@ -5,6 +5,7 @@
 # 测试 / 诊断脚本与临时输出（保留远程打包脚本）
 /scripts/*
 !/scripts/build_fpk.py
+!/scripts/build_led_compat.py
 !/scripts/build_ugreenctl.py
 !/scripts/build_fpk_remote.py
 !/scripts/preview_web.py

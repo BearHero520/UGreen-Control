@@ -296,6 +296,7 @@ tick_mode_smart() {
 
 daemon_loop() {
     local interval mode enabled cli_version
+    local controller_ready_profile="" controller_profile
     # The daemon outlives the request that started it. Avoid attributing all
     # subsequent runtime events to that one API/CGI request.
     unset UGREEN_REQUEST_ID
@@ -328,6 +329,17 @@ daemon_loop() {
             log_limited "backend" 60 "ERROR LED 控制后端不可用或发生冲突：${LED_LAST_ERROR:-unknown}"
             sleep "$interval"
             continue
+        fi
+
+        controller_profile=$(hardware_profile_key)
+        if [[ "$controller_ready_profile" != "$controller_profile" ]]; then
+            if led_initialize_controller; then
+                controller_ready_profile="$controller_profile"
+            else
+                log_limited "controller_init" 30 "ERROR LED 控制器初始化失败：${LED_LAST_ERROR:-unknown}"
+                sleep "$interval"
+                continue
+            fi
         fi
 
         mode=$(settings_get "$SETTINGS_FILE" mode global "smart")

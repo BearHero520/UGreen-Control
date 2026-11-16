@@ -1,7 +1,7 @@
 #!/bin/bash
 # 绿联机型档案：将 DMI 型号转换为控制协议、LED 布局与 HCTL 规则。
 
-UGREEN_CLI_RELEASE="local-dxp2800-em26-20261101"
+UGREEN_CLI_RELEASE="local-dxp4800gt-led-20261116"
 
 hardware_detected_product_name() {
     local product="${UGREEN_PRODUCT_NAME:-}" file
@@ -65,7 +65,20 @@ hardware_profile_key() {
             echo "$override"
             ;;
         *)
-            hardware_profile_from_name "$(hardware_detected_product_name)"
+            local product vendor
+            product=$(hardware_detected_product_name)
+            vendor="${UGREEN_SYS_VENDOR:-}"
+            if [[ -z "$vendor" && -r /sys/class/dmi/id/sys_vendor ]]; then
+                vendor=$(</sys/class/dmi/id/sys_vendor)
+            fi
+            # The user confirmed this exact shared-board signature is iDX6012.
+            # This selects application layout only; the CLI independently checks DMI.
+            if [[ "$product" == 'Default string' && "$vendor" == UGREEN &&
+                  "$(hardware_detected_product_version)" == 'iDX6011_iDX6012 V3.0 241112' ]]; then
+                echo idx6012
+            else
+                hardware_profile_from_name "$product"
+            fi
             ;;
     esac
 }
@@ -147,7 +160,9 @@ hardware_power26_controller() {
 
 hardware_hctl_profile() {
     case "${1:-$(hardware_profile_key)}" in
-        dxp6800) echo "dxp6800" ;;
+        # Intel hosts 0/1 -> bays 5/6; ASMedia hosts 2..5 -> bays 1..4.
+        # iDX6012 shares the existing six-bay routing, not sequential HCTL+1.
+        dxp6800|idx6012) echo "dxp6800" ;;
         *) echo "sequential" ;;
     esac
 }
@@ -182,5 +197,6 @@ dxp8800|UGREEN DXP8800 Plus
 dxp480t_plus|UGREEN DXP480T / DXP480T Plus（仅电源灯）
 idx6011|UGREEN iDX6011（实验性）
 idx6011_pro|UGREEN iDX6011 Pro（实验性）
+idx6012|UGREEN iDX6012（实验性）
 EOF
 }

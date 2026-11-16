@@ -100,7 +100,7 @@ _led_cli_run_raw_unlocked() {
     ensure_cli || return 1
     protocol="upstream-managed"
     for arg in "$@"; do
-        case "$arg" in -on|-off|-color|-brightness|-blink|-breath) access=(--force --apply); break ;; esac
+        case "$arg" in -on|-off|-color|-brightness|-blink|-breath|-initialize-idx6012) access=(--force --apply); break ;; esac
     done
     action="$*"
     if (( ${#access[@]} )); then
@@ -142,6 +142,15 @@ _led_cli_run_raw_unlocked() {
 
 led_cli_power26_probe() {
     led_cli_run power -status
+}
+
+# Called once by an enabled daemon before normal control. The bundled CLI owns
+# identity checks, initialization, locking and restoration of the power LED.
+# Do not invoke from status/backend discovery: those paths must remain read-only.
+led_initialize_controller() {
+    declare -F hardware_profile_key >/dev/null || return 0
+    [[ "$(hardware_profile_key)" == idx6012 ]] || return 0
+    _led_cli_run_raw snapshot power -initialize-idx6012 >/dev/null
 }
 
 # The release compatibility CLI supports N76 modes, not palette changes or breath.

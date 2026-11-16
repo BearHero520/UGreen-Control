@@ -1,0 +1,27 @@
+{
+  "binary_sha256": "d92e4a7f10ad8f112908db3c7a636bd3e8f014aa756ffeae9ce06dd9886ba069",
+  "patch_sha256": "7c923f16e72f1095c21382b804467a590cf20cc9984b0778adb562fc75849ee4",
+  "patches": {
+    "dxp2800-em26.patch": "7c923f16e72f1095c21382b804467a590cf20cc9984b0778adb562fc75849ee4",
+    "dxp4800gt-multibus.patch": "4b3994de46ba8c2f9d7da617795786f698621ac6510bef59bd767670e3f4916e",
+    "idx6012-block.patch": "73fbec5666cc2d0e31f49fae1b774f308d0f28649d93622a29215c7efee2f09b"
+  },
+  "physical_validation": "not-performed",
+  "source_revision": "aff7991ee58709ad34b5afbc2787f0d21300368d",
+  "source_sha256": {
+    "App.Native.UGreenLED/app/server/vendor/ugreen_leds_controller/patches/dxp2800-em26.patch": "7c923f16e72f1095c21382b804467a590cf20cc9984b0778adb562fc75849ee4",
+    "App.Native.UGreenLED/app/server/vendor/ugreen_leds_controller/patches/dxp4800gt-multibus.patch": "4b3994de46ba8c2f9d7da617795786f698621ac6510bef59bd767670e3f4916e",
+    "App.Native.UGreenLED/app/server/vendor/ugreen_leds_controller/patches/idx6012-block.patch": "73fbec5666cc2d0e31f49fae1b774f308d0f28649d93622a29215c7efee2f09b",
+    "scripts/build_led_compat.py": "0e19f93f2f865ee8798decd27f40bf70c5df305ccf7653b8fc2dc20d17753b40",
+    "tests/test_dxp2800_led.c": "c877253e8514cc1d787936d1544d297fc96ff48179dc6c93aca2914385d208bb",
+    "tests/test_dxp4800gt_bus.c": "21866dbe16f1d6b05c9bd39145d7f6791952c37f5e463c138f0484d9b93efbd5",
+    "tests/test_dxp4800gt_discovery.c": "09882cd4b62c59aed7e459c00a1adb5cd4319ea72f00335cae0953d77d9b6e00",
+    "tests/test_idx6012_led.c": "621ddb2f231174c147f8a594ce8b470194f13f5af05da4b6565a8cfbd95d8ca6"
+  },
+  "tests": {
+    "test-dxp2800-led": "be78e8ceea250c38cc18f654a84021ba61893c67870581b0f08ef6eccc20f5db",
+    "test-dxp4800gt-bus": "2cffcd9e4422548f18e30650e79eea736a4929ff3919775507c4e274683f5bac",
+    "test-dxp4800gt-discovery": "4be2e743c23b955cdd948de45f3f6b6067c6fb17a2edb798def4116d9c3520e5",
+    "test-idx6012-led": "31668c219c4c297e368d25394ec87c91888fc33d7e83ac616eec3e26ec2c6949"
+  }
+}

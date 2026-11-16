@@ -18,7 +18,7 @@ SERVER = ROOT / 'App.Native.UGreenLED/app/server'
 SOURCE = ROOT.parent / 'UGREEN-NAS-Hardware'
 LOCK_FILE = Path(__file__).with_name('hardware-release.json')
 PROGRAMS = ('ugreenctl', 'ugreenctl-fand', 'ugreen_leds_cli', 'ugreenctl-ledd')
-MODELS = ('dx4600', 'dxp2800', 'dxp4800', 'dxp4800plus', 'dxp4800s', 'dxp480tplus', 'dxp6800pro', 'dxp6800plus', 'dxp6800', 'dxp8800plus', 'dxp8800pro')
+MODELS = ('dx4600', 'dxp2800', 'dxp4800', 'dxp4800plus', 'dxp4800s', 'dxp480tplus', 'dxp6800pro', 'dxp6800plus', 'dxp6800', 'dxp8800plus', 'dxp8800pro', 'dxp4800gt', 'idx6012')
 
 def digest(data):
     return hashlib.sha256(data).hexdigest()

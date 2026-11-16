@@ -66,6 +66,12 @@ disk_sample_io() {
 # 仅在缓存过期时执行 ATA CHECK POWER MODE，降低对兼容性较差桥接器的查询频率。
 disk_read_power_state_cached() {
     local dev="$1" probe_interval="${2:-60}" f now cached_at cached_state out lower
+    # U.2 is NVMe, so ATA CHECK POWER MODE would give a false offline result.
+    # After the caller checks the block node and I/O, idle here means no I/O.
+    if [[ "$dev" =~ ^/dev/nvme[0-9]+n[0-9]+$ ]]; then
+        echo idle
+        return
+    fi
     f=$(disk_power_cache_path "$dev")
     now=$(date +%s)
 

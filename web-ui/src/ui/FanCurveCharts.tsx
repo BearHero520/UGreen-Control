@@ -31,6 +31,11 @@ export type FanCurveDraft = {
 };
 
 export type StockFanCurveData = {
+  format?: string;
+  cpufan_curve_cpu?: string;
+  sysfan_curve_cpu?: string;
+  sysfan_curve_ata?: string;
+  sysfan_curve_ssd?: string;
   available?: boolean;
   profile?: string;
   cpu?: string;
@@ -100,13 +105,13 @@ function parseCsv(source: string, expected: number, fallback: number[]) {
   );
 }
 
-function curveValues(draft: FanCurveDraft, minPwm: number): CurveValues {
+function curveValues(draft: FanCurveDraft, minPwm: number, maxPwm = 255): CurveValues {
   const pwm = [
-    clamp(Math.round(draft.minimum), minPwm, 255),
+    clamp(Math.round(draft.minimum), minPwm, maxPwm),
     ...parseCsv(draft.pwm, 4, [128, 204, 255, 255]),
   ];
   for (let index = 1; index < pwm.length; index += 1)
-    pwm[index] = clamp(pwm[index], pwm[index - 1], 255);
+    pwm[index] = clamp(pwm[index], pwm[index - 1], maxPwm);
   return {
     cpu: parseCsv(draft.cpu, 5, [50, 55, 75, 80, 90]),
     hdd: parseCsv(draft.hdd, 5, [40, 45, 50, 55, 70]),
@@ -166,8 +171,9 @@ function useEChart(
 function curveSeries(
   draft: FanCurveDraft,
   minPwm: number,
+  maxPwm: number,
 ): LineSeriesOption[] {
-  const values = curveValues(draft, minPwm);
+  const values = curveValues(draft, minPwm, maxPwm);
   return curves.map((curve) => ({
     id: `curve-${curve.key}`,
     name: curve.label,
@@ -198,6 +204,7 @@ function curveOption(
   draft: FanCurveDraft,
   minPwm: number,
   maxTemperature = 125,
+  maxPwm = 255,
 ): EChartsOption {
   return {
     animation: false,
@@ -241,7 +248,7 @@ function curveOption(
     yAxis: {
       type: "value",
       min: minPwm,
-      max: 255,
+      max: maxPwm,
       name: "PWM",
       nameTextStyle: { color: axisTextColor, fontSize: 10, fontWeight: 700 },
       axisLine: { show: true, lineStyle: { color: axisLineColor } },
@@ -249,19 +256,20 @@ function curveOption(
       axisLabel: { color: axisTextColor, fontSize: 9 },
       splitLine: { lineStyle: { color: gridLineColor } },
     },
-    series: curveSeries(draft, minPwm),
+    series: curveSeries(draft, minPwm, maxPwm),
   };
 }
 
 function updateCurvePoint(
   draft: FanCurveDraft,
   minPwm: number,
+  maxPwm: number,
   curveKey: CurveKey,
   pointIndex: number,
   x: number,
   y: number,
 ) {
-  const values = curveValues(draft, minPwm);
+  const values = curveValues(draft, minPwm, maxPwm);
   const temperatures = [...values[curveKey]];
   const pwm = [...values.pwm];
   const lowerTemperature = pointIndex
@@ -273,7 +281,7 @@ function updateCurvePoint(
       : 125;
   const lowerPwm = pointIndex ? pwm[pointIndex - 1] : minPwm;
   const upperPwm =
-    pointIndex < pwm.length - 1 ? pwm[pointIndex + 1] : 255;
+    pointIndex < pwm.length - 1 ? pwm[pointIndex + 1] : maxPwm;
   const temperature = clamp(
     Math.round(Number.isFinite(x) ? x : temperatures[pointIndex]),
     lowerTemperature,
@@ -301,11 +309,13 @@ function updateCurvePoint(
 export function FanCurveEditor({
   draft,
   minPwm,
+  maxPwm = 255,
   disabled,
   onChange,
 }: {
   draft: FanCurveDraft;
   minPwm: number;
+  maxPwm?: number;
   disabled: boolean;
   onChange: (next: FanCurveDraft) => void;
 }) {
@@ -338,10 +348,10 @@ export function FanCurveEditor({
     if (!chart) return;
     draftRef.current = draft;
     pendingDraftRef.current = draft;
-    chart.setOption(curveOption(draft, minPwm), true);
+    chart.setOption(curveOption(draft, minPwm, 125, maxPwm), true);
 
     const frame = window.requestAnimationFrame(() => {
-      const values = curveValues(draft, minPwm);
+      const values = curveValues(draft, minPwm, maxPwm);
       const graphics = curves.flatMap((curve) =>
         values[curve.key].map((temperature, pointIndex) => {
           const pixel = chart.convertToPixel(
@@ -357,6 +367,7 @@ export function FanCurveEditor({
             const next = updateCurvePoint(
               pendingDraftRef.current,
               minPwm,
+              maxPwm,
               curve.key,
               pointIndex,
               Number(data?.[0]),
@@ -364,7 +375,7 @@ export function FanCurveEditor({
             );
             pendingDraftRef.current = next.draft;
             chart.setOption(
-              { series: curveSeries(next.draft, minPwm) },
+              { series: curveSeries(next.draft, minPwm, maxPwm) },
               { replaceMerge: ["series"], lazyUpdate: true },
             );
             setReadout(
@@ -396,7 +407,7 @@ export function FanCurveEditor({
       chart.setOption({ graphic: graphics });
     });
     return () => window.cancelAnimationFrame(frame);
-  }, [chartRef, disabled, draft, minPwm]);
+  }, [chartRef, disabled, draft, minPwm, maxPwm]);
 
   return (
     <section className="fan-curve-graph" aria-label="温度 PWM 曲线编辑器">
@@ -434,11 +445,11 @@ function sameNumbers(left: number[], right: number[]) {
 
 export function StockFanCurve({ stock }: { stock: StockFanCurveData | null }) {
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const chartRef = useEChart(containerRef, Boolean(stock?.available));
+  const chartRef = useEChart(containerRef, Boolean(stock?.available && stock.format !== "eight-point"));
 
   useEffect(() => {
     const chart = chartRef.current;
-    if (!chart || !stock?.available) return;
+    if (!chart || !stock?.available || stock.format === "eight-point") return;
     const systemPwm = parseCsv(stock.system_pwm || "", 4, [64, 128, 204, 255]);
     const cpuPwm = parseCsv(stock.cpu_pwm || "", 4, systemPwm);
     const sources: Array<{
@@ -530,6 +541,23 @@ export function StockFanCurve({ stock }: { stock: StockFanCurveData | null }) {
   const proCompatible = ["stock-6800", "stock-6800plus"].includes(String(stock?.profile));
   if (!stock?.available)
     return <p className="surface-help">暂未读取到该机型的原厂曲线记录。</p>;
+  if (stock.format === "eight-point") {
+    const rows = [
+      ["CPU → CPU 风扇", stock.cpufan_curve_cpu],
+      ["HDD → 系统风扇", stock.sysfan_curve_ata],
+      ["NVMe → 系统风扇", stock.sysfan_curve_ssd],
+    ];
+    return <section className="fan-curve-graph" aria-label="GT 官方八点温控曲线">
+      <h3>GT 官方八点温控曲线</h3>
+      <p className="surface-help">每格为温度 °C → 原始 PWM。点间线性插值后限制到 40–198；系统风扇取 HDD 与 NVMe 需求的较高值。CPU 风扇独立调节。</p>
+      <div className="fan-curve-table-wrap"><table className="fan-curve-table">
+        <thead><tr><th>温度来源</th>{Array.from({length: 8}, (_, i) => <th key={i}>点 {i+1}</th>)}</tr></thead>
+        <tbody>{rows.map(([label, value]) => <tr key={label}><th>{label}</th>{String(value || "").split("&").map((point, i) => <td key={i}>{point.replace(",", " → ")}</td>)}</tr>)}</tbody>
+      </table></div>
+      <p className="surface-help">GT 有独立 CPU 风扇，官方配置中的 CPU → 系统风扇备用曲线不启用。CPU 温度失效时两路使用 PWM 198；开启存储温度保护后，无存储读数同样使用 198。保留快速升速、延迟降速保护。</p>
+      <output>{stock.profile}</output>
+    </section>;
+  }
   return (
     <section className="fan-curve-graph" aria-label="原厂温度 PWM 曲线">
       <div className="fan-curve-graph-heading">

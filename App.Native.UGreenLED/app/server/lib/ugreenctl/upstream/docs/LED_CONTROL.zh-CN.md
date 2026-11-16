@@ -17,6 +17,8 @@ PVE 应在宿主机运行；容器或虚拟机中的诊断结果不能代表宿�
 
 新命令的 `--json`、`--apply`、`--force` 可以放在命令前后。
 LED/盘位命令使用内置能力档案，不需要加载风扇 `.so` 插件。
+LED 控制与可选的 `ugreen_leds_cli` 兼容入口均由本仓库的 C 后端提供，
+不需要安装或调用外部 LED 命令行工具。
 
 ```sh
 # 查看本机档案声明的灯位和功能；不访问 I2C。
@@ -292,18 +294,8 @@ UGOS Pro `1.20.0.0142` / amd64 / Linux `6.18.15`，SHA-256：
 `firmware-inbox/work/dxp6800plus/`，新增可复现分析目录
 `firmware-inbox/work/almighty-firmware-map/`。详情见固件映射核对文档。
 
-协议参考源码：
-`miskcoo/ugreen_leds_controller`，commit
-`f0fcd8192abdd92244aba9f6f0d10572f5561380`（MIT）。本地 `git archive` 快照：
-`firmware-inbox/work/almighty-upstream/ugreen_leds_controller-f0fcd8192abdd92244aba9f6f0d10572f5561380.tar`，
-SHA-256：`e83c4c840ede2c945db3903ca64ecee3bdabf345a1ab5eefea3422931142152c`。
-提取/参考目录：`firmware-inbox/work/almighty-upstream/source/`；不纳入 Git。
-
-来源包括 [传统协议源码](https://github.com/miskcoo/ugreen_leds_controller/blob/f0fcd8192abdd92244aba9f6f0d10572f5561380/cli/ugreen_leds.cpp)、
-[DXP2800 修订差异](https://github.com/miskcoo/ugreen_leds_controller/issues/128)、
-[同芯片身份不同协议](https://github.com/miskcoo/ugreen_leds_controller/pull/100)、
-[物理盘位一手记录](https://github.com/miskcoo/ugreen_leds_controller/issues/9)。
-上游许可保存在 `led/LICENSE.upstream-led`，见 [第三方说明](../THIRD_PARTY_NOTICES.md)。
+协议参考、历史来源与许可记录集中在 [第三方说明](../THIRD_PARTY_NOTICES.md)，
+用于记录实现依据，不属于安装或运行依赖。
 
 协议、权限/所有者/锁/身份拒绝、回读失败、定位恢复、稀疏拓扑、空槽、校准、
 歧义与命令兼容通过模拟和 Linux fixture 测试。构建与模拟通过不表示实机写入已验证，

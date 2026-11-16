@@ -7,21 +7,28 @@ disk_inventory_field() {
     printf '%s\n' "$line" | sed -n "s/.*${key}=\"\\([^\"]*\\)\".*/\\1/p"
 }
 
+# Output includes NVMe namespaces (U.2 and M.2); form factor and LED slot
+# cannot be inferred from nvme numbering. Never invent an HCTL for NVMe.
+disk_inventory_is_block() { [[ -b "$1" ]]; }
+
 # 输出：device|hctl|serial|model|size|transport
 disk_inventory_rows() {
-    local raw line name hctl serial model size transport dev
-    raw=$(lsblk -S -n -P -o NAME,HCTL,SERIAL,MODEL,SIZE,TRAN 2>/dev/null || true)
+    local raw line name hctl serial model size transport dev type
+    raw=$(lsblk -d -n -P -o NAME,TYPE,HCTL,SERIAL,MODEL,SIZE,TRAN 2>/dev/null || true)
     if [[ -n "$raw" ]]; then
         while IFS= read -r line; do
             [[ -n "$line" ]] || continue
             name=$(disk_inventory_field "$line" NAME)
+            type=$(disk_inventory_field "$line" TYPE)
+            [[ "$type" == "disk" ]] || continue
             hctl=$(disk_inventory_field "$line" HCTL)
             serial=$(disk_inventory_field "$line" SERIAL)
             model=$(disk_inventory_field "$line" MODEL)
             size=$(disk_inventory_field "$line" SIZE)
             transport=$(disk_inventory_field "$line" TRAN)
-            dev="/dev/$name"
-            [[ -n "$name" && -b "$dev" ]] || continue
+            dev="/dev/${name#/dev/}"
+            [[ -n "$name" ]] && disk_inventory_is_block "$dev" || continue
+            [[ "$name" != nvme* || -n "$transport" ]] || transport=nvme
             printf '%s|%s|%s|%s|%s|%s\n' "$dev" "$hctl" "$serial" "$model" "$size" "$transport"
         done <<< "$raw"
         return
@@ -62,8 +69,34 @@ disk_guess_led_by_hctl() {
     fi
 }
 
-# 自动生成映射行：device|hctl|led|serial
+# The GT's SATA and U.2 endpoints can share a bay. The upstream physical
+# scanner checks that conflict before returning a slot. Do not fall back to HCTL.
+disk_gt_physical_rows() {
+    local rows header dev interface slot led extra row
+    local -a decoded=()
+    rows=$(timeout 5 "${SERVER_DIR}/bin/ugreenctl" disk map --tsv) || return 1
+    {
+        IFS= read -r header
+        [[ "$header" == $'device\tinterface\tslot_name\tled' ]] || return 1
+        while IFS= read -r row; do
+            IFS=$'\t' read -r dev interface slot led extra <<< "$row"
+            [[ "$dev" =~ ^/dev/(sd[a-z]+|nvme[0-9]+n[0-9]+)$ && -z "$extra" ]] || return 1
+            [[ "$interface" =~ ^(sata|nvme|u2)$ ]] || return 1
+            [[ "$slot" == - || "$slot" =~ ^(ata|nvme)[1-9][0-9]*$ ]] || return 1
+            [[ "$led" == - || ( "$slot" != - && "$led" =~ ^disk[1-4]$ ) ]] || return 1
+            disk_inventory_is_block "$dev" || continue
+            decoded+=("$dev||${led#-}||$interface|${slot#-}")
+        done
+        if (( ${#decoded[@]} )); then printf '%s\n' "${decoded[@]}"; fi
+    } <<< "$rows"
+}
+
+# 自动生成映射行：device|hctl|led|serial[|interface|slot]
 disk_build_mapping() {
+    if declare -F hardware_detected_product_name >/dev/null && [[ "$(hardware_detected_product_name)" == 'DXP4800 GT' ]]; then
+        disk_gt_physical_rows
+        return
+    fi
     local dev hctl serial model size transport led slot
     declare -A valid_led=() used_led=()
     while IFS= read -r slot; do
@@ -78,7 +111,7 @@ disk_build_mapping() {
     done < <(disk_inventory_rows | sort -t'|' -k2,2V -k1,1)
 }
 
-declare -gA DISK_LED_MAP
+declare -gA DISK_LED_MAP=() DISK_MAP_INTERFACE=() DISK_MAP_SLOT=()
 
 disk_mapping_mode() {
     local settings="$1" mode
@@ -114,10 +147,14 @@ disk_load_auto_mapping_from_settings() {
 }
 
 disk_load_auto_mapping_live() {
-    local dev hctl led serial
-    while IFS='|' read -r dev hctl led serial; do
-        [[ -n "$dev" && -n "$led" ]] && DISK_LED_MAP["$dev"]="$led"
-    done < <(disk_build_mapping)
+    local rows dev hctl led serial interface slot
+    rows=$(disk_build_mapping) || return 1
+    while IFS='|' read -r dev hctl led serial interface slot; do
+        [[ -n "$dev" ]] || continue
+        [[ -z "$led" ]] || DISK_LED_MAP["$dev"]="$led"
+        [[ -z "$interface" ]] || DISK_MAP_INTERFACE["$dev"]="$interface"
+        [[ -z "$slot" ]] || DISK_MAP_SLOT["$dev"]="$slot"
+    done <<< "$rows"
     [[ ${#DISK_LED_MAP[@]} -gt 0 ]]
 }
 
@@ -147,6 +184,7 @@ disk_load_position_mapping_from_settings() {
 
     [[ ${#hctl_led[@]} -gt 0 ]] || return 1
     while IFS='|' read -r dev hctl serial model size transport; do
+        [[ -n "$hctl" ]] || continue
         led="${hctl_led[$hctl]:-}"
         [[ -n "$dev" && -n "$led" ]] && DISK_LED_MAP["$dev"]="$led"
     done < <(disk_inventory_rows)
@@ -179,6 +217,7 @@ disk_load_identity_mapping_from_settings() {
 
     [[ ${#serial_led[@]} -gt 0 ]] || return 1
     while IFS='|' read -r dev hctl inv_serial model size transport; do
+        [[ -n "$inv_serial" ]] || continue
         mapped_led="${serial_led[$inv_serial]:-}"
         [[ -n "$dev" && -n "$inv_serial" && -n "$mapped_led" ]] && DISK_LED_MAP["$dev"]="$mapped_led"
     done < <(disk_inventory_rows)
@@ -188,6 +227,8 @@ disk_load_identity_mapping_from_settings() {
 disk_load_mapping_from_settings() {
     local settings="$1" mode
     DISK_LED_MAP=()
+    DISK_MAP_INTERFACE=()
+    DISK_MAP_SLOT=()
     [[ -f "$settings" ]] || return 1
     mode=$(disk_mapping_mode "$settings")
     case "$mode" in
@@ -208,9 +249,9 @@ disk_remove_section() {
 
 # 重写 settings 中的自动 [disk_map]。
 disk_refresh_mapping() {
-    local settings="$1" tmp product profile
+    local settings="$1" tmp product profile dev hctl led serial interface slot
     local -a lines=()
-    while IFS='|' read -r dev hctl led serial; do
+    while IFS='|' read -r dev hctl led serial interface slot; do
         [[ -n "$dev" && -n "$led" ]] && lines+=("${dev}=${led}")
     done < <(disk_build_mapping)
     product=$(hardware_detected_product_name)

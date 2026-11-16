@@ -502,14 +502,18 @@ bios_status_json() {
     wol_error="$BIOS_WOL_ERROR"
     fan_curve=$(bios_fan_curve_status_json)
     bios_write_risk_acknowledged && risk_acknowledged=true
-    printf '{"ok":true,"supported":%s,"available":%s,"startup_available":%s,"wol_available":%s,"model":"%s","experimental":%s,"min_pwm":%s,"fan_write_target":"%s","cpu_fan_present":%s,"fan_mode_writable":%s,"pwm_readable":%s,"write_confirmation_required":%s,"write_confirmation_acknowledged":%s,"direct_fan_fallback":%s,"product_name":"%s","backend":"%s","chip_id":"%s","revision":%s,"cpu_pwm":%s,"sys_pwm":%s,"sys2_pwm":%s,"cpu_rpm":%s,"sys_rpm":%s,"sys2_rpm":%s,"cpu_manual":%s,"sys_manual":%s,"sys2_manual":%s,"startup":"%s","wol":"%s","error":"%s","fan_error":"%s","startup_error":"%s","wol_error":"%s"' \
+    printf '{"max_pwm":%s,"startup_readback":%s,"startup_restore_supported":%s,' "${BIOS_MAX_PWM:-255}" "$([[ "$BIOS_MODEL" == "dxp4800gt" ]] && echo false || echo true)" "$([[ "$BIOS_MODEL" == "dxp4800gt" || "$BIOS_MODEL" == idx6012 ]] && echo false || echo true)"
+    printf '"ok":true,"supported":%s,"available":%s,"startup_available":%s,"wol_available":%s,"model":"%s","experimental":%s,"min_pwm":%s,"fan_write_target":"%s","cpu_fan_present":%s,"fan_mode_writable":%s,"pwm_readable":%s,"write_confirmation_required":%s,"write_confirmation_acknowledged":%s,"direct_fan_fallback":%s,"product_name":"%s","backend":"%s","chip_id":"%s","revision":%s,"cpu_pwm":%s,"sys_pwm":%s,"sys2_pwm":%s,"cpu_rpm":%s,"sys_rpm":%s,"sys2_rpm":%s,"cpu_manual":%s,"sys_manual":%s,"sys2_manual":%s,"startup":"%s","wol":"%s","error":"%s","fan_error":"%s","startup_error":"%s","wol_error":"%s"' \
         "$BIOS_SUPPORTED" "$BIOS_AVAILABLE" "$BIOS_STARTUP_AVAILABLE" "$BIOS_WOL_AVAILABLE" "$(json_str "$BIOS_MODEL")" "$BIOS_EXPERIMENTAL" "${BIOS_MIN_PWM:-0}" "$(json_str "$BIOS_FAN_WRITE_TARGET")" \
         "$BIOS_CPU_FAN_PRESENT" "$BIOS_FAN_MODE_WRITABLE" "$BIOS_PWM_READABLE" "$BIOS_WRITE_CONFIRMATION_REQUIRED" "$risk_acknowledged" "$BIOS_DIRECT_FAN_FALLBACK" "$(json_str "$BIOS_PRODUCT_NAME")" "$(json_str "$BIOS_BACKEND")" \
         "$(json_str "$chip_id")" "${BIOS_REVISION:-0}" "${BIOS_CPU_PWM:--1}" "${BIOS_SYS_PWM:--1}" "${BIOS_SYS2_PWM:--1}" \
         "${BIOS_CPU_RPM:-0}" "${BIOS_SYS_RPM:-0}" "${BIOS_SYS2_RPM:-0}" "$BIOS_CPU_MANUAL" "$BIOS_SYS_MANUAL" "$BIOS_SYS2_MANUAL" \
         "$(json_str "$BIOS_STARTUP_POLICY")" "$(json_str "$BIOS_WOL_POLICY")" "$(json_str "$error")" "$(json_str "$fan_error")" "$(json_str "$startup_error")" "$(json_str "$wol_error")"
-    printf ',"wol_supported":%s,"rtc_supported":%s,"wol_automatic":%s,"wol_interface":"%s"' \
-        "$BIOS_WOL_SUPPORTED" "$BIOS_RTC_SUPPORTED" "$BIOS_WOL_AUTOMATIC" "$(json_str "$(bios_selected_wol_interface)")"
+    printf ',"wol_supported":%s,"rtc_supported":%s,"wol_automatic":%s,' \
+        "$BIOS_WOL_SUPPORTED" "$BIOS_RTC_SUPPORTED" "$BIOS_WOL_AUTOMATIC"
+    printf '"wol_interface_required":%s,"wol_interface":"%s","wol_interfaces":%s' \
+        "$(bios_wol_requires_interface && echo true || echo false)" \
+        "$(json_str "$(bios_selected_wol_interface)")" "$(bios_wol_interfaces_json)"
     printf ',"fan_curve":%s' "$fan_curve"
     printf ',"power_schedule":{"available":%s,"enabled":%s,"days":"%s","wake_time":"%s","shutdown_time":"%s","rtc_epoch":%s,"error":"%s"}' \
         "$BIOS_POWER_SCHEDULE_AVAILABLE" "$BIOS_POWER_SCHEDULE_ENABLED" \
@@ -534,6 +538,7 @@ bios_write_risk_acknowledgement_value() {
     profile=$(hardware_detected_product_name)
     token=$(bios_write_confirmation_token)
     bios_supported_model || bios_wol_supported_model || bios_rtc_supported_model || return 1
+    if [[ "$(bios_detected_profile)" == idx6012 ]]; then profile="idx6012:$(hardware_detected_product_version)"; fi
     [[ -n "$token" ]] || return 1
     printf '%s\n' "v2:${token}:${profile}"
 }
@@ -769,6 +774,13 @@ clear_application_logs() {
 }
 
 handle_api_request() {
+if [[ "$REQUEST_METHOD" == POST && "$API_PATH" == /bios/* ]]; then
+    mkdir -p "$(dirname "$(bios_fan_curve_pid_path)")"
+    if ! { exec 8>"$(dirname "$(bios_fan_curve_pid_path)")/bios-write.lock"; } || ! flock -w 15 8; then
+        echo '{"ok":false,"error":"另一项 BIOS 设置正在执行，请稍后重试"}'
+        return
+    fi
+fi
 case "$API_PATH" in
     /hardware/diagnostics)
         if [[ "$REQUEST_METHOD" != "GET" ]]; then
@@ -892,14 +904,19 @@ case "$API_PATH" in
         else
             if bios_fan_curve_running; then
                 fan_curve_was_running=true
-                bios_fan_curve_stop true
+                if ! bios_fan_curve_stop true; then
+                    printf '{"ok":false,"error":"%s"}' "$(json_str "$BIOS_LAST_ERROR")"
+                    return
+                fi
             fi
-            if bios_set_fan "$channel" "$pwm"; then
+            if bios_set_fan_saved "$channel" "$pwm"; then
                 settings_set "$SETTINGS_FILE" fan_curve enabled false
             if [[ "$channel" == "cpu" ]]; then fan_name="CPU 风扇"; elif [[ "$channel" == "all" ]]; then fan_name="系统风扇对"; else fan_name="系统风扇"; fi
                 bios_status_json "${fan_name} 已切换为固定转速 PWM ${pwm}；自动温控已停止"
             else
+                fan_write_error="$BIOS_LAST_ERROR"
                 if $fan_curve_was_running; then bios_fan_curve_restore >/dev/null 2>&1 || true; fi
+                BIOS_LAST_ERROR="$fan_write_error"
                 printf '{"ok":false,"error":"%s"}' "$(json_str "${BIOS_LAST_ERROR:-风扇控制失败}")"
             fi
         fi
@@ -913,15 +930,18 @@ case "$API_PATH" in
         curve_cpu=$(query_value cpu); curve_cpu="${curve_cpu:-50,55,75,80,90}"
         curve_hdd=$(query_value hdd); curve_hdd="${curve_hdd:-40,45,50,55,70}"
         curve_ssd=$(query_value ssd); curve_ssd="${curve_ssd:-45,50,60,65,70}"
-        curve_pwm=$(query_value pwm); curve_pwm="${curve_pwm:-64,128,204,255}"
+        curve_pwm=$(query_value pwm); curve_pwm="${curve_pwm:-$(if [[ "$(bios_detected_profile)" == idx6012 ]]; then echo 64,128,170,198; else echo 64,128,204,255; fi)}"
         curve_storage=$(query_value require_storage); curve_storage="${curve_storage:-false}"
         if [[ "$REQUEST_METHOD" == "GET" ]]; then
             bios_fan_curve_status_json
         elif [[ "$REQUEST_METHOD" != "POST" ]]; then
             echo '{"ok":false,"error":"method not allowed"}'
         elif [[ "$curve_action" == "stop" ]]; then
-            bios_fan_curve_stop
-            bios_status_json "自动温控曲线已停止；当前 PWM 保持最后一次安全写入值"
+            if bios_fan_curve_stop; then
+                bios_status_json "自动温控曲线已停止；当前 PWM 保持最后一次安全写入值"
+            else
+                printf '{"ok":false,"error":"%s"}' "$(json_str "$BIOS_LAST_ERROR")"
+            fi
         elif [[ "$curve_action" != "start" ]]; then
             echo '{"ok":false,"error":"温控曲线操作无效"}'
         elif ! bios_write_confirmation_valid; then
@@ -936,8 +956,17 @@ case "$API_PATH" in
     /bios/fan/mode)
         if [[ "$REQUEST_METHOD" != "POST" ]]; then
             echo '{"ok":false,"error":"method not allowed"}'
-        else
+        elif [[ "$(bios_detected_profile)" != idx6012 ]]; then
             echo '{"ok":false,"error":"暂时只开放手动 PWM；原厂自动模式由软件温控曲线实现，不能用 pwm*_enable=2 代替"}'
+        elif [[ "$(query_value channel)" != sys || "$(query_value mode)" != auto ]]; then
+            echo '{"ok":false,"error":"当前机型不支持此风扇模式"}'
+        elif ! bios_write_confirmation_valid; then
+            echo '{"ok":false,"error":"受保护写入需要先在页面确认风险"}'
+        elif bios_set_auto_saved; then
+            settings_set "$SETTINGS_FILE" fan_curve enabled false
+            bios_status_json "两路风扇已恢复设备智能模式"
+        else
+            printf '{"ok":false,"error":"%s"}' "$(json_str "${BIOS_LAST_ERROR:-恢复智能模式失败}")"
         fi
         ;;
     /bios/startup)
@@ -956,16 +985,16 @@ case "$API_PATH" in
         ;;
     /bios/wol)
         policy=$(query_value policy)
-        interface=$(query_value interface)
+        wol_interface=$(query_value interface)
         if [[ "$REQUEST_METHOD" == "GET" ]]; then
-            bios_wol_query_json "$interface"
+            bios_wol_query_json "$wol_interface"
         elif [[ "$REQUEST_METHOD" != "POST" ]]; then
             echo '{"ok":false,"error":"method not allowed"}'
         elif ! [[ "$policy" =~ ^(on|off)$ ]]; then
             echo '{"ok":false,"error":"网络唤醒参数无效"}'
         elif ! bios_write_confirmation_valid; then
             echo '{"ok":false,"error":"固件逆向网络唤醒写入需要先在页面确认风险"}'
-        elif bios_set_wol_saved "$policy" "$interface"; then
+        elif bios_set_wol_saved "$policy" "$wol_interface"; then
             bios_status_json "网络唤醒策略已更新"
         else
             printf '{"ok":false,"error":"%s"}' "$(json_str "${BIOS_LAST_ERROR:-网络唤醒设置失败}")"
@@ -994,23 +1023,38 @@ case "$API_PATH" in
         disk_load_mapping_from_settings "$SETTINGS_FILE" 2>/dev/null || DISK_LED_MAP=()
         printf '{"ok":true,"mapping":['
         first=1
+        declare -A displayed_disks=()
         if runtime_file_fresh "$DISK_STATUS_FILE" 90; then
             while IFS='|' read -r dev led state read_kbps write_kbps total_kbps updated; do
-                [[ -n "$dev" ]] || continue
+                # Remapping or hotplug can invalidate the daemon's old slot.
+                [[ -n "$dev" && -n "$led" && "${DISK_LED_MAP[$dev]:-}" == "$led" ]] || continue
                 [[ $first -eq 0 ]] && printf ','
                 first=0
-                printf '{"device":"%s","led":"%s","state":"%s","read_kbps":%s,"write_kbps":%s,"total_kbps":%s,"updated_at":%s}' \
-                    "$(json_str "$dev")" "$(json_str "$led")" "$state" "${read_kbps:-0}" "${write_kbps:-0}" "${total_kbps:-0}" "${updated:-0}"
+                displayed_disks["$dev"]=1
+                printf '{"device":"%s","led":"%s","state":"%s","read_kbps":%s,"write_kbps":%s,"total_kbps":%s,"updated_at":%s,"transport":"%s","slot_name":"%s"}' \
+                    "$(json_str "$dev")" "$(json_str "$led")" "$state" "${read_kbps:-0}" "${write_kbps:-0}" "${total_kbps:-0}" "${updated:-0}" \
+                    "${DISK_MAP_INTERFACE[$dev]:-}" "${DISK_MAP_SLOT[$dev]:-}"
             done < "$DISK_STATUS_FILE"
-        else
-            for dev in "${!DISK_LED_MAP[@]}"; do
-                led="${DISK_LED_MAP[$dev]}"
-                [[ $first -eq 0 ]] && printf ','
-                first=0
-                printf '{"device":"%s","led":"%s","state":"%s","read_kbps":%s,"write_kbps":%s,"total_kbps":%s}' \
-                    "$(json_str "$dev")" "$(json_str "$led")" "unknown" 0 0 0
-            done
         fi
+        for dev in "${!DISK_LED_MAP[@]}"; do
+            [[ -z "${displayed_disks[$dev]:-}" ]] || continue
+            led="${DISK_LED_MAP[$dev]}"
+            [[ $first -eq 0 ]] && printf ','
+            first=0
+            displayed_disks["$dev"]=1
+            printf '{"device":"%s","led":"%s","state":"unknown","read_kbps":0,"write_kbps":0,"total_kbps":0,"transport":"%s","slot_name":"%s"}' \
+                "$(json_str "$dev")" "$(json_str "$led")" "${DISK_MAP_INTERFACE[$dev]:-}" "${DISK_MAP_SLOT[$dev]:-}"
+        done
+        # Inventory visibility is independent of whether a physical LED slot
+        # is known. A known internal NVMe slot can have no independent LED.
+        while IFS='|' read -r dev hctl serial model size transport; do
+            [[ -n "$dev" && -z "${displayed_disks[$dev]:-}" ]] || continue
+            [[ $first -eq 0 ]] && printf ','
+            first=0
+            displayed_disks["$dev"]=1
+            printf '{"device":"%s","led":"","state":"unknown","mapped":false,"transport":"%s","model":"%s","slot_name":"%s","read_kbps":0,"write_kbps":0}' \
+                "$(json_str "$dev")" "$(json_str "${DISK_MAP_INTERFACE[$dev]:-$transport}")" "$(json_str "$model")" "${DISK_MAP_SLOT[$dev]:-}"
+        done < <(disk_inventory_rows)
         printf ']}'
         ;;
     /settings)

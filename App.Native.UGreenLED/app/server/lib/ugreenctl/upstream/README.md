@@ -1,22 +1,46 @@
-# ugreenctl
+# UGREEN NAS Hardware
 
-`main` contains the merged Almighty implementation, including the subsequent independent WOL/RTC paths and DXP6800 support. The remote `Almighty` branch has been deleted; use `main` for current source and instructions. Application development and updates use [UGreen-Control](https://github.com/BearHero520/UGreen-Control); see the [migration record](docs/UGREEN_CONTROL_MIGRATION.zh-CN.md).
+`ugreenctl` is an open-source Linux userspace hardware-management utility for
+UGREEN NAS systems. Its command-line interface lets you inspect hardware and
+manage supported models' LEDs, fans, AC-power recovery, and wake settings.
+Use it over SSH or as a hardware backend for another application.
 
-Experimental N76 userspace control (no module builder): [usage and unverified-output semantics](docs/N76_DIRECT_CONTROL.zh-CN.md).
+[中文文档](README.zh-CN.md) · [Downloads](https://github.com/BearHero520/UGREEN-NAS-Hardware/releases) ·
+[Compatibility catalog](docs/COMPATIBILITY.md) · [Issues](https://github.com/BearHero520/UGREEN-NAS-Hardware/issues)
 
-The current implementation includes native LED control, physical SATA/NVMe bay mapping and an
-optional `ugreen_leds_cli` argument-compatible executable. See
-[LED and disk commands](docs/LED_CONTROL.zh-CN.md) for commands, evidence and
-model-specific limits. These built-in capability profiles are independent of
-the older fan/power model-plugin ABI; LED writes remain experimental.
+## Features
+
+| Feature | What it provides |
+| --- | --- |
+| Model and hardware detection | Exact-model routing, available plugins, controllers, and capabilities. |
+| Fans and temperatures | Fan RPM and PWM readings, CPU/HDD/NVMe temperatures, and guarded manual PWM control. |
+| Automatic cooling | The `ugreenctl-fand` software daemon with recovered stock curves and custom configuration. |
+| Power and wake | AC-power recovery policies, Wake-on-LAN (WOL), and RTC scheduled wake. |
+| LED control | Model-dependent on/off, color, brightness, blink, and breathing effects, plus an optional `ugreen_leds_cli` argument-compatible entry point. |
+| Disk mapping and location | Physical SATA/NVMe bay mapping and identification through LEDs where the mapping is confirmed. |
+
+Availability and validation are recorded separately for each model and feature.
+The catalog covers 25 target models; physical validation remains incomplete.
+Check compatibility and read the local state before using controls. Fan and
+AC-recovery commands use model `.so` plugins; LED/disk and WOL/RTC commands use
+their own built-in profiles.
+
+LED commands run through this repository's built-in C backend. The optional
+`ugreen_leds_cli` compatibility executable is also built here; no external LED
+command-line tool needs to be installed.
+
+For a graphical interface on fnOS, see the companion application
+[UGreen Control](https://github.com/BearHero520/UGreen-Control).
+
+## Requirements
+
+- Linux x86/x86_64 or ARM64. ARM64 does not provide x86 Super I/O port access.
+- Root or appropriate device permissions for hardware access.
+- For source builds: a C11 compiler, CMake 3.20+, and Make/Ninja. Python 3.10+ is used for packaging and related tests.
+
 See the [Linux NAS deployment guide](docs/LINUX_DEPLOYMENT.zh-CN.md) for runtime
-libraries, persistent paths, and holder lifecycle on the target systems.
-
-ugreenctl is an open-source, plugin-based hardware-management utility for UGREEN
-NAS systems.
-
-[中文文档](README.zh-CN.md) · [Compatibility catalog](docs/COMPATIBILITY.md) ·
-[中文兼容性目录](docs/COMPATIBILITY.zh-CN.md)
+libraries, persistent paths, and services on fnOS, Debian/Ubuntu, PVE, Unraid,
+and TrueNAS SCALE. Deployment instructions do not imply physical validation on every system.
 
 ## Download and quick start
 
@@ -63,7 +87,8 @@ not a promise that an untested firmware upgrade has the same behavior.
 | DXP6800 Pro (`dxp6800pro`) | UGOS Pro `1.17.0.0095`, build `20260630.111337`, kernel `6.12.30+` | CPU/paired-system fans, AC recovery, WOL, scheduled wake | Firmware-reversed; no physical write validation. Every write needs `--force --apply`. |
 | DXP6800 Plus (`dxp6800plus`) | UGOS Pro `1.20.0.0142` | CPU/paired-system fans, AC recovery, WOL, scheduled wake | Physical validation was reported by the user; detailed scope is unavailable. Guarded writes still require `--force --apply`; actual wake remains unverified. |
 | DXP6800 (`dxp6800`) | UGOS Pro `1.20.0.0142` | CPU/paired-system fans, AC recovery; independent built-in WOL/RTC commands | Firmware-reversed; physical validation pending. `stock-6800` adopts Pro parameters; the factory curve is unknown. Writes require `--force --apply`. |
-| DXP2800 / DXP8800 Plus | Upstream LED protocol records | Model detection and conditional built-in LED profiles | Fan/power plugins remain placeholders; LED writes are experimental. |
+| DXP2800 EM26 (`dxp2800`) | UGOS Pro 1.20.0.0142, exact `EM_DXP2800_V1.0.26` | Single sys fan PWM/RPM, AC recovery, custom curves; built-in explicit WOL/RTC | Firmware-reversed, physical validation pending; PWM 40..255, `--force --apply`. [Evidence](docs/DXP2800_EM26_SUPPORT.md). |
+| DXP8800 Plus | Model records | Model detection | Fan/power plugin remains a placeholder. |
 
 Fan/power writes require exact DMI matching. LED commands use their own
 compiled profiles with exact DMI or firmware-proven ARM device-tree identity,
@@ -290,19 +315,6 @@ active:
     sudo modprobe -r ug_it86x_sio       # DX4600 / DXP4800S / DXP4800 branch
     sudo modprobe -r ug_it86x_cpufan    # DXP4800 Plus / DXP480T / DXP6800 branch
 
-## Plugin ABI
-
-Models may export the ABI version 3 entrypoint for fan-mode control and keep
-the ABI version 2 entrypoint for compatibility:
-
-    const struct ugreenctl_plugin *ugreenctl_plugin_v3(void);
-
-    const struct ugreenctl_plugin *ugreenctl_plugin_v2(void);
-
-The ABI is declared in include/ugreenctl.h. The core prefers ABI version 3,
-falls back to ABI version 2, and discovers plugins by DMI product name or
---model.
-
 ## Maintaining compatibility
 
 The machine-readable [compatibility catalog](models/compatibility.json) is the
@@ -311,6 +323,36 @@ release-facing record for every model. Before adding a plugin, follow the
 exact DMI names, declare a support level, and record firmware evidence. Do not
 promote a profile-only plugin to read-only or supported based on a similar
 model.
+
+## Documentation
+
+- [LEDs, disk bays, and CLI compatibility](docs/LED_CONTROL.zh-CN.md): parameters, disk location, and model-specific limits.
+- [Automatic fan curves](docs/FAN_CURVE.md): `ugreenctl-fand` configuration, invocation, and status output.
+- [Persistent AC-power recovery](docs/AC_RECOVERY_PERSISTENCE.zh-CN.md): saved policies and service lifecycle behavior.
+- [Linux NAS deployment](docs/LINUX_DEPLOYMENT.zh-CN.md): runtime libraries, installation paths, and services.
+- [Experimental N76 control](docs/N76_DIRECT_CONTROL.zh-CN.md): the explicit userspace path and unverified outputs.
+- [Hardware support and evidence](docs/HARDWARE_SUPPORT.md): controller mappings, firmware evidence, and physical validation.
+- [Architecture and plugins](docs/ARCHITECTURE.md) and [reproducible builds](docs/BUILD_REPRODUCIBILITY.zh-CN.md): development and validation.
+
+## Contributing and feedback
+
+[Open an issue](https://github.com/BearHero520/UGREEN-NAS-Hardware/issues) to report
+a problem or share model-validation results. Pull requests for code and documentation
+are welcome. Include the exact model, OS/kernel and tool versions, command, and
+relevant output. Remove personal information such as serial numbers and MAC addresses from logs.
+
+## Support the author
+
+If this project helps you, a ⭐ **Star** is a lovely way to help others discover it.
+If you would like, you can also buy the author a coffee to support continued
+model adaptation, testing, and maintenance. Donations are entirely optional;
+using the project, sharing feedback, and spreading the word also mean a lot. Thank you!
+
+| Alipay | WeChat Pay |
+| --- | --- |
+| ![Optional donation via Alipay](https://raw.githubusercontent.com/BearHero520/UGREEN-NAS-Hardware/main/docs/assets/donate/alipay.jpg) | ![Optional donation via WeChat Pay](https://raw.githubusercontent.com/BearHero520/UGREEN-NAS-Hardware/main/docs/assets/donate/wechat.png) |
+
+Click an image to view it at full size.
 
 ## License, vendor firmware, and evidence
 
