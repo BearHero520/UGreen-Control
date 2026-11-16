@@ -159,7 +159,7 @@ done
 # All other service effects, the LED backend and module loading are mocked.
 SERVICE_APP="$TMP/service-app"
 mkdir -p "$SERVICE_APP/server/lib" "$SERVICE_APP/server/bin" "$TMP/service-var" "$TMP/service-run" "$TMP/mock-bin"
-cp "$LIB/settings.sh" "$LIB/hardware_profile.sh" "$LIB/bios_control.sh" "$SERVICE_APP/server/lib/"
+cp "$LIB/settings.sh" "$LIB/hardware_profile.sh" "$LIB/bios_control.sh" "$LIB/wake_control.sh" "$SERVICE_APP/server/lib/"
 cat > "$SERVICE_APP/server/lib/logging.sh" <<'EOF'
 ugreen_log_debug() { :; }
 ugreen_log_info() { :; }

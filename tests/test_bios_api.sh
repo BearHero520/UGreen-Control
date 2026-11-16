@@ -468,7 +468,7 @@ grep -Fq ' <--force> <--apply> <power> <startup> <set> <on>' "$CALLS" || fail "G
 : > "$CALLS"
 json=$(request /bios/wol 'policy=on&confirm=firmware-reversed' POST)
 assert_contains "$json" '"ok":false'
-[[ ! -s "$CALLS" ]] || fail "GT WOL reached backend without interface selection"
+! grep -Fq " <network> <wol> <set>" "$CALLS" || fail "GT WOL issued a write without interface selection"
 json=$(request /bios/wol 'policy=on&interface=br0&confirm=firmware-reversed' POST)
 assert_contains "$json" '"ok":false'
 assert_contains "$json" 'not a physical Ethernet interface'
