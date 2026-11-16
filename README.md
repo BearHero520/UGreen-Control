@@ -2,9 +2,9 @@
 
 UGreen Control 是面向飞牛 fnOS 的开源绿联 NAS 硬件工具箱，将灯光控制、硬件状态监测，以及兼容机型的风扇和电源管理集中到一个 Web 界面，让日常查看和设置更方便。
 
-当前源码版本 **3.2.0**
+当前版本 **3.2.0**
 
-[下载最新版本](https://github.com/BearHero520/UGreen-Control/releases/latest) · [v3.2.0 更新说明](docs/releases/v3.2.0.md) · [问题反馈](https://github.com/BearHero520/UGreen-Control/issues)
+[下载 v3.2.0](https://github.com/BearHero520/UGreen-Control/releases/tag/v3.2.0) · [v3.2.0 更新说明](docs/releases/v3.2.0.md) · [问题反馈](https://github.com/BearHero520/UGreen-Control/issues)
 
 ## 主要功能
 
@@ -32,11 +32,11 @@ UGreen Control 是面向飞牛 fnOS 的开源绿联 NAS 硬件工具箱，将灯
 | 状态 | 机型 |
 |------|------|
 | 已验证 | DX4600、DX4600 Pro、DX4700+、DXP2800、DXP4800、DXP4800 Plus、DXP6800 Pro、DXP8800 Plus |
-| 实验性 | DXP4800S、DXP4800 GT、iDX6011、iDX6011 Pro |
+| 实验性 | DXP4800S、DXP4800 GT、iDX6011、iDX6011 Pro、iDX6012 |
 | 待验证 | DXP2800 GT、DXP4800 Pro |
 | 受限支持 | DXP480T、DXP480T Plus，仅支持红白电源灯 |
 
-不同机型提供的 LED、风扇和电源管理功能可能不同。实验性或待验证机型建议先使用应用内的检测功能确认硬件映射。
+iDX6012 的灯光、两路风扇调速及来电开关和 WOL 设置回读已有指定主板实测。DXP4800 GT 增加八点温控和 U.2／M.2 盘位识别，灯光及风扇控制还需在目标 fnOS 上复测。不同机型提供的 LED、风扇和电源管理功能可能不同。实验性或待验证机型建议先使用应用内的检测功能确认硬件映射。
 
 ## 下载与安装
 
