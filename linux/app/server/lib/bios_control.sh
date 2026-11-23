@@ -158,10 +158,10 @@ bios_backend() {
     bios_ugreenctl_binary >/dev/null && bios_ugreenctl_plugin_dir >/dev/null && echo "ugreenctl" || echo "unavailable"
 }
 
-bios_fan_curve_config_path() { printf '%s\n' "${VAR_DIR:-/var/apps/App.Native.UGreenLED/var}/fan-curve.conf"; }
-bios_fan_curve_state_path() { printf '%s\n' "${RUNTIME_DIR:-/run/App.Native.UGreenLED}/fan-curve.state"; }
-bios_fan_curve_pid_path() { printf '%s\n' "${RUNTIME_DIR:-/run/App.Native.UGreenLED}/fan-curve.pid"; }
-bios_fan_curve_log_path() { printf '%s\n' "${VAR_DIR:-/var/apps/App.Native.UGreenLED/var}/log/fan-curve.log"; }
+bios_fan_curve_config_path() { printf '%s\n' "${VAR_DIR:-/var/lib/ugreen-nas}/fan-curve.conf"; }
+bios_fan_curve_state_path() { printf '%s\n' "${RUNTIME_DIR:-/run/ugreen-nas}/fan-curve.state"; }
+bios_fan_curve_pid_path() { printf '%s\n' "${RUNTIME_DIR:-/run/ugreen-nas}/fan-curve.pid"; }
+bios_fan_curve_log_path() { printf '%s\n' "${VAR_DIR:-/var/lib/ugreen-nas}/log/fan-curve.log"; }
 
 bios_fan_curve_stock_profile_for_model() {
     case "$(bios_detected_profile)" in

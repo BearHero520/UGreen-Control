@@ -52,6 +52,7 @@ retained_files=5
 backend=cli
 profile=auto
 write_protocol=auto
+n76_direct=auto
 [activity]
 disk_blink=false
 network_blink=false

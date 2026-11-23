@@ -1,0 +1,97 @@
+name: Synology and TrueNAS adapter
+
+on:
+  push:
+    branches: [synology-truenas]
+    paths: ["linux/**", ".github/workflows/platform.yml"]
+  pull_request:
+    paths: ["linux/**", ".github/workflows/platform.yml"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  platform:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v5
+      - name: Validate Python and hardware-free runtime fixtures
+        run: python3 -m unittest discover -s linux/tests -p 'test_*.py'
+      - name: Validate shell and host telemetry fixtures
+        shell: bash
+        run: |
+          set -euo pipefail
+          for file in linux/app/server/*.sh linux/app/server/lib/*.sh linux/app/ui/*.cgi; do
+            bash -n "$file"
+          done
+          bash linux/tests/test_platform_telemetry.sh
+      - name: Build local image (includes frontend checks and payload verification)
+        run: docker build --platform linux/amd64 -t llled-platform:ci linux
+      - name: Install isolated fixture ACL and HTTPS proxy tools
+        run: sudo apt-get update && sudo apt-get install -y acl nginx openssl
+      - name: Exercise real container permissions, locks and recovery
+        run: sudo python3 linux/tests/docker_smoke.py --isolated-host --image llled-platform:ci --directory "$RUNNER_TEMP/llled-smoke"
+      - name: Build native DSM development package
+        run: python3 linux/scripts/build_spk.py
+      - name: Simulate native SPK services without DSM hardware
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo mkdir -p "$RUNNER_TEMP/native-results"
+          native_args=(--rm --user 0:0 --cap-drop ALL --cap-add CHOWN --cap-add DAC_OVERRIDE --cap-add SETUID --cap-add SETGID --cap-add KILL --security-opt no-new-privileges:true)
+          native_args+=(--mount "type=bind,src=$PWD/dist/UGreenToolbox-3.0.1-1005-x86_64.spk,dst=/spk/input.spk,readonly")
+          native_args+=(--mount "type=bind,src=$PWD/linux/tests/native_spk_smoke.py,dst=/lab.py,readonly")
+          native_args+=(--mount "type=bind,src=$RUNNER_TEMP/native-results,dst=/results")
+          for name in llled-hardware.lock ugreenctl-led-mcu.lock ugreenctl-it8613.lock ugreenctl-fand.lock ugreenctl-wol.lock ugreenctl-rtc.lock; do
+            native_args+=(--mount "type=bind,src=/run/$name,dst=/run/$name")
+          done
+          sudo docker run "${native_args[@]}" --network none --entrypoint python3 llled-platform:ci /lab.py --expect-lock-conflict
+          sudo docker compose -p llled-smoke-truenas -f "$RUNNER_TEMP/llled-smoke/truenas/compose.yaml" stop
+          openssl req -x509 -newkey rsa:2048 -nodes -keyout "$RUNNER_TEMP/native.key" -out "$RUNNER_TEMP/native.crt" -days 1 -subj /CN=localhost
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+          directory=Path(os.environ['RUNNER_TEMP'])
+          config=f'''worker_processes 1;
+          pid {directory}/native-proxy.pid;
+          error_log {directory}/native-proxy.log;
+          events {{ worker_connections 128; }}
+          http {{
+            access_log off;
+            include /etc/nginx/mime.types;
+            server {{
+              listen 127.0.0.1:5443 ssl;
+              listen 127.0.0.1:5444;
+              server_name localhost;
+              ssl_certificate {directory}/native.crt;
+              ssl_certificate_key {directory}/native.key;
+              include {Path.cwd()}/linux/synology/dsm-desktop.conf;
+            }}
+          }}
+          '''
+          (directory/'native-proxy.conf').write_text(config)
+          PY
+          sudo nginx -t -c "$RUNNER_TEMP/native-proxy.conf"
+          sudo nginx -c "$RUNNER_TEMP/native-proxy.conf"
+          # Host network is confined to this disposable CI fixture; it is not a deployment setting.
+          sudo docker run "${native_args[@]}" --network host -e UGREEN_TEST_DESKTOP_PROXY=https://127.0.0.1:5443 --entrypoint python3 llled-platform:ci /lab.py
+      - name: Stop isolated HTTPS proxy
+        if: always()
+        run: |
+          if [ -f "$RUNNER_TEMP/native-proxy.pid" ]; then sudo nginx -s quit -c "$RUNNER_TEMP/native-proxy.conf"; fi
+      - name: Collect validation reports
+        if: always()
+        run: |
+          sudo cp "$RUNNER_TEMP/llled-smoke/report.json" "$RUNNER_TEMP/docker-validation.json" || true
+          sudo chmod a+r "$RUNNER_TEMP/docker-validation.json" "$RUNNER_TEMP/native-results/"*.json || true
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: platform-validation
+          path: |
+            ${{ runner.temp }}/docker-validation.json
+            ${{ runner.temp }}/native-results/*.json
+            dist/*.spk
+            dist/*.spk.sha256

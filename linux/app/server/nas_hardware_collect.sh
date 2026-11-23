@@ -122,22 +122,8 @@ run_with_timeout() {
 }
 
 find_led_cli() {
-    local candidate
-    if [[ -n "${UGREEN_DIAG_LED_CLI:-}" ]]; then
-        LED_CLI="$UGREEN_DIAG_LED_CLI"
-        return 0
-    fi
-    for candidate in \
-        "$SCRIPT_DIR/bin/ugreen_leds_cli" \
-        "${TRIM_APPDEST:-/var/apps/$APP_NAME}/server/bin/ugreen_leds_cli" \
-        "${TRIM_APPDEST:-/var/apps/$APP_NAME}/target/server/bin/ugreen_leds_cli"; do
-        if [[ -x "$candidate" && ! -L "$candidate" ]]; then
-            LED_CLI="$candidate"
-            return 0
-        fi
-    done
-    LED_CLI=""
-    return 1
+    LED_CLI="${SCRIPT_DIR}/bin/ugreen_leds_cli"
+    [[ -x "$LED_CLI" && ! -L "$LED_CLI" ]]
 }
 
 read_selected_hardware_setting() {
@@ -145,8 +131,8 @@ read_selected_hardware_setting() {
     settings="${UGREEN_DIAG_SETTINGS_FILE:-}"
     if [[ -z "$settings" ]]; then
         for candidate in \
-            "${TRIM_PKGVAR:-/var/apps/$APP_NAME/var}/settings.conf" \
-            "${TRIM_APPDEST:-/var/apps/$APP_NAME}/var/settings.conf"; do
+            "${VAR_DIR:-/var/lib/ugreen-nas}/settings.conf" \
+            "${APP_ROOT:-$(dirname "$SCRIPT_DIR")}/var/settings.conf"; do
             if [[ -r "$candidate" && ! -L "$candidate" ]]; then
                 settings="$candidate"
                 break
@@ -531,9 +517,9 @@ collect_controller() {
     else
         for candidate in \
             "$SCRIPT_DIR/bin/ugreenctl" \
-            "${TRIM_APPDEST:-/var/apps/$APP_NAME}/server/bin/ugreenctl" \
-            "${TRIM_APPDEST:-/var/apps/$APP_NAME}/target/server/bin/ugreenctl" \
-            /usr/bin/ugreenctl; do
+            "${APP_ROOT:-$(dirname "$SCRIPT_DIR")}/server/bin/ugreenctl" \
+            "${APP_ROOT:-$(dirname "$SCRIPT_DIR")}/target/server/bin/ugreenctl" \
+            "$SCRIPT_DIR/bin/ugreenctl"; do
             if [[ -x "$candidate" ]]; then
                 controller="$candidate"
                 break
@@ -562,8 +548,8 @@ collect_controller() {
 }
 
 collect_application() {
-    local app_root="${TRIM_APPDEST:-/var/apps/$APP_NAME}"
-    local var_root="${TRIM_PKGVAR:-/var/apps/$APP_NAME/var}"
+    local app_root="${APP_ROOT:-$(dirname "$SCRIPT_DIR")}"
+    local var_root="${VAR_DIR:-/var/lib/ugreen-nas}"
     local manifest="" candidate pid_file pid
     section "application-runtime"
     printf 'app_root=%s\n' "$app_root"

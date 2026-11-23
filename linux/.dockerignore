@@ -1,0 +1,11 @@
+web-ui/node_modules
+web-ui/dist
+app/www/assets
+app/www/js
+app/www/index.html
+tests
+__pycache__
+**/__pycache__
+*.pyc
+*.fpk
+*.tar

@@ -29,17 +29,35 @@ net_can_ping_overseas() {
     net_can_ping_any "${NET_OVERSEAS_HOSTS[@]}"
 }
 
+# fnOS installations can have a working LAN link while ICMP is blocked or the
+# host has no external DNS route. Use the kernel link state as the local
+# connectivity signal, then keep ping only for domestic/overseas refinement.
+net_link_up_any() {
+    local dev path operstate carrier
+    while IFS= read -r dev; do
+        [[ -n "$dev" ]] || continue
+        path="${NET_SYS_CLASS_DIR}/${dev}"
+        operstate=$(cat "$path/operstate" 2>/dev/null || true)
+        carrier=$(cat "$path/carrier" 2>/dev/null || true)
+        [[ "$operstate" == up || "$carrier" == 1 ]] && return 0
+    done < <(net_list_monitored_interfaces)
+    return 1
+}
+
 # 国内与海外探测并行执行，输出 state|domestic_ok|overseas_ok。
 net_probe_state() {
-    local domestic=0 overseas=0 p_domestic p_overseas
+    local domestic=0 overseas=0 link_up=0 p_domestic p_overseas
     net_can_ping_domestic & p_domestic=$!
     net_can_ping_overseas & p_overseas=$!
     wait "$p_domestic" && domestic=1
     wait "$p_overseas" && overseas=1
+    net_link_up_any && link_up=1
 
     if [[ $overseas -eq 1 ]]; then
         echo "vpn|${domestic}|${overseas}"
     elif [[ $domestic -eq 1 ]]; then
+        echo "connected|${domestic}|${overseas}"
+    elif [[ $link_up -eq 1 ]]; then
         echo "connected|${domestic}|${overseas}"
     else
         echo "disconnected|${domestic}|${overseas}"

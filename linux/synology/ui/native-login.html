@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>登录 UGREEN工具箱</title>
+  <link rel="stylesheet" href="./native-login.css">
+  <script src="./native-login.js" defer></script>
+</head>
+<body>
+  <main>
+    <h1>UGREEN工具箱</h1>
+    <p>输入安装套件时设置的管理密码。</p>
+    <form id="login-form">
+      <label for="username">用户名</label>
+      <input id="username" name="username" value="admin" autocomplete="username" readonly>
+      <label for="password">管理密码</label>
+      <input id="password" name="password" type="password" autocomplete="current-password" maxlength="256" required autofocus>
+      <button type="submit">登录</button>
+      <p id="message" role="status" aria-live="polite"></p>
+    </form>
+    <small>登录使用套件密码，与 DSM 账号独立。</small>
+  </main>
+</body>
+</html>

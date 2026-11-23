@@ -1,0 +1,214 @@
+{
+  "date": "2026-10-30",
+  "branch": "synology-truenas",
+  "scope": "isolated QEMU Linux and disposable containers; actual DSM Package Center / PID 1 lifecycle / physical hardware untested",
+  "spk": "UGreenToolbox-3.0.1-1004-x86_64.spk",
+  "spk_sha256": "33c13d0ca110492a0d3980bc5c828658f96e6ca05c34cb8a27a7f22a97e189f5",
+  "spk_bytes": 3246080,
+  "payload_sha256": "40677a1adc1cfe4a6528315cfbebdc932e8dbca6a9e23f742cdecb93eca04b8a",
+  "native": {
+    "environment": "disposable Debian container; DSM Package Center not emulated",
+    "checks": {
+      "non_root_install_scripts_and_one_use_credentials": true,
+      "systemd_ready_is_sent_after_private_runtime_and_socket_are_ready": true,
+      "package_user_control_scripts_only_check_health_of_system_dependencies": true,
+      "dedicated_package_group_overrides_unrelated_account_primary_group": true,
+      "native_web_broker_authentication_and_secret_cleanup": true,
+      "real_https_nginx_desktop_login_assets_api_csrf_and_logout": true,
+      "authenticated_export_contains_application_rotations_root_startup_and_no_secret_canaries": true,
+      "log_socket_rejects_wrong_uid_even_with_group_access": true,
+      "root_sealed_code_and_policy_not_package_writable": true,
+      "hardware_broker_failure_keeps_desktop_health_and_log_export_available": true,
+      "untrusted_package_payload_rejected_and_cached_trusted_restart_recovers": true,
+      "trusted_native_upgrade_switches_code_preserves_auth_and_data": true,
+      "native_upgrade_and_service_restarts_preserve_log_history_and_export": true,
+      "web_restart_invalidates_browser_session_preserves_install_password": true
+    },
+    "runtime_python": "3.8.15"
+  },
+  "native_lock_conflict": {
+    "environment": "disposable Debian container; DSM Package Center not emulated",
+    "checks": {
+      "non_root_install_scripts_and_one_use_credentials": true,
+      "log_collector_remains_ready_during_shared_hardware_lock_conflict": true,
+      "native_broker_rejects_container_owned_host_lock": true
+    },
+    "runtime_python": "3.8.15"
+  },
+  "tests": {
+    "linux_python_passed": 58,
+    "windows_python_passed": 52,
+    "windows_python_skipped": 6,
+    "frontend_passed": 10,
+    "frontend_typecheck": true,
+    "frontend_build": true
+  },
+  "redaction": {
+    "decoded_archive_content_checked": true,
+    "application_files_in_unit_fixture": 11,
+    "credential_formats": [
+      "JSON",
+      "shell assignments",
+      "multiline",
+      "percent/unicode escaped keys",
+      "Unicode normalization",
+      "bare Basic/Bearer",
+      "PEM"
+    ],
+    "identifiers": [
+      "IPv4",
+      "IPv6",
+      "MAC colon/hyphen/dot",
+      "URL authority/userinfo",
+      "email",
+      "home/share paths",
+      "host/user/serial/WWN"
+    ],
+    "negative_cases": [
+      "symlinks",
+      "hardlinks",
+      "FIFO",
+      "wrong owner",
+      "writable log",
+      "partial records",
+      "truncated sensitive continuation",
+      "unavailable/empty journal",
+      "arbitrary paths",
+      "wrong UID",
+      "unauthenticated/cross-origin requests",
+      "concurrent export"
+    ],
+    "boundaries": "credential-bearing records are removed conservatively; unrecognized free-form personal data still needs review"
+  },
+  "firmware": {
+    "version": "DSM 7.2.2-72806 DS3622xs+ x86_64",
+    "python": "3.8.15",
+    "system_unit_worker_install_and_generate": true,
+    "installed_units_byte_equal_final_spk": true,
+    "original_generator_enable_links": [
+      [
+        "/etc/systemd/system/pkgctl-UGreenToolbox.service.requires/pkg-UGreenToolbox-web.service",
+        "/usr/local/lib/systemd/system/pkg-UGreenToolbox-web.service"
+      ],
+      [
+        "/etc/systemd/system/pkgctl-UGreenToolbox.service.requires/pkg-UGreenToolbox-logs.service",
+        "/usr/local/lib/systemd/system/pkg-UGreenToolbox-logs.service"
+      ],
+      [
+        "/etc/systemd/system/pkgctl-UGreenToolbox.service.wants/pkg-UGreenToolbox-hardware.service",
+        "/usr/local/lib/systemd/system/pkg-UGreenToolbox-hardware.service"
+      ]
+    ],
+    "original_journalctl_flags_help_verified": true,
+    "journal_content": "controlled NDJSON fixture, not actual DSM system journal"
+  },
+  "docker": {
+    "image_id": "sha256:10523516c01f91575357379b89e65b9b146f544b98648b9ee650f01a4998e453",
+    "profiles": {
+      "synology": {
+        "unprivileged_web_and_offline_broker": {
+          "uid": 1030,
+          "gid": 65539,
+          "web_cap_eff": 0,
+          "seccomp": 2
+        },
+        "authenticated_real_cgi_and_default_write_denial": true,
+        "redacted_log_export_includes_rotations_and_explicit_host_journal_unavailable": true,
+        "web_cannot_write_auth_ipc_code_or_hardware_data": [
+          "/auth/forbidden",
+          "/ipc/forbidden",
+          "/opt/ugreen/forbidden",
+          "/var/lib/ugreen-nas/forbidden"
+        ],
+        "all_locks_share_host_inode_and_flock": {
+          "llled-hardware.lock": [
+            25,
+            22
+          ],
+          "ugreenctl-led-mcu.lock": [
+            25,
+            23
+          ],
+          "ugreenctl-it8613.lock": [
+            25,
+            24
+          ],
+          "ugreenctl-fand.lock": [
+            25,
+            25
+          ],
+          "ugreenctl-wol.lock": [
+            25,
+            26
+          ],
+          "ugreenctl-rtc.lock": [
+            25,
+            27
+          ]
+        },
+        "same_group_wrong_uid_rejected_by_peer_credentials": true,
+        "updated_container_starts_and_reconnects_after_broker_restart": true
+      },
+      "truenas": {
+        "unprivileged_web_and_offline_broker": {
+          "uid": 568,
+          "gid": 568,
+          "web_cap_eff": 0,
+          "seccomp": 2
+        },
+        "authenticated_real_cgi_and_default_write_denial": true,
+        "redacted_log_export_includes_rotations_and_explicit_host_journal_unavailable": true,
+        "web_cannot_write_auth_ipc_code_or_hardware_data": [
+          "/auth/forbidden",
+          "/ipc/forbidden",
+          "/opt/ugreen/forbidden",
+          "/var/lib/ugreen-nas/forbidden"
+        ],
+        "all_locks_share_host_inode_and_flock": {
+          "llled-hardware.lock": [
+            25,
+            22
+          ],
+          "ugreenctl-led-mcu.lock": [
+            25,
+            23
+          ],
+          "ugreenctl-it8613.lock": [
+            25,
+            24
+          ],
+          "ugreenctl-fand.lock": [
+            25,
+            25
+          ],
+          "ugreenctl-wol.lock": [
+            25,
+            26
+          ],
+          "ugreenctl-rtc.lock": [
+            25,
+            27
+          ]
+        },
+        "same_group_wrong_uid_rejected_by_peer_credentials": true,
+        "updated_container_starts_and_reconnects_after_broker_restart": true
+      }
+    }
+  },
+  "canonical_led_bytes_unchanged": true,
+  "hardware_writes_performed": false,
+  "source_sha256": {
+    "linux/app/server/log_export.py": "3c0330ba8e06f9d6a10ee527d1bcdbdb35a4fbf4d2a528667dafc6dcb7106829",
+    "linux/app/server/portable_runtime.py": "d124b60a77d74f020d1d35553e315fab99fc9934a3874990607b34a31a485b51",
+    "linux/synology/native_runtime.py": "95e36048cae15f94d51fef9b319842ec63ca3d258a8c2348a46d9b5f80cb6f48",
+    "linux/synology/native_bootstrap.py": "c17bb1bb49dfa1e55b6613ee91a997316a9cd31ad0996b98553c9d91b89a9210",
+    "linux/synology/native_desktop.py": "aceaf503bd1a21019e3395b2eb9331e3050793291f98a71b9fef3e2578b1d42b",
+    "linux/scripts/build_spk.py": "79384d2e71777ffdbc581536dda85d1ce649a8173393026a3cb137fdefb4c0fa",
+    "linux/web-ui/src/lib/logExport.ts": "f1eef2fa832296e437adcaac22b2707f6d598c2ef235b5e7c51eae47c2102040",
+    "linux/web-ui/src/ui/DevicesPage.tsx": "ee1275be14be80a160d632576fa21123e55672970e090eeb91aed2002a876028",
+    "linux/tests/test_log_export.py": "a1cba4ceaed72768a1c69020d6bbd4e39dc218521200cecc629e52f0393f79bf",
+    "linux/tests/native_spk_smoke.py": "c7bb5105088357548a177060871bb5ba944bb31f4d6d2c10d7db446af5f1aa96",
+    "linux/tests/docker_smoke.py": "00edcf58ba486935eec708b019b39af0163787b7b6bbc0b0677c715422d1a7dc",
+    "linux/Dockerfile": "a1996af6f19e39df40a65369022f613215669979bde9e5804db1d922778ac5a4"
+  }
+}

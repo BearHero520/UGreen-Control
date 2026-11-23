@@ -51,4 +51,12 @@ __pycache__/
 /.work-dx4600-dh2600/
 
 !/scripts/hardware-release.json
+!/scripts/build_led_compat.py
+!/scripts/prepare_dxp2800.py
+!/scripts/prepare_dxp8800pro.py
+!/scripts/prepare_idx6012.py
+!/scripts/prepare_dxp4800gt.py
 /.work-almighty-release/
+/.work-platform-docker/
+
+!scripts/prepare_dxp4800gt_hardware.py

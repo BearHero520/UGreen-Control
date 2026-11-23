@@ -105,16 +105,20 @@ start)
                 "operation_id=$DRIVER_OPERATION_ID" "exit_code=$driver_rc" "configured_backend=$configured_backend"
         fi
     fi
+    # A service restart is the explicit recovery point for a previously
+    # unavailable LED backend. Normal settings reloads keep the disabled
+    # marker so a missing N76 driver cannot trigger periodic probes.
+    led_backend_reset
     backend_rc=0
     ensure_led_backend || backend_rc=$?
     if [[ "$backend_rc" -ne 0 ]]; then
         # fnOS 会把 start 的非零退出码当成安装失败。硬件或依赖暂时不可用时，
-        # 仍允许应用和 Web 管理页启动，由守护进程持续重试并在页面显示诊断。
+        # 仍允许应用和 Web 管理页启动，守护进程保持后端禁用并在页面显示诊断。
         backend_message="LED 控制后端暂不可用；应用继续启动，请在 Web 页面检查硬件与依赖"
         ugreen_log_run_raw "${VAR_DIR}/log/driver.log" 10485760 3 "backend-unavailable" \
             printf '%s\n' "$backend_message" || true
         printf '%s\n' "$backend_message" >&2
-        ugreen_log_error "backend.unavailable" "LED 控制后端暂不可用，应用将继续启动并重试" \
+        ugreen_log_error "backend.unavailable" "LED 控制后端暂不可用，应用将继续启动并保持禁用" \
             "exit_code=$backend_rc" "configured_backend=$configured_backend" "error=${LED_LAST_ERROR:-unknown}"
     else
         ugreen_log_info "backend.ready" "LED 控制后端已就绪" "backend=${LED_BACKEND_ACTIVE:-unknown}"
@@ -137,14 +141,8 @@ start)
         ugreen_log_warn "fan_telemetry.start_failed" "风扇遥测采样进程未启动；页面仍可读取当前状态" \
             "exit_code=$telemetry_rc"
     fi
-    if [[ "$(settings_get "$SETTINGS_FILE" fan_curve enabled false)" == "true" ]]; then
-        if bios_fan_curve_restore; then
-            ugreen_log_info "bios.fan_curve_restored" "已恢复已启用的风扇自动温控曲线"
-        else
-            curve_rc=$?
-            ugreen_log_warn "bios.fan_curve_restore_failed" "已启用的风扇自动温控曲线未能恢复" \
-                "exit_code=$curve_rc"
-        fi
+    if ! bios_restore_runtime_choices; then
+        ugreen_log_warn "bios.runtime_restore_failed" "恢复风扇运行设置失败" "error=$BIOS_LAST_ERROR"
     fi
     exit 0
     ;;

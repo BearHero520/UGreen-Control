@@ -57,13 +57,15 @@ function ColorGrid({ items, colorSection, brightnessSection, settings, onChange 
   </div>;
 }
 
-function StandardLighting({ settings, onChange, onSave, onToast }: {
+function StandardLighting({ settings, networkLedAvailable = true, onChange, onSave, onToast }: {
   settings: IniData;
+  networkLedAvailable?: boolean;
   onChange: (next: IniData) => void;
   onSave: () => Promise<void>;
   onToast: (message: string, type?: 'ok' | 'err') => void;
 }) {
   const [panel, setPanel] = useState<'disk' | 'network' | 'power'>('disk');
+  const selectedPanel = !networkLedAvailable && panel === 'network' ? 'disk' : panel;
   const [saving, setSaving] = useState(false);
   const save = async () => {
     setSaving(true);
@@ -77,22 +79,22 @@ function StandardLighting({ settings, onChange, onSave, onToast }: {
 
   return <>
     <div className="settings-tabs glass-surface" role="tablist" aria-label="灯光设置分类">
-      {([['disk', 'bi-device-hdd', '硬盘灯'], ['network', 'bi-wifi', '网络灯'], ['power', 'bi-power', '电源灯']] as const).map(([key, icon, label]) => (
-        <button key={key} type="button" className={`settings-tab${panel === key ? ' active' : ''}`} role="tab" aria-selected={panel === key} onClick={() => setPanel(key)}><i className={`bi ${icon}`} aria-hidden="true" /><span>{label}</span></button>
+      {([['disk', 'bi-device-hdd', '硬盘灯'], ...(networkLedAvailable ? [['network', 'bi-wifi', '网络灯'] as const] : []), ['power', 'bi-power', '电源灯']] as const).map(([key, icon, label]) => (
+        <button key={key} type="button" className={`settings-tab${selectedPanel === key ? ' active' : ''}`} role="tab" aria-selected={selectedPanel === key} onClick={() => setPanel(key)}><i className={`bi ${icon}`} aria-hidden="true" /><span>{label}</span></button>
       ))}
     </div>
     <div className="settings-layout">
-      <article className="glass-surface settings-surface" hidden={panel !== 'disk'}>
+      <article className="glass-surface settings-surface" hidden={selectedPanel !== 'disk'}>
         <div className="section-heading"><div><span className="section-kicker">DISK LED</span><h2>硬盘状态颜色</h2></div><span className="soft-badge">智能模式</span></div>
         <p className="surface-help">为活动、空闲、休眠和离线状态设置颜色与亮度。</p>
         <ColorGrid items={diskStates} colorSection="disk_colors" brightnessSection="disk_brightness" settings={settings} onChange={onChange} />
       </article>
-      <article className="glass-surface settings-surface" hidden={panel !== 'network'}>
+      {networkLedAvailable ? <article className="glass-surface settings-surface" hidden={selectedPanel !== 'network'}>
         <div className="section-heading"><div><span className="section-kicker">NETWORK LED</span><h2>网络状态颜色</h2></div></div>
         <p className="surface-help">外网、联网和断网状态分别使用独立颜色。</p>
         <ColorGrid items={networkStates} colorSection="netdev_colors" brightnessSection="netdev_brightness" settings={settings} onChange={onChange} />
-      </article>
-      <article className="glass-surface settings-surface" hidden={panel !== 'power'}>
+      </article> : null}
+      <article className="glass-surface settings-surface" hidden={selectedPanel !== 'power'}>
         <div className="section-heading"><div><span className="section-kicker">POWER LED</span><h2>电源灯</h2></div></div>
         <p className="surface-help">设置智能模式和全部开启时的电源灯表现。</p>
         <div className="color-grid">
@@ -140,16 +142,17 @@ function Power26Lighting({ settings, onApply }: { settings: IniData; onApply: (c
   </div>;
 }
 
-export function LightingPage({ hidden, settings, power26, onSettingsChange, onSave, onPower26Apply, onToast }: {
+export function LightingPage({ hidden, settings, power26, networkLedAvailable = true, onSettingsChange, onSave, onPower26Apply, onToast }: {
   hidden: boolean;
   settings: IniData;
   power26: boolean;
+  networkLedAvailable?: boolean;
   onSettingsChange: (next: IniData) => void;
   onSave: () => Promise<void>;
   onPower26Apply: (color: string, effect: string, threshold: number, off: boolean) => Promise<void>;
   onToast: (message: string, type?: 'ok' | 'err') => void;
 }) {
   return <section className="react-view" hidden={hidden} aria-label="灯光设置">
-    {power26 ? <Power26Lighting settings={settings} onApply={onPower26Apply} /> : <StandardLighting settings={settings} onChange={onSettingsChange} onSave={onSave} onToast={onToast} />}
+    {power26 ? <Power26Lighting settings={settings} onApply={onPower26Apply} /> : <StandardLighting settings={settings} networkLedAvailable={networkLedAvailable} onChange={onSettingsChange} onSave={onSave} onToast={onToast} />}
   </section>;
 }

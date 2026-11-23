@@ -89,6 +89,7 @@ def is_executable(relative: Path, *, command_tree: bool) -> bool:
         return True
     return relative.suffix.lower() in {".cgi", ".sh"} or relative.as_posix() in {
         "server/bin/ugreen_leds_cli",
+        "server/bin/ugreen_leds_cli.compat",
         "server/bin/ugreenctl",
         "server/bin/ugreenctl-fand",
         "server/bin/ugreenctl-ledd",
@@ -147,6 +148,7 @@ def validate_project() -> None:
         PROJECT / "ICON.PNG",
         PROJECT / "ICON_256.PNG",
         PROJECT / "app" / "server" / "bin" / "ugreen_leds_cli",
+        PROJECT / "app" / "server" / "bin" / "ugreen_leds_cli.compat",
         PROJECT / "app" / "server" / "bin" / "ugreen_leds_cli.sha256",
         PROJECT / "app" / "server" / "bin" / "ugreenctl",
         PROJECT / "app" / "server" / "bin" / "ugreenctl-fand",
@@ -159,6 +161,10 @@ def validate_project() -> None:
         PROJECT / "app" / "server" / "lib" / "ugreenctl" / "models" / "dx4600.so",
         PROJECT / "app" / "server" / "lib" / "ugreenctl" / "models" / "dxp2800.so",
         PROJECT / "app" / "server" / "lib" / "ugreenctl" / "models" / "dxp8800plus.so",
+        PROJECT / "app" / "server" / "lib" / "ugreenctl" / "models" / "dxp8800pro.so",
+        PROJECT / "app" / "server" / "lib" / "ugreenctl" / "models" / "dxp4800gt.so",
+        PROJECT / "app" / "server" / "lib" / "ugreenctl" / "models" / "idx6012.so",
+        PROJECT / "app" / "server" / "lib" / "ugreenctl" / "upstream" / "models" / "dxp4800gt-fan-curve.json",
         PROJECT / "app" / "server" / "lib" / "ugreenctl" / "build-info.json",
         PROJECT / "app" / "server" / "lib" / "ugreenctl" / "models" / "dxp4800.so",
         PROJECT / "app" / "server" / "lib" / "ugreenctl" / "models" / "dxp4800plus.so",
@@ -166,6 +172,7 @@ def validate_project() -> None:
         PROJECT / "app" / "server" / "lib" / "ugreenctl" / "models" / "dxp480tplus.so",
         PROJECT / "app" / "server" / "lib" / "ugreenctl" / "models" / "dxp6800pro.so",
         PROJECT / "app" / "server" / "lib" / "ugreenctl" / "models" / "dxp6800plus.so",
+        PROJECT / "app" / "server" / "lib" / "ugreenctl" / "models" / "dxp6800.so",
         PROJECT / "app" / "server" / "vendor" / "UGREEN-NAS-Hardware" / "LICENSE",
     ]
     missing = [str(path.relative_to(ROOT)) for path in required if not path.exists()]
@@ -190,9 +197,12 @@ def validate_project() -> None:
         raise SystemExit("Almighty release manifest SHA256 mismatch")
     published = json.loads(release_manifest.read_text(encoding="utf-8"))
     published_hashes = {item["path"]: item["sha256"] for item in published["files"]}
+    local_cli_adapter = (PROJECT / "app" / "server" / "bin" / "ugreen_leds_cli").read_text(encoding="utf-8").startswith("#!/bin/bash\n# Compatibility entry point")
     for name, value in metadata["files"].items():
         upstream = "usr/local/lib/ugreenctl/" + name if name.startswith("models/") else "usr/local/bin/" + name
         if published_hashes.get(upstream) != value:
+            if name == "ugreen_leds_cli" and local_cli_adapter:
+                continue
             raise SystemExit(f"Payload receipt differs from pinned release: {name}")
     for name, digest in metadata["files"].items():
         artifact = model_dir.parent / name if name.startswith("models/") else PROJECT / "app" / "server" / "bin" / name
@@ -232,6 +242,7 @@ def verify_package(package: Path, *, expected_checksum: str, expected_version: s
                 "ui",
                 "www",
                 "server/bin/ugreen_leds_cli",
+                "server/bin/ugreen_leds_cli.compat",
                 "server/bin/ugreen_leds_cli.sha256",
                 "server/bin/ugreenctl",
                 "server/bin/ugreenctl-fand",
@@ -243,6 +254,9 @@ def verify_package(package: Path, *, expected_checksum: str, expected_version: s
                 "server/lib/ugreenctl/models/dx4600.so",
                 "server/lib/ugreenctl/models/dxp2800.so",
                 "server/lib/ugreenctl/models/dxp8800plus.so",
+                "server/lib/ugreenctl/models/dxp8800pro.so",
+                "server/lib/ugreenctl/models/dxp4800gt.so",
+                "server/lib/ugreenctl/upstream/models/dxp4800gt-fan-curve.json",
                 "server/lib/ugreenctl/build-info.json",
                 "server/lib/ugreenctl/models/dxp4800.so",
                 "server/lib/ugreenctl/models/dxp4800plus.so",
@@ -250,6 +264,7 @@ def verify_package(package: Path, *, expected_checksum: str, expected_version: s
                 "server/lib/ugreenctl/models/dxp480tplus.so",
                 "server/lib/ugreenctl/models/dxp6800pro.so",
                 "server/lib/ugreenctl/models/dxp6800plus.so",
+                "server/lib/ugreenctl/models/dxp6800.so",
                 "server/vendor/UGREEN-NAS-Hardware/LICENSE",
             }.issubset(app_names):
                 raise SystemExit("FPK app.tgz 结构校验失败")

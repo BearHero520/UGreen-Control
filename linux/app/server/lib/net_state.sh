@@ -31,6 +31,17 @@ net_can_ping_overseas() {
 
 # 国内与海外探测并行执行，输出 state|domestic_ok|overseas_ok。
 net_probe_state() {
+    # The isolated hardware container cannot probe the public network. Report
+    # actual host carrier state rather than treating its offline namespace as NAS offline.
+    if [[ "${UGREEN_NETWORK_MODE:-}" == "carrier" ]]; then
+        local device carrier
+        while IFS= read -r device; do
+            carrier=$(cat "${NET_SYS_CLASS_DIR}/${device}/carrier" 2>/dev/null || true)
+            [[ "$carrier" == "1" ]] && { echo 'connected|0|0'; return; }
+        done < <(net_list_monitored_interfaces)
+        echo 'disconnected|0|0'
+        return
+    fi
     local domestic=0 overseas=0 p_domestic p_overseas
     net_can_ping_domestic & p_domestic=$!
     net_can_ping_overseas & p_overseas=$!

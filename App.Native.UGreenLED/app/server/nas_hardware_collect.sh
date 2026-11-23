@@ -287,14 +287,14 @@ collect_module_details() {
         output=$(lsmod 2>&1)
         rc=$?
         if (( rc == 0 )); then
-            printf '%s\n' "$output" | grep -Ei '^(it87|ug_it86|hwmon_vid|wmi|i2c_|leds_mcu)' || printf '<no related modules>\n'
+            printf '%s\n' "$output" | grep -Ei '^(it87|ug_it86|ug_4800gt_sio|ec_sys|hwmon_vid|wmi|i2c_|leds_mcu)' || printf '<no related modules>\n'
         else
             printf '%s\nexit_code=%d\n' "$output" "$rc"
         fi
     fi
     if [[ -r "$PROC_ROOT/modules" ]]; then
         printf '\n[related-proc-modules]\n'
-        grep -Ei '^(it87|ug_it86|hwmon_vid|wmi|i2c_|leds_mcu)' "$PROC_ROOT/modules" 2>/dev/null || \
+        grep -Ei '^(it87|ug_it86|ug_4800gt_sio|ec_sys|hwmon_vid|wmi|i2c_|leds_mcu)' "$PROC_ROOT/modules" 2>/dev/null || \
             printf '<no related modules>\n'
     fi
 
@@ -335,7 +335,7 @@ collect_module_details() {
 
     printf '\n[ioports-relevant]\n'
     if [[ -r "$PROC_ROOT/ioports" ]]; then
-        grep -iE 'it87|it86|0a3[0-9]|0a35|0a36|super.?io|hwmon' "$PROC_ROOT/ioports" 2>/dev/null || \
+        grep -iE 'it87|it86|0a3[0-9]|0a35|0a36|super.?io|hwmon|006[0-9a-f]-|\bEC\b' "$PROC_ROOT/ioports" 2>/dev/null || \
             printf '<no matching I/O resources>\n'
     else
         printf '<unavailable>\n'
@@ -469,7 +469,7 @@ collect_i2c() {
         output=$(dmesg 2>&1)
         rc=$?
         if (( rc == 0 )); then
-            printf '%s\n' "$output" | grep -iE 'i2c|smbus|i801|it87|it8613|n76e003|ht32|led.?ugreen|0x3a' | tail -n 240 || \
+            printf '%s\n' "$output" | grep -iE 'i2c|smbus|i801|it87|it8613|n76e003|ht32|led.?ugreen|0x3a|ACPI: EC:' | tail -n 240 || \
                 printf '<no relevant kernel messages>\n'
         else
             printf '%s\nexit_code=%d\n' "$output" "$rc"
@@ -559,6 +559,12 @@ collect_controller() {
     output=$(run_with_timeout "$controller" "${controller_args[@]}" power startup get 2>&1)
     rc=$?
     printf 'command=power startup get\nexit_code=%d\n%s\n' "$rc" "${output:-<no output>}"
+    if [[ "$PRODUCT_NAME" == 'DXP4800 GT' ]]; then
+        # The TSV contract carries no serials, WWNs or model strings.
+        output=$(run_with_timeout "$controller" disk map --tsv 2>&1)
+        rc=$?
+        printf 'command=disk map --tsv\nexit_code=%d\n%s\n' "$rc" "${output:-<no output>}"
+    fi
 }
 
 collect_application() {

@@ -1,0 +1,293 @@
+{
+  "date": "2026-10-28",
+  "scope": "isolated QEMU Linux only; no DSM or TrueNAS NAS access; no hardware writes",
+  "docker_profiles": {
+    "host": "Linux-6.12.114-0-virt-x86_64-with",
+    "docker": {
+      "Client": {
+        "Version": "28.3.3",
+        "ApiVersion": "1.51",
+        "DefaultAPIVersion": "1.51",
+        "GitCommit": "980b85681696fbd95927fd8ded8f6d91bdca95b0",
+        "GoVersion": "go1.24.12",
+        "Os": "linux",
+        "Arch": "amd64",
+        "BuildTime": "Thu Jan 15 20:35:20 2026",
+        "Context": "default"
+      },
+      "Server": {
+        "Platform": {
+          "Name": ""
+        },
+        "Components": [
+          {
+            "Name": "Engine",
+            "Version": "28.3.3",
+            "Details": {
+              "ApiVersion": "1.51",
+              "Arch": "amd64",
+              "BuildTime": "Thu Jan 15 20:35:20 2026",
+              "Experimental": "false",
+              "GitCommit": "bea959c7b793b32a893820b97c4eadc7c87fabb0",
+              "GoVersion": "go1.24.12",
+              "KernelVersion": "6.12.114-0-virt",
+              "MinAPIVersion": "1.24",
+              "Os": "linux"
+            }
+          },
+          {
+            "Name": "containerd",
+            "Version": "v2.1.5",
+            "Details": {
+              "GitCommit": "fcd43222d6b07379a4be9786bda52438f0dd16a1"
+            }
+          },
+          {
+            "Name": "runc",
+            "Version": "1.3.4",
+            "Details": {
+              "GitCommit": "d842d7719497cc3b774fd71620278ac9e17710e0"
+            }
+          },
+          {
+            "Name": "docker-init",
+            "Version": "0.19.0",
+            "Details": {
+              "GitCommit": ""
+            }
+          }
+        ],
+        "Version": "28.3.3",
+        "ApiVersion": "1.51",
+        "MinAPIVersion": "1.24",
+        "GitCommit": "bea959c7b793b32a893820b97c4eadc7c87fabb0",
+        "GoVersion": "go1.24.12",
+        "Os": "linux",
+        "Arch": "amd64",
+        "KernelVersion": "6.12.114-0-virt",
+        "BuildTime": "2026-01-15T20:35:20.000000000+00:00"
+      }
+    },
+    "compose": "2.36.2",
+    "security_options": [
+      "name=seccomp,profile=builtin",
+      "name=cgroupns"
+    ],
+    "image_id": "sha256:a1a940ba956c8274e0517b513454d72e5fd34f16907cc091c7290d810604290a",
+    "profiles": {
+      "synology": {
+        "platform_metadata": "fixture on disposable Linux, not NAS validation",
+        "checks": {
+          "unprivileged_web_and_offline_broker": {
+            "uid": 1030,
+            "gid": 65539,
+            "web_cap_eff": 0,
+            "seccomp": 2
+          },
+          "authenticated_real_cgi_and_default_write_denial": true,
+          "web_cannot_write_auth_ipc_code_or_hardware_data": [
+            "/auth/forbidden",
+            "/ipc/forbidden",
+            "/opt/ugreen/forbidden",
+            "/var/lib/ugreen-nas/forbidden"
+          ],
+          "all_locks_share_host_inode_and_flock": {
+            "llled-hardware.lock": [
+              24,
+              54
+            ],
+            "ugreenctl-led-mcu.lock": [
+              24,
+              55
+            ],
+            "ugreenctl-it8613.lock": [
+              24,
+              56
+            ],
+            "ugreenctl-fand.lock": [
+              24,
+              57
+            ],
+            "ugreenctl-wol.lock": [
+              24,
+              58
+            ],
+            "ugreenctl-rtc.lock": [
+              24,
+              59
+            ]
+          },
+          "same_group_wrong_uid_rejected_by_peer_credentials": true,
+          "root_web_startup_refused": true,
+          "second_broker_refused_without_disturbing_first": true,
+          "graceful_broker_restart_reconnects_existing_web": true,
+          "sigkill_restart_replaces_stale_socket_preserves_lock_inodes": true,
+          "wrong_auth_group_fails_closed_and_scoped_prepare_repairs_it": true,
+          "posix_acl_denial_detected_without_widening_or_erasing_acl": true,
+          "socket_acl_failure_marks_web_unhealthy_and_recovers_without_recreation": true,
+          "missing_boot_lock_prevents_unsafe_private_lock_fallback": true,
+          "boot_lock_preparation_and_recreation_preserve_auth_and_data": true
+        },
+        "directory": "/validation/synology",
+        "project": "llled-smoke-synology",
+        "auth_sha256": "64445fa73f1419e2c9e0fa6af3033904ac0921df4eb409c5027d22224b560f2d"
+      },
+      "truenas": {
+        "platform_metadata": "fixture on disposable Linux, not NAS validation",
+        "checks": {
+          "unprivileged_web_and_offline_broker": {
+            "uid": 568,
+            "gid": 568,
+            "web_cap_eff": 0,
+            "seccomp": 2
+          },
+          "authenticated_real_cgi_and_default_write_denial": true,
+          "web_cannot_write_auth_ipc_code_or_hardware_data": [
+            "/auth/forbidden",
+            "/ipc/forbidden",
+            "/opt/ugreen/forbidden",
+            "/var/lib/ugreen-nas/forbidden"
+          ],
+          "all_locks_share_host_inode_and_flock": {
+            "llled-hardware.lock": [
+              24,
+              883
+            ],
+            "ugreenctl-led-mcu.lock": [
+              24,
+              55
+            ],
+            "ugreenctl-it8613.lock": [
+              24,
+              56
+            ],
+            "ugreenctl-fand.lock": [
+              24,
+              57
+            ],
+            "ugreenctl-wol.lock": [
+              24,
+              58
+            ],
+            "ugreenctl-rtc.lock": [
+              24,
+              59
+            ]
+          },
+          "same_group_wrong_uid_rejected_by_peer_credentials": true,
+          "root_web_startup_refused": true,
+          "second_broker_refused_without_disturbing_first": true,
+          "graceful_broker_restart_reconnects_existing_web": true,
+          "sigkill_restart_replaces_stale_socket_preserves_lock_inodes": true,
+          "wrong_auth_group_fails_closed_and_scoped_prepare_repairs_it": true,
+          "posix_acl_denial_detected_without_widening_or_erasing_acl": true,
+          "socket_acl_failure_marks_web_unhealthy_and_recovers_without_recreation": true,
+          "missing_boot_lock_prevents_unsafe_private_lock_fallback": true,
+          "boot_lock_preparation_and_recreation_preserve_auth_and_data": true
+        },
+        "directory": "/validation/truenas",
+        "project": "llled-smoke-truenas",
+        "auth_sha256": "38476449192b79072144c80a1b107bbe7249fd3d83087dffb3a92b9ce47892d7"
+      }
+    }
+  },
+  "cold_boot": {
+    "boot_id_before": "0a2a0f04-85f4-4c0b-8961-0123af326521",
+    "boot_id_after": "ae0bb935-62f6-45bf-8c7c-2e789dfa0ce5",
+    "fresh_kernel_boot": true,
+    "apparmor_enabled": true,
+    "existing_truenas_profile_recovered_by_generated_host_script": true,
+    "password_and_data_preserved": true
+  },
+  "native_spk": {
+    "environment": "disposable Debian container; DSM Package Center not emulated",
+    "checks": {
+      "non_root_install_scripts_and_one_use_credentials": true,
+      "systemd_ready_is_sent_after_private_runtime_and_socket_are_ready": true,
+      "dedicated_package_group_overrides_unrelated_account_primary_group": true,
+      "native_web_broker_authentication_and_secret_cleanup": true,
+      "root_sealed_code_and_policy_not_package_writable": true,
+      "untrusted_package_payload_rejected_and_cached_trusted_restart_recovers": true,
+      "trusted_native_upgrade_switches_code_preserves_auth_and_data": true
+    }
+  },
+  "native_container_shared_lock_exclusion": true,
+  "spk_sha256": "959f4416a466218aeb157da08892fe09e0dab07358a4185ac8bce4ed3116b4e7",
+  "source_sha256": {
+    "linux/app/server/portable_runtime.py": "5939a3591ee0c42af23951c05b6299d08b6c5fa968f69567393c52d23ea780ca",
+    "linux/synology/native_bootstrap.py": "3728962b4242de5fe9d8e5bcc0f7c0df0720cbebd9beac0388161e36d423d2b5",
+    "linux/synology/native_runtime.py": "a93519e5b70db5e79e4ccf57b4ddf7e2e1a3ed2fc86a6e1a47a2612d5f3ad0c9",
+    "linux/scripts/build_spk.py": "2fb2c580a4e494cd62644cf43a22fef0cb385e90e7b7b22a58f6d65caad3be99"
+  },
+  "not_verified": [
+    "DSM Package Center acceptance and wizard",
+    "DSM system-unit privilege policy and synosystemctl",
+    "actual NAS Python/glibc/kernel/ACL",
+    "TrueNAS UI install and actual NFSv4 ACL",
+    "model-specific hardware reads/writes",
+    "native systemd sandbox enforcement on DSM"
+  ],
+  "final_image_validation": {
+    "image_id": "sha256:7656af4b73e2c22441ee859a2a9a116b8f3dbc1af305c1cd868f2e90b298eb3f",
+    "apparmor": "[\"name=apparmor\",\"name=seccomp,profile=builtin\",\"name=cgroupns\"]",
+    "checks": {
+      "unprivileged_web_and_offline_broker": {
+        "uid": 568,
+        "gid": 568,
+        "web_cap_eff": 0,
+        "seccomp": 2
+      },
+      "authenticated_real_cgi_and_default_write_denial": true,
+      "web_cannot_write_auth_ipc_code_or_hardware_data": [
+        "/auth/forbidden",
+        "/ipc/forbidden",
+        "/opt/ugreen/forbidden",
+        "/var/lib/ugreen-nas/forbidden"
+      ],
+      "all_locks_share_host_inode_and_flock": {
+        "llled-hardware.lock": [
+          25,
+          93
+        ],
+        "ugreenctl-led-mcu.lock": [
+          25,
+          94
+        ],
+        "ugreenctl-it8613.lock": [
+          25,
+          95
+        ],
+        "ugreenctl-fand.lock": [
+          25,
+          96
+        ],
+        "ugreenctl-wol.lock": [
+          25,
+          97
+        ],
+        "ugreenctl-rtc.lock": [
+          25,
+          98
+        ]
+      },
+      "same_group_wrong_uid_rejected_by_peer_credentials": true
+    },
+    "data_and_auth_preserved": true
+  },
+  "exported_image_sha256": "f0e629cb4ec6299c1aeb1390d083db84862f493c9aa6aa4577295ee593aef681",
+  "test_totals": {
+    "linux_python": {
+      "passed": 42,
+      "skipped": 0
+    },
+    "windows_python": {
+      "passed": 41,
+      "skipped": 1
+    },
+    "frontend": {
+      "passed": 7,
+      "typecheck": true,
+      "build": true
+    }
+  }
+}

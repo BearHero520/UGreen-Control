@@ -2,8 +2,8 @@
 # Independent read-only fan telemetry sampler. It never controls LEDs or writes PWM.
 
 APP_NAME="App.Native.UGreenLED"
-APP_ROOT="${TRIM_APPDEST:-${APP_ROOT:-/var/apps/${APP_NAME}}}"
-VAR_DIR="${TRIM_PKGVAR:-${VAR_DIR:-${APP_ROOT}/var}}"
+APP_ROOT="${APP_ROOT:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
+VAR_DIR="${VAR_DIR:-/var/lib/ugreen-nas}"
 SERVER_DIR="${SERVER_DIR:-}"
 if [[ -z "$SERVER_DIR" ]]; then
     for d in "${APP_ROOT}/server" "${APP_ROOT}/target/server"; do

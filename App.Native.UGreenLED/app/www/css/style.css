@@ -836,7 +836,12 @@ input[type="number"]:disabled { opacity: 0.45; cursor: not-allowed; }
   .speed-metric { padding: 18px 0; }
   .activity-card-head { grid-template-columns: auto 1fr; }
   .activity-card-head .native-check { grid-column: 1 / -1; justify-self: flex-start; }
-  .color-row { grid-template-columns: minmax(84px, 1fr) 64px 66px; }
+  .color-row { grid-template-columns: minmax(0, 1fr) 64px 44px; padding: 8px 0; }
+  .color-row > .brightness-input { grid-column: 1 / -1; grid-row: 2; min-height: 28px; }
+  .color-row > .brightness-value { grid-column: 3; grid-row: 1; }
+  .color-row.is-brightness-only { grid-template-columns: minmax(0, 1fr) 44px; }
+  .color-row.is-brightness-only > .brightness-value { grid-column: 2; }
+  .color-row.is-color-only { grid-template-columns: minmax(0, 1fr) 64px; }
   .power26-effect-options { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .power26-actions { align-items: stretch; flex-direction: column-reverse; }
   .power26-actions button { width: 100%; }

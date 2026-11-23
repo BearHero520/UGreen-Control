@@ -1,0 +1,181 @@
+{
+  "date": "2026-10-28",
+  "scope": "official firmware offline inspection and component execution in isolated QEMU containers; DSM PID 1 and Package Center were not started; no physical devices or hardware writes",
+  "firmware": {
+    "url": "https://global.synologydownload.com/download/DSM/release/7.2.2/72806/DSM_DS3622xs%2B_72806.pat",
+    "final_url": "https://global.synologydownload.com/download/DSM/release/7.2.2/72806/DSM_DS3622xs%2B_72806.pat",
+    "headers": {
+      "Content-Length": "391539031",
+      "Last-Modified": "Wed, 11 Sep 2024 20:56:40 GMT",
+      "ETag": "\"a367762acbc737fa1d5063ba637f0729-75\"",
+      "Content-Type": "application/octet-stream"
+    },
+    "bytes": 391539031,
+    "sha256": "7bcea0d19b9cebc9fc009d4491e67bb9c7938c61341b5452170d2559f398c590",
+    "date": "2026-10-28"
+  },
+  "bootstrap_extractor_source": {
+    "url": "https://global.synologydownload.com/download/DSM/release/7.0.1/42218/DSM_DS3615xs_42218.pat",
+    "range": [
+      67098112,
+      72762239
+    ],
+    "bytes": 5664128,
+    "sha256": "3a8c2fe60142d3eb3a7ed2381819faa1db2cda30ff163288dd0a6c85a25815c1"
+  },
+  "version": "DSM 7.2.2-72806",
+  "model_image": "DS3622xs+ / broadwellnk / x86_64",
+  "rootfs_sha256": "b744318cba433f611f2c19f0964087fce781b9057c16384bd43cb16965d72951",
+  "firmware_files": {
+    "usr/lib/libsynopkg.so.1": {
+      "mode": "0o644",
+      "uid": 0,
+      "gid": 0,
+      "size": 3011899,
+      "sha256": "a754ed499eff013fec5552913117bb78694d20e0b8bda2d2277c1528f33e3e1f"
+    },
+    "usr/lib/libsynosystemd.so.7": {
+      "mode": "0o644",
+      "uid": 0,
+      "gid": 0,
+      "size": 572819,
+      "sha256": "b37927f973b01edb8a63473048f8b3c9a62673599dd660afa251a9635321308f"
+    },
+    "usr/lib/libc.so.6": {
+      "mode": "0o555",
+      "uid": 0,
+      "gid": 0,
+      "size": 1885128,
+      "sha256": "6e0975b12e9d22814b9e4ecfa3c4c12b1c2b36699187b06787ab790a4cde1276"
+    },
+    "usr/bin/python3.8": {
+      "mode": "0o755",
+      "uid": 0,
+      "gid": 0,
+      "size": 14464,
+      "sha256": "af9da346a3d9e2454647bc68d0da385181208077125df453556f7359a27dd7f1"
+    },
+    "usr/syno/lib/systemd/generators/syno-system-generator": {
+      "mode": "0o755",
+      "uid": 0,
+      "gid": 0,
+      "size": 82595,
+      "sha256": "448fd2b86a3481311d63aab54ae5907357fe9916a9a67c8e513c4355ec33142b"
+    },
+    "usr/syno/bin/synosystemctl": {
+      "mode": "0o755",
+      "uid": 0,
+      "gid": 0,
+      "size": 131923,
+      "sha256": "cdc16dec50bf45732f84ed57dbbf15e844304d244b489b09f5fafb277061cf7b"
+    }
+  },
+  "findings": {
+    "synosystemctl_nonroot_uses_user_manager": true,
+    "synosystemctl_is_active_supported": false,
+    "pkg_service_unit_requires_override_preserved": false,
+    "python": "3.8.15",
+    "glibc": "2.36",
+    "desktop_components": {
+      "v-app-instance": [
+        "usr/syno/synoman/webman/modules/AdminCenter/admin_center.js",
+        "usr/syno/synoman/webman/modules/DesktopProgress/DesktopProgress.js",
+        "usr/syno/synoman/webman/modules/DisableAdminNotification/DisableAdminNotification.js",
+        "usr/syno/synoman/webman/modules/DSMNotify/CheckAFPIsEnabledTray.js",
+        "usr/syno/synoman/webman/modules/DSMNotify/CheckMailIsEnabledTray.js",
+        "usr/syno/synoman/webman/modules/DSMNotify/DSMNotifyVueBundle.js",
+        "usr/syno/synoman/webman/modules/EnableNewUpdateSetting/EnableNewUpdateSetting.js",
+        "usr/syno/synoman/webman/modules/HelpBrowser/HelpBrowser.js"
+      ],
+      "v-app-window": [
+        "usr/syno/synoman/scripts/syno-vue-components/syno-vue-components.min.js",
+        "usr/syno/synoman/webman/modules/DSMNotify/DSMNotifyVueBundle.js",
+        "usr/syno/synoman/webman/modules/HelpBrowser/HelpBrowser.js",
+        "usr/syno/synoman/webman/modules/PersonalSettings/PersonalSettingsBundle.js",
+        "usr/syno/synoman/webman/modules/ResetAdminApp/ResetAdminApp.js",
+        "usr/syno/synoman/webman/modules/UpdateMaskApp/UpdateMaskApp.js",
+        "usr/syno/synoman/webman/modules/WelcomeApp/PromotionApp.js",
+        "usr/syno/synoman/webman/modules/WelcomeApp/WelcomeApp.js"
+      ]
+    }
+  },
+  "isolated_firmware_probes": {
+    "native": {
+      "environment": "disposable Debian container; DSM Package Center not emulated",
+      "checks": {
+        "non_root_install_scripts_and_one_use_credentials": true,
+        "systemd_ready_is_sent_after_private_runtime_and_socket_are_ready": true,
+        "package_user_control_scripts_only_check_health_of_system_dependencies": true,
+        "dedicated_package_group_overrides_unrelated_account_primary_group": true,
+        "native_web_broker_authentication_and_secret_cleanup": true,
+        "real_https_nginx_desktop_login_assets_api_csrf_and_logout": true,
+        "root_sealed_code_and_policy_not_package_writable": true,
+        "untrusted_package_payload_rejected_and_cached_trusted_restart_recovers": true,
+        "trusted_native_upgrade_switches_code_preserves_auth_and_data": true,
+        "web_restart_invalidates_browser_session_preserves_install_password": true
+      },
+      "runtime_python": "3.8.15"
+    },
+    "unit_enumeration_copy_and_package_unit_generation": true,
+    "original_system_generator_and_systemctl_enable": true,
+    "required_dependencies": [
+      {
+        "path": "/etc/systemd/system/pkgctl-UGreenToolbox.service.requires/pkg-UGreenToolbox-hardware.service",
+        "target": "/usr/local/lib/systemd/system/pkg-UGreenToolbox-hardware.service"
+      },
+      {
+        "path": "/etc/systemd/system/pkgctl-UGreenToolbox.service.requires/pkg-UGreenToolbox-web.service",
+        "target": "/usr/local/lib/systemd/system/pkg-UGreenToolbox-web.service"
+      }
+    ],
+    "spk_units_sha256": {
+      "pkg-UGreenToolbox-hardware.service": "dc3e67c48ebf27307bc8a5b8901ad2dccff153503135d4ff5a4a52e933c0f113",
+      "pkg-UGreenToolbox-web.service": "6436f590e184c8506657da357fc06aed10a2d4d47415e23fc5bc0ab24b931547"
+    },
+    "loader_dependency_resolution_only": [
+      {
+        "binary": "ugreen_leds_cli",
+        "exit": 0,
+        "output": "\tlinux-vdso.so.1 => linux-vdso.so.1 (0x00007f83a9bbb000)\n\tlibpthread.so.0 => /dsm/usr/lib/libpthread.so.0 (0x00007f83a9bb0000)\n\tlibc.so.6 => /dsm/usr/lib/libc.so.6 (0x00007f83a99d7000)\n\t/lib64/ld-linux-x86-64.so.2 => /dsm/usr/lib/ld-linux-x86-64.so.2 (0x00007f83a9bbd000)\n"
+      },
+      {
+        "binary": "ugreenctl",
+        "exit": 0,
+        "output": "\tlinux-vdso.so.1 => linux-vdso.so.1 (0x00007faab87e3000)\n\tlibpthread.so.0 => /dsm/usr/lib/libpthread.so.0 (0x00007faab87d8000)\n\tlibc.so.6 => /dsm/usr/lib/libc.so.6 (0x00007faab85ff000)\n\tlibdl.so.2 => /dsm/usr/lib/libdl.so.2 (0x00007faab85fa000)\n\t/lib64/ld-linux-x86-64.so.2 => /dsm/usr/lib/ld-linux-x86-64.so.2 (0x00007faab87e5000)\n"
+      },
+      {
+        "binary": "ugreenctl-fand",
+        "exit": 0,
+        "output": "\tlinux-vdso.so.1 => linux-vdso.so.1 (0x00007f7c19eb0000)\n\tlibpthread.so.0 => /dsm/usr/lib/libpthread.so.0 (0x00007f7c19ea5000)\n\tlibc.so.6 => /dsm/usr/lib/libc.so.6 (0x00007f7c19ccc000)\n\t/lib64/ld-linux-x86-64.so.2 => /dsm/usr/lib/ld-linux-x86-64.so.2 (0x00007f7c19eb2000)\n"
+      }
+    ]
+  },
+  "spk": {
+    "name": "UGreenToolbox-3.0.1-1003-x86_64.spk",
+    "bytes": 3225600,
+    "sha256": "91bde5130cdadbe495d4f22d6da0132376ec6ed4decb4565d09deb43908b3b36",
+    "payload_sha256": "7f2bcea6d59e58c807d64f290ad8c92f0b6b0601462043a007ce4bbd95934020"
+  },
+  "tests": {
+    "linux_python_passed": 49,
+    "windows_python_passed": 48,
+    "windows_python_skipped": 1,
+    "frontend_unchanged_baseline": "2026-10-28-dsm-desktop.json"
+  },
+  "not_verified": [
+    "Full DSM Package Center privilege validation and lifecycle timing",
+    "Actual PID 1 service activation, ordering and sandbox enforcement",
+    "DSM desktop rendering and ACL on a real NAS",
+    "Boot/shutdown/uninstall and hardware behavior on target NAS",
+    "Other DSM versions and hardware platform images"
+  ],
+  "source_sha256": {
+    "linux/scripts/build_spk.py": "2436aca0d87fc6f98a096912f83c532063f83402cd7f3410cc4dfb1006331bd2",
+    "linux/app/server/portable_runtime.py": "8579ecf79f9b8c22abe7bddcda480d02082f934a9add4c1af9eaaf9d9823f169",
+    "linux/synology/native_bootstrap.py": "3728962b4242de5fe9d8e5bcc0f7c0df0720cbebd9beac0388161e36d423d2b5",
+    "linux/synology/native_runtime.py": "c47b7289d06a481e3dd9c54d05f487421d58b445f3651e47091bc7dee114658c",
+    "linux/synology/native_desktop.py": "44f1681055d93d4e763259cacb33779b25234016e32369e005937e83e4b69893",
+    "linux/tests/native_spk_smoke.py": "0b3eaab091fe234e580d8ce549e28d1ce753a81b1670ebcd436f3a1c5d1d5329",
+    "linux/tests/test_spk.py": "4a834338c5d0ce45db292b4d108e27f994983beb5491f16054eadafec4506055"
+  }
+}

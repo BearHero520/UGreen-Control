@@ -35,6 +35,21 @@ class QuietPreviewHandler(preview.PreviewHandler):
 
 
 class PreviewApiTests(unittest.TestCase):
+    def test_dxp2800_explicit_wol_and_bios_capabilities(self) -> None:
+        preview.STATE.configure_profile("dxp2800")
+        _, data, _ = self.request("GET", "/bios/status")
+        self.assertTrue(data["supported"])
+        self.assertTrue(data["startup_available"])
+        self.assertFalse(data["cpu_fan_present"])
+        self.assertFalse(data["wol_available"])
+        self.assertEqual(data["wol_interfaces"], ["enp2s0", "enp3s0"])
+        _, data, _ = self.request("POST", "/bios/wol?policy=on&interface=br0&confirm=firmware-reversed")
+        self.assertFalse(data["ok"])
+        _, data, _ = self.request("POST", "/bios/wol?policy=on&interface=enp2s0&confirm=firmware-reversed")
+        self.assertTrue(data["ok"])
+        self.assertTrue(data["wol_available"])
+        self.assertEqual(data["wol_interface"], "enp2s0")
+
     @classmethod
     def setUpClass(cls) -> None:
         cls.server = preview.ThreadingHTTPServer(("127.0.0.1", 0), QuietPreviewHandler)

@@ -110,7 +110,11 @@ disk_detect_smart_sample() {
     local dev="$1" idle_sec="${2:-8}" probe_interval="${3:-60}"
     local sample power_state read_kbps=0 write_kbps=0 total_kbps=0 active=0
 
-    [[ -b "$dev" ]] || { echo "offline|0|0|0"; return; }
+    if [[ "${UGREEN_DISK_MODE:-}" == "stats" ]]; then
+        [[ -d "${DISK_SYS_CLASS_DIR:-/sys/class/block}/$(basename "$dev")" ]] || { echo "offline|0|0|0"; return; }
+    else
+        [[ -b "$dev" ]] || { echo "offline|0|0|0"; return; }
+    fi
 
     sample=$(disk_sample_io "$dev" "$idle_sec")
     IFS='|' read -r read_kbps write_kbps total_kbps active <<< "$sample"
@@ -120,6 +124,11 @@ disk_detect_smart_sample() {
         return
     fi
 
+    if [[ "${UGREEN_DISK_MODE:-}" == "stats" ]]; then
+        # Idle refers only to I/O. Power/sleep state is deliberately not inferred.
+        echo "idle|${read_kbps:-0}|${write_kbps:-0}|${total_kbps:-0}"
+        return
+    fi
     power_state=$(disk_read_power_state_cached "$dev" "$probe_interval")
     case "$power_state" in
         offline) echo "offline|0|0|0" ;;

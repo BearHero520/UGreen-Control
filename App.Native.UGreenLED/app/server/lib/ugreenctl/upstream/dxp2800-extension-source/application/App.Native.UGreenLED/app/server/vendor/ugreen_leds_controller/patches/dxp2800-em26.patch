@@ -1,0 +1,7 @@
+diff --git a/models/led_profiles.c b/models/led_profiles.c
+--- a/models/led_profiles.c
++++ b/models/led_profiles.c
+@@ -62,2 +62,3 @@
+     MCU_PROFILE("dxp2800-em-legacy","DXP2800","EM_DXP2800_V1.0.24","legacy-i2c-block",2,rgb2,"SMBus I801 adapter","https://github.com/miskcoo/ugreen_leds_controller/issues/128"),
++    MCU_PROFILE("dxp2800-em26-legacy","DXP2800","EM_DXP2800_V1.0.26","legacy-i2c-block",2,rgb2,"SMBus I801 adapter","docs/DXP2800_EM26_SUPPORT.md"),
+     MCU_PROFILE("dxp2800-v12-block","DXP2800","DXP2800 V1.2 251215","smbus-block-le",2,rgb2,"SMBus I801 adapter","https://github.com/miskcoo/ugreen_leds_controller/issues/128"),

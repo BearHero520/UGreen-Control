@@ -1,8 +1,8 @@
 #!/bin/bash
 # LED 守护进程：全局模式 + 动态盘位映射 + 速度闪动 + 电源/网络灯
 APP_NAME="App.Native.UGreenLED"
-APP_ROOT="${TRIM_APPDEST:-${APP_ROOT:-/var/apps/${APP_NAME}}}"
-VAR_DIR="${TRIM_PKGVAR:-${VAR_DIR:-${APP_ROOT}/var}}"
+APP_ROOT="${APP_ROOT:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
+VAR_DIR="${VAR_DIR:-/var/lib/ugreen-nas}"
 LOG_DIR="${LOG_DIR:-${VAR_DIR}/log}"
 
 SERVER_DIR="${SERVER_DIR:-}"
@@ -43,10 +43,7 @@ LEGACY_PID_FILE="${VAR_DIR}/led_daemon.pid"
 SETTINGS_FILE="${VAR_DIR}/settings.conf"
 DISK_STATUS_FILE="${RUNTIME_DIR}/disk_status.tsv"
 NET_STATUS_FILE="${RUNTIME_DIR}/net_status.tsv"
-UGREEN_CLI=""
-for c in "${SERVER_DIR}/bin/ugreen_leds_cli" "${APP_ROOT}/target/server/bin/ugreen_leds_cli" /usr/bin/ugreen_leds_cli; do
-    [[ -x "$c" ]] && UGREEN_CLI="$c" && break
-done
+UGREEN_CLI="${SERVER_DIR}/bin/ugreen_leds_cli"
 export TARGET="${APP_ROOT}"
 
 export UGREEN_CLI LED_API_CACHE_DIR="${RUNTIME_DIR}/led_cache"

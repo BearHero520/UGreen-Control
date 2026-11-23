@@ -10,6 +10,22 @@ disk_inventory_field() {
 # 输出：device|hctl|serial|model|size|transport
 disk_inventory_rows() {
     local raw line name hctl serial model size transport dev
+    if [[ "${UGREEN_DISK_MODE:-}" == "stats" ]]; then
+        # Host metadata only: no raw disk passthrough and no ATA/SCSI commands.
+        local entry root="${DISK_SYS_CLASS_DIR:-/sys/class/block}"
+        for entry in "$root"/sd*; do
+            [[ -d "$entry/device" && ! -e "$entry/partition" ]] || continue
+            name=$(basename "$entry")
+            [[ "$name" =~ ^sd[a-z]+$ ]] || continue
+            hctl=$(basename "$(readlink -f "$entry/device")")
+            [[ "$hctl" =~ ^[0-9]+:[0-9]+:[0-9]+:[0-9]+$ ]] || continue
+            model=$(cat "$entry/device/model" 2>/dev/null || true)
+            serial=$(cat "$entry/device/serial" 2>/dev/null || true)
+            size=$(cat "$entry/size" 2>/dev/null || echo 0)
+            printf '/dev/%s|%s|%s|%s|%s|\n' "$name" "$hctl" "${serial//|/}" "${model//|/}" "$size"
+        done
+        return
+    fi
     raw=$(lsblk -S -n -P -o NAME,HCTL,SERIAL,MODEL,SIZE,TRAN 2>/dev/null || true)
     if [[ -n "$raw" ]]; then
         while IFS= read -r line; do

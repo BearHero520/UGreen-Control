@@ -65,8 +65,8 @@ PREVIEW_STOCK_CURVES = {
     "dxp480t_plus": {"profile": "stock-480tplus", "cpu": "25,55,75,85,95", "hdd": "0,0,0,0,0", "ssd": "40,50,60,70,80", "system_pwm": "55,90,110,128", "cpu_pwm": "70,130,150,200"},
     "dxp6800": {"profile": "stock-6800pro", "cpu": "25,38,55,75,90", "hdd": "30,35,43,48,55", "ssd": "45,50,60,65,70", "system_pwm": "64,130,210,230", "cpu_pwm": "80,130,210,230"},
 }
-BIOS_PREVIEW_PROFILES = frozenset({"dx4600", "dxp4800", "dxp4800_plus", "dxp4800_pro", "dxp4800s", "dxp480t_plus", "dxp6800"})
-BIOS_SINGLE_FAN_PROFILES = frozenset({"dx4600", "dxp4800", "dxp4800s"})
+BIOS_PREVIEW_PROFILES = frozenset({"dxp2800", "dx4600", "dxp4800", "dxp4800_plus", "dxp4800_pro", "dxp4800s", "dxp480t_plus", "dxp6800"})
+BIOS_SINGLE_FAN_PROFILES = frozenset({"dxp2800", "dx4600", "dxp4800", "dxp4800s"})
 
 
 def parse_ini(raw: str) -> OrderedDict[str, OrderedDict[str, str]]:
@@ -110,6 +110,7 @@ class PreviewState:
         self.bios_sys2_manual = False
         self.bios_startup = "last"
         self.bios_wol = "on"
+        self.bios_wol_interface = ""
         self.bios_power_schedule_enabled = False
         self.bios_power_schedule_days = ""
         self.bios_power_schedule_wake_time = ""
@@ -204,7 +205,10 @@ class PreviewState:
             "sys2_manual": self.bios_sys2_manual if is_480t or is_6800 else False,
             "startup": self.bios_startup if supported else "unknown",
             "startup_available": supported,
-            "wol_available": supported,
+            "wol_available": supported and (profile != "dxp2800" or bool(self.bios_wol_interface)),
+            "wol_interface_required": profile == "dxp2800",
+            "wol_interface": self.bios_wol_interface if profile == "dxp2800" else "",
+            "wol_interfaces": ["enp2s0", "enp3s0"] if profile == "dxp2800" else [],
             "wol": self.bios_wol if supported else "unknown",
             "wol_error": "" if supported else "此机型没有固件证明的网络唤醒映射",
             "power_schedule": {
@@ -888,6 +892,12 @@ class PreviewHandler(BaseHTTPRequestHandler):
                 self.send_json({"ok": False, "error": "网络唤醒参数无效"})
                 return
             with STATE.lock:
+                if STATE.selected_profile() == "dxp2800":
+                    interface = (query.get("interface") or [STATE.bios_wol_interface])[0]
+                    if interface not in {"enp2s0", "enp3s0"}:
+                        self.send_json({"ok": False, "error": "请选择物理有线网卡"})
+                        return
+                    STATE.bios_wol_interface = interface
                 STATE.bios_wol = policy
             self.send_json(STATE.bios_payload("网络唤醒策略已更新"))
             return

@@ -1,4 +1,5 @@
-const API = '/cgi/ThirdParty/App.Native.UGreenLED/api.cgi';
+// Preserve the DSM app proxy prefix; the standalone container still uses /api.
+const API = new URL('api', document.baseURI).pathname;
 
 export type ApiOptions = {
   method?: 'GET' | 'POST';
@@ -20,7 +21,7 @@ function createRequestId() {
 
 export async function api<T>(path: string, options: ApiOptions = {}): Promise<T> {
   const requestId = createRequestId();
-  const headers: Record<string, string> = { 'X-Request-ID': requestId };
+  const headers: Record<string, string> = { 'X-Request-ID': requestId, 'X-UGREEN-Request': '1' };
   if (options.body !== undefined) headers['Content-Type'] = 'text/plain';
 
   const response = await fetch(`${API}${path}${options.query ? `?${options.query}` : ''}`, {
@@ -31,6 +32,9 @@ export async function api<T>(path: string, options: ApiOptions = {}): Promise<T>
     cache: 'no-store',
     signal: options.signal,
   });
+  if (response.status === 401 && response.headers.get('X-UGREEN-Login') === 'required') {
+    window.location.reload();
+  }
   const text = await response.text();
   let data: T & { ok?: boolean; error?: string };
   try {

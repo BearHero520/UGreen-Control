@@ -11,7 +11,7 @@ export SETTINGS_FILE="$TMP/settings.conf" UGREEN_PRODUCT_NAME=DX4600
 export BIOS_UGREENCTL="$TMP/ugreenctl" BIOS_UGREENCTL_PLUGIN_DIR="$TMP/models"
 export TEST_STATE="$TMP/hardware" TEST_CALLS="$TMP/calls" TEST_FAIL="$TMP/fail"
 mkdir -p "$BIOS_UGREENCTL_PLUGIN_DIR"
-for model in dx4600 dxp4800 dxp4800plus dxp4800s dxp480tplus dxp6800pro dxp6800plus; do
+for model in dxp2800 dx4600 dxp4800 dxp4800plus dxp4800s dxp480tplus dxp6800pro dxp6800plus dxp4800gt; do
     touch "$BIOS_UGREENCTL_PLUGIN_DIR/$model.so"
 done
 cat > "$BIOS_UGREENCTL" <<'EOF'
@@ -31,16 +31,20 @@ source "$LIB/bios_control.sh"
 
 # Every exact startup DMI accepted by the adapter must save and replay all
 # explicit choices. Plugin-sharing variants still receive distinct bindings.
-products=('DX4600' 'DX4600+' 'DX4600 Pro' 'DXP4800'
+export UGREEN_PRODUCT_VERSION="EM_DXP2800_V1.0.26"
+products=('DXP2800' 'DX4600' 'DX4600+' 'DX4600 Pro' 'DXP4800'
     'DXP4800 Plus' 'UGREEN DXP4800 Plus' 'DXP4800 Pro' 'UGREEN DXP4800 Pro'
-    'DXP4800S' 'DXP480T Plus' 'UGREEN DXP480T Plus' 'DXP6800 Plus' 'DXP6800 Pro')
+    'DXP4800S' 'DXP480T Plus' 'UGREEN DXP480T Plus' 'DXP6800 Plus' 'DXP6800 Pro' 'DXP4800 GT')
+if [[ -n "${TEST_PRODUCT:-}" ]]; then products=("$TEST_PRODUCT"); fi
 for UGREEN_PRODUCT_NAME in "${products[@]}"; do
     bios_supported_model || fail "supported exact DMI rejected: $UGREEN_PRODUCT_NAME"
     settings_set "$SETTINGS_FILE" bios startup_selection ''
     : > "$TEST_CALLS"
     bios_startup_restore
     assert_no_calls "unconfigured $UGREEN_PRODUCT_NAME restore"
-    for policy in on off last; do
+    policies=(on off last)
+    [[ "$UGREEN_PRODUCT_NAME" != "DXP4800 GT" ]] || policies=(on off)
+    for policy in "${policies[@]}"; do
         echo unknown > "$TEST_STATE"
         bios_read_cli_startup || fail 'unknown policy made the interface unavailable'
         [[ "$BIOS_STARTUP_POLICY" == unknown ]] || fail 'unknown policy was replaced with a default'
@@ -62,14 +66,20 @@ for UGREEN_PRODUCT_NAME in "${products[@]}"; do
         [[ "$(wc -l < "$TEST_CALLS")" -eq 1 ]] || fail 'restore must make one guarded write'
         assert_saved "$UGREEN_PRODUCT_NAME|$policy"
     done
+    retained_policy="$policy"
+    if [[ "$UGREEN_PRODUCT_NAME" == "DXP4800 GT" ]]; then
+        : > "$TEST_CALLS"
+        ! bios_set_startup_saved last || fail "GT accepted unsupported last policy"
+        assert_no_calls "GT last policy"
+    fi
     touch "$TEST_FAIL"
     ! bios_set_startup_saved on || fail 'failed hardware write reported success'
-    assert_saved "$UGREEN_PRODUCT_NAME|last"
+    assert_saved "$UGREEN_PRODUCT_NAME|$retained_policy"
     ! bios_startup_restore || fail 'failed restore reported success'
     rm "$TEST_FAIL"
     : > "$TEST_CALLS"
     ! bios_set_startup_saved invalid || fail 'invalid choice accepted'
-    assert_saved "$UGREEN_PRODUCT_NAME|last"
+    assert_saved "$UGREEN_PRODUCT_NAME|$retained_policy"
     assert_no_calls 'invalid choice'
     for corrupt in "$UGREEN_PRODUCT_NAME|invalid" "$UGREEN_PRODUCT_NAME|on|last" "$UGREEN_PRODUCT_NAME"; do
         settings_set "$SETTINGS_FILE" bios startup_selection "$corrupt"
@@ -180,12 +190,14 @@ for UGREEN_PRODUCT_NAME in "${products[@]}"; do
     bash "$ROOT/App.Native.UGreenLED/cmd/main" start
     bash "$ROOT/App.Native.UGreenLED/cmd/main" stop
     assert_no_calls "unconfigured service $UGREEN_PRODUCT_NAME"
-    settings_set "$SETTINGS_FILE" bios startup_selection "$UGREEN_PRODUCT_NAME|last"
+    service_policy=last; service_expected=restore
+    [[ "$UGREEN_PRODUCT_NAME" != "DXP4800 GT" ]] || { service_policy=off; service_expected=off; }
+    settings_set "$SETTINGS_FILE" bios startup_selection "$UGREEN_PRODUCT_NAME|$service_policy"
     for action in start stop; do
         echo unknown > "$TEST_STATE"
         : > "$TEST_CALLS"
         bash "$ROOT/App.Native.UGreenLED/cmd/main" "$action"
-        [[ "$(cat "$TEST_STATE")" == restore ]] || fail "service $action lost policy on $UGREEN_PRODUCT_NAME"
+        [[ "$(cat "$TEST_STATE")" == "$service_expected" ]] || fail "service $action lost policy on $UGREEN_PRODUCT_NAME"
         [[ "$(wc -l < "$TEST_CALLS")" -eq 1 ]] || fail "service $action must restore exactly once"
     done
 done
@@ -194,6 +206,6 @@ for action in start stop; do
     : > "$TEST_SERVICE_WARNINGS"
     bash "$ROOT/App.Native.UGreenLED/cmd/main" "$action"
     grep -Fq 'bios.startup_restore_failed' "$TEST_SERVICE_WARNINGS" || fail "service $action hid restore failure"
-    assert_saved "$UGREEN_PRODUCT_NAME|last"
+    assert_saved "$UGREEN_PRODUCT_NAME|$retained_policy"
 done
-echo 'Startup persistence tests passed (13 exact products, all policies, cross-model rejection, failures, service start/stop)'
+echo "Startup persistence tests passed (${#products[@]} exact products, supported policies, cross-model rejection, failures, service start/stop)"

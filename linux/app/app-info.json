@@ -1,0 +1,7 @@
+{
+  "name": "ugreen-nas-tool",
+  "version": "3.0.1-platform.1",
+  "channel": "synology-truenas",
+  "status": "experimental-unverified",
+  "architecture": "x86_64"
+}

@@ -78,6 +78,19 @@ stock_curve=$(bios_fan_curve_stock_json)
 grep -Fq '"profile":"stock-4800s"' <<< "$stock_curve" || fail "DXP4800S must use its stock profile"
 grep -Fq '"cpu":"50,55,75,80,90"' <<< "$stock_curve" || fail "DXP4800S CPU curve must match firmware"
 grep -Fq '"system_pwm":"64,128,204,255"' <<< "$stock_curve" || fail "DXP4800S PWM curve must match firmware"
+UGREEN_PRODUCT_NAME="DH2600"
+assert_eq "$(hardware_profile_key)" "dh2600"
+assert_eq "$(hardware_profile_display_name)" "UGREEN DH2600"
+assert_eq "$(hardware_support_level)" "experimental"
+assert_eq "$(hardware_disk_count)" "2"
+assert_eq "$(hardware_netdev_count)" "0"
+assert_eq "$(hardware_hctl_profile)" "dh2600"
+assert_eq "$(hardware_network_leds)" ""
+LED_N76_DIRECT_SPEC=4:0x31
+assert_eq "$(hardware_cli_led_name disk1)" "disk2"
+assert_eq "$(hardware_cli_led_name disk2)" "disk1"
+LED_N76_DIRECT_SPEC=""
+assert_eq "$(hardware_cli_led_name disk1)" "disk1"
 settings_set "$SETTINGS_FILE" hardware profile dxp480t_plus
 assert_eq "$(hardware_support_level)" "limited"
 hardware_driver_supported && fail "DXP480T must not use the legacy LED driver"
@@ -114,6 +127,10 @@ fi
 
 settings_set "$SETTINGS_FILE" hardware profile dxp6800
 source "$LIB/disk_map.sh"
+settings_set "$SETTINGS_FILE" hardware profile dh2600
+assert_eq "$(disk_guess_led_by_hctl 0:0:0:0)" "disk2"
+assert_eq "$(disk_guess_led_by_hctl 1:0:0:0)" "disk1"
+settings_set "$SETTINGS_FILE" hardware profile dxp6800
 led_list_disk_slots() { printf '%s\n' disk1 disk2 disk3 disk4 disk5 disk6; }
 disk_inventory_rows() {
   printf '%s\n' \

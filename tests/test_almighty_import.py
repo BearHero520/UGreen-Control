@@ -50,7 +50,7 @@ class ImportTests(unittest.TestCase):
         (server / 'bin/ugreen_leds_cli').write_bytes(b'old LED')
         build.install_release(manifest, files, lock, server)
         receipt = json.loads((server / 'lib/ugreenctl/build-info.json').read_text())
-        self.assertEqual(len(receipt['files']), 13)
+        self.assertEqual(len(receipt['files']), len(build.PROGRAMS) + len(build.MODELS))
         self.assertEqual(receipt['release_tag'], 'preview')
         for p in build.PROGRAMS:
             self.assertEqual((server / 'bin' / p).read_bytes(), self.files[f'usr/local/bin/{p}'])
@@ -74,6 +74,20 @@ class ImportTests(unittest.TestCase):
         self.files[name] = bytes(data)
         with self.assertRaisesRegex(ValueError, 'Wrong ELF'):
             build.validate_release(self.root, self.bundle())
+
+    def test_local_application_artifact_uses_application_repository(self):
+        lock = self.bundle()
+        lock.update(source_type='application-local-artifact', artifact_path='release')
+        directory = self.root / 'release'; directory.mkdir()
+        for name in (lock['archive'], lock['manifest'], 'SHA256SUMS'):
+            (directory / name).write_bytes((self.root / name).read_bytes())
+        destination = self.root / 'download'; destination.mkdir()
+        with patch.object(build, 'ROOT', self.root):
+            build.download_assets(lock, destination)
+        self.assertEqual((destination / lock['archive']).read_bytes(), (directory / lock['archive']).read_bytes())
+        lock['artifact_path'] = '../escape'
+        with patch.object(build, 'ROOT', self.root), self.assertRaisesRegex(ValueError, 'escapes'):
+            build.download_assets(lock, destination)
 
     def test_missing_plugin(self):
         del self.files['usr/local/lib/ugreenctl/models/dxp2800.so']

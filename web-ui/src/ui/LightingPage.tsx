@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { ColorPicker } from './ColorPicker';
 import { boundedInt, hexToRgb, mergeIni, rgbToHex, type IniData } from '../lib/ini';
 
 type ColorSetting = { key: string; label: string; def: string; brightness: number; off?: boolean };
@@ -46,8 +47,8 @@ function ColorGrid({ items, colorSection, brightnessSection, settings, onChange 
       const brightness = boundedInt(settings[brightnessSection]?.[item.key], 0, 255, item.brightness);
       return <div className="color-row" key={item.key}>
         <label>{item.label}</label>
-        <input type="color" value={rgbToHex(rawColor)} aria-label={`${item.label}颜色`} onChange={(event) => {
-          const [red, green, blue] = hexToRgb(event.target.value);
+        <ColorPicker value={rgbToHex(rawColor)} label={`${item.label}颜色`} onChange={(value) => {
+          const [red, green, blue] = hexToRgb(value);
           update(item.key, `${red} ${green} ${blue}`);
         }} />
         <input className="brightness-input" type="range" min="0" max="255" step="1" value={brightness} aria-label={`${item.label}亮度`} onChange={(event) => update(item.key, undefined, boundedInt(event.target.value, 0, 255, item.brightness))} />
@@ -57,13 +58,15 @@ function ColorGrid({ items, colorSection, brightnessSection, settings, onChange 
   </div>;
 }
 
-function StandardLighting({ settings, onChange, onSave, onToast }: {
+function StandardLighting({ settings, networkLedAvailable = true, onChange, onSave, onToast }: {
   settings: IniData;
+  networkLedAvailable?: boolean;
   onChange: (next: IniData) => void;
   onSave: () => Promise<void>;
   onToast: (message: string, type?: 'ok' | 'err') => void;
 }) {
   const [panel, setPanel] = useState<'disk' | 'network' | 'power'>('disk');
+  const selectedPanel = !networkLedAvailable && panel === 'network' ? 'disk' : panel;
   const [saving, setSaving] = useState(false);
   const save = async () => {
     setSaving(true);
@@ -77,27 +80,27 @@ function StandardLighting({ settings, onChange, onSave, onToast }: {
 
   return <>
     <div className="settings-tabs glass-surface" role="tablist" aria-label="灯光设置分类">
-      {([['disk', 'bi-device-hdd', '硬盘灯'], ['network', 'bi-wifi', '网络灯'], ['power', 'bi-power', '电源灯']] as const).map(([key, icon, label]) => (
-        <button key={key} type="button" className={`settings-tab${panel === key ? ' active' : ''}`} role="tab" aria-selected={panel === key} onClick={() => setPanel(key)}><i className={`bi ${icon}`} aria-hidden="true" /><span>{label}</span></button>
+      {([['disk', 'bi-device-hdd', '硬盘灯'], ...(networkLedAvailable ? [['network', 'bi-wifi', '网络灯'] as const] : []), ['power', 'bi-power', '电源灯']] as const).map(([key, icon, label]) => (
+        <button key={key} type="button" className={`settings-tab${selectedPanel === key ? ' active' : ''}`} role="tab" aria-selected={selectedPanel === key} onClick={() => setPanel(key)}><i className={`bi ${icon}`} aria-hidden="true" /><span>{label}</span></button>
       ))}
     </div>
     <div className="settings-layout">
-      <article className="glass-surface settings-surface" hidden={panel !== 'disk'}>
+      <article className="glass-surface settings-surface" hidden={selectedPanel !== 'disk'}>
         <div className="section-heading"><div><span className="section-kicker">DISK LED</span><h2>硬盘状态颜色</h2></div><span className="soft-badge">智能模式</span></div>
         <p className="surface-help">为活动、空闲、休眠和离线状态设置颜色与亮度。</p>
         <ColorGrid items={diskStates} colorSection="disk_colors" brightnessSection="disk_brightness" settings={settings} onChange={onChange} />
       </article>
-      <article className="glass-surface settings-surface" hidden={panel !== 'network'}>
+      {networkLedAvailable ? <article className="glass-surface settings-surface" hidden={selectedPanel !== 'network'}>
         <div className="section-heading"><div><span className="section-kicker">NETWORK LED</span><h2>网络状态颜色</h2></div></div>
         <p className="surface-help">外网、联网和断网状态分别使用独立颜色。</p>
         <ColorGrid items={networkStates} colorSection="netdev_colors" brightnessSection="netdev_brightness" settings={settings} onChange={onChange} />
-      </article>
-      <article className="glass-surface settings-surface" hidden={panel !== 'power'}>
+      </article> : null}
+      <article className="glass-surface settings-surface" hidden={selectedPanel !== 'power'}>
         <div className="section-heading"><div><span className="section-kicker">POWER LED</span><h2>电源灯</h2></div></div>
         <p className="surface-help">设置智能模式和全部开启时的电源灯表现。</p>
         <div className="color-grid">
-          <div className="color-row is-color-only"><label>智能模式</label><input type="color" value={rgbToHex(settings.power?.smart_color || '100 100 100')} aria-label="智能模式颜色" onChange={(event) => setPowerColor('smart_color', event.target.value)} /></div>
-          <div className="color-row is-color-only"><label>全部开启</label><input type="color" value={rgbToHex(settings.power?.all_on_color || '180 180 180')} aria-label="全部开启颜色" onChange={(event) => setPowerColor('all_on_color', event.target.value)} /></div>
+          <div className="color-row is-color-only"><label>智能模式</label><ColorPicker value={rgbToHex(settings.power?.smart_color || '100 100 100')} label="智能模式颜色" onChange={(value) => setPowerColor('smart_color', value)} /></div>
+          <div className="color-row is-color-only"><label>全部开启</label><ColorPicker value={rgbToHex(settings.power?.all_on_color || '180 180 180')} label="全部开启颜色" onChange={(value) => setPowerColor('all_on_color', value)} /></div>
           <div className="color-row is-brightness-only"><label>亮度</label><input className="brightness-input" type="range" min="0" max="255" step="1" value={powerBrightness} aria-label="电源灯亮度" onChange={(event) => onChange(mergeIni(settings, { power: { brightness: String(boundedInt(event.target.value, 0, 255, 40)) } }))} /><output className="brightness-value">{powerBrightness}</output></div>
         </div>
       </article>
@@ -140,16 +143,17 @@ function Power26Lighting({ settings, onApply }: { settings: IniData; onApply: (c
   </div>;
 }
 
-export function LightingPage({ hidden, settings, power26, onSettingsChange, onSave, onPower26Apply, onToast }: {
+export function LightingPage({ hidden, settings, power26, networkLedAvailable = true, onSettingsChange, onSave, onPower26Apply, onToast }: {
   hidden: boolean;
   settings: IniData;
   power26: boolean;
+  networkLedAvailable?: boolean;
   onSettingsChange: (next: IniData) => void;
   onSave: () => Promise<void>;
   onPower26Apply: (color: string, effect: string, threshold: number, off: boolean) => Promise<void>;
   onToast: (message: string, type?: 'ok' | 'err') => void;
 }) {
   return <section className="react-view" hidden={hidden} aria-label="灯光设置">
-    {power26 ? <Power26Lighting settings={settings} onApply={onPower26Apply} /> : <StandardLighting settings={settings} onChange={onSettingsChange} onSave={onSave} onToast={onToast} />}
+    {power26 ? <Power26Lighting settings={settings} onApply={onPower26Apply} /> : <StandardLighting settings={settings} networkLedAvailable={networkLedAvailable} onChange={onSettingsChange} onSave={onSave} onToast={onToast} />}
   </section>;
 }

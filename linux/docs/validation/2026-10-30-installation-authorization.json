@@ -1,0 +1,158 @@
+{
+  "date": "2026-10-30",
+  "branch": "synology-truenas",
+  "spk": "UGreenToolbox-3.0.1-1005-x86_64.spk",
+  "spk_sha256": "0d42818604af1ea60d36f992587d57bf11ecffc4fb17976038d1949923c6ce9a",
+  "spk_bytes": 3266560,
+  "payload_sha256": "82238c040053eb6a5ddd1c9972f95cfa78c51eedf4bde82e5c36b1add8fad1ca",
+  "scope": "isolated QEMU Linux and disposable containers using original DSM Python 3.8.15; no physical hardware writes",
+  "tests": {
+    "linux_python_passed": 65,
+    "windows_python_passed": 53,
+    "windows_python_skipped": 12
+  },
+  "native_scenarios": {
+    "off": {
+      "environment": "disposable Debian container; DSM Package Center not emulated",
+      "checks": {
+        "invalid_wizard_values_rejected_before_persistence": true,
+        "non_root_install_scripts_and_one_use_credentials": true,
+        "systemd_ready_is_sent_after_private_runtime_and_socket_are_ready": true,
+        "package_user_control_scripts_only_check_health_of_system_dependencies": true,
+        "dedicated_package_group_overrides_unrelated_account_primary_group": true,
+        "installer_authorization_reaches_root_policy_and_api_without_hardware_writes": true,
+        "native_web_broker_authentication_and_secret_cleanup": true,
+        "real_https_nginx_desktop_login_assets_api_csrf_and_logout": true,
+        "authenticated_export_contains_application_rotations_root_startup_and_no_secret_canaries": true,
+        "log_socket_rejects_wrong_uid_even_with_group_access": true,
+        "root_sealed_code_and_policy_not_package_writable": true,
+        "hardware_broker_failure_keeps_desktop_health_and_log_export_available": true,
+        "package_user_cannot_replay_authorization_on_broker_restart": true,
+        "untrusted_package_payload_rejected_and_cached_trusted_restart_recovers": true,
+        "trusted_restart_and_upgrade_preserve_installer_authorization": true,
+        "trusted_native_upgrade_switches_code_preserves_auth_and_data": true,
+        "native_upgrade_and_service_restarts_preserve_log_history_and_export": true,
+        "web_restart_invalidates_browser_session_preserves_install_password": true
+      },
+      "runtime_python": "3.8.15"
+    },
+    "both": {
+      "environment": "disposable Debian container; DSM Package Center not emulated",
+      "checks": {
+        "invalid_wizard_values_rejected_before_persistence": true,
+        "non_root_install_scripts_and_one_use_credentials": true,
+        "systemd_ready_is_sent_after_private_runtime_and_socket_are_ready": true,
+        "package_user_control_scripts_only_check_health_of_system_dependencies": true,
+        "dedicated_package_group_overrides_unrelated_account_primary_group": true,
+        "installer_authorization_reaches_root_policy_and_api_without_hardware_writes": true,
+        "native_web_broker_authentication_and_secret_cleanup": true,
+        "real_https_nginx_desktop_login_assets_api_csrf_and_logout": true,
+        "authenticated_export_contains_application_rotations_root_startup_and_no_secret_canaries": true,
+        "log_socket_rejects_wrong_uid_even_with_group_access": true,
+        "root_sealed_code_and_policy_not_package_writable": true,
+        "hardware_broker_failure_keeps_desktop_health_and_log_export_available": true,
+        "package_user_cannot_replay_authorization_on_broker_restart": true,
+        "untrusted_package_payload_rejected_and_cached_trusted_restart_recovers": true,
+        "trusted_restart_and_upgrade_preserve_installer_authorization": true,
+        "trusted_native_upgrade_switches_code_preserves_auth_and_data": true,
+        "native_upgrade_and_service_restarts_preserve_log_history_and_export": true,
+        "web_restart_invalidates_browser_session_preserves_install_password": true
+      },
+      "runtime_python": "3.8.15"
+    },
+    "upgrade-led": {
+      "environment": "disposable Debian container; DSM Package Center not emulated",
+      "checks": {
+        "invalid_wizard_values_rejected_before_persistence": true,
+        "non_root_install_scripts_and_one_use_credentials": true,
+        "systemd_ready_is_sent_after_private_runtime_and_socket_are_ready": true,
+        "package_user_control_scripts_only_check_health_of_system_dependencies": true,
+        "dedicated_package_group_overrides_unrelated_account_primary_group": true,
+        "installer_authorization_reaches_root_policy_and_api_without_hardware_writes": true,
+        "native_web_broker_authentication_and_secret_cleanup": true,
+        "real_https_nginx_desktop_login_assets_api_csrf_and_logout": true,
+        "authenticated_export_contains_application_rotations_root_startup_and_no_secret_canaries": true,
+        "log_socket_rejects_wrong_uid_even_with_group_access": true,
+        "root_sealed_code_and_policy_not_package_writable": true,
+        "hardware_broker_failure_keeps_desktop_health_and_log_export_available": true,
+        "package_user_cannot_replay_authorization_on_broker_restart": true,
+        "untrusted_package_payload_rejected_and_cached_trusted_restart_recovers": true,
+        "trusted_restart_and_upgrade_preserve_installer_authorization": true,
+        "trusted_native_upgrade_switches_code_preserves_auth_and_data": true,
+        "native_upgrade_and_service_restarts_preserve_log_history_and_export": true,
+        "web_restart_invalidates_browser_session_preserves_install_password": true
+      },
+      "runtime_python": "3.8.15"
+    },
+    "upgrade-preserve": {
+      "environment": "disposable Debian container; DSM Package Center not emulated",
+      "checks": {
+        "invalid_wizard_values_rejected_before_persistence": true,
+        "non_root_install_scripts_and_one_use_credentials": true,
+        "systemd_ready_is_sent_after_private_runtime_and_socket_are_ready": true,
+        "package_user_control_scripts_only_check_health_of_system_dependencies": true,
+        "dedicated_package_group_overrides_unrelated_account_primary_group": true,
+        "installer_authorization_reaches_root_policy_and_api_without_hardware_writes": true,
+        "native_web_broker_authentication_and_secret_cleanup": true,
+        "real_https_nginx_desktop_login_assets_api_csrf_and_logout": true,
+        "authenticated_export_contains_application_rotations_root_startup_and_no_secret_canaries": true,
+        "log_socket_rejects_wrong_uid_even_with_group_access": true,
+        "root_sealed_code_and_policy_not_package_writable": true,
+        "hardware_broker_failure_keeps_desktop_health_and_log_export_available": true,
+        "package_user_cannot_replay_authorization_on_broker_restart": true,
+        "untrusted_package_payload_rejected_and_cached_trusted_restart_recovers": true,
+        "trusted_restart_and_upgrade_preserve_installer_authorization": true,
+        "trusted_native_upgrade_switches_code_preserves_auth_and_data": true,
+        "native_upgrade_and_service_restarts_preserve_log_history_and_export": true,
+        "web_restart_invalidates_browser_session_preserves_install_password": true
+      },
+      "runtime_python": "3.8.15"
+    }
+  },
+  "firmware_generated_units_byte_equal_final_spk": true,
+  "firmware_enable_links": [
+    [
+      "/etc/systemd/system/pkgctl-UGreenToolbox.service.requires/pkg-UGreenToolbox-web.service",
+      "/usr/local/lib/systemd/system/pkg-UGreenToolbox-web.service"
+    ],
+    [
+      "/etc/systemd/system/pkgctl-UGreenToolbox.service.requires/pkg-UGreenToolbox-logs.service",
+      "/usr/local/lib/systemd/system/pkg-UGreenToolbox-logs.service"
+    ],
+    [
+      "/etc/systemd/system/pkgctl-UGreenToolbox.service.wants/pkg-UGreenToolbox-hardware.service",
+      "/usr/local/lib/systemd/system/pkg-UGreenToolbox-hardware.service"
+    ]
+  ],
+  "authorization": {
+    "first_install_default": "both disabled",
+    "upgrade_default": "preserve existing",
+    "separate_led_and_bios_choices": true,
+    "explicit_upgrade_can_replace_or_revoke": true,
+    "root_pinned_version_consumed_once": true,
+    "atomic_root_policy_and_receipt": true,
+    "no_hardware_writes_during_install_or_restart": true,
+    "same_version_reinstall": "retains receipt and policy; use a newer version wizard to change"
+  },
+  "canonical_led_bytes_unchanged": true,
+  "hardware_implementation_changed": false,
+  "limitations": [
+    "actual DSM Package Center wizard and PID1 lifecycle untested",
+    "physical NAS hardware and DSM ACL untested",
+    "installer request is read once before Web starts; does not independently authenticate a DSM user",
+    "existing fan curve and power schedule limitations retained"
+  ],
+  "sources": {
+    "wizard_variables": "https://help.synology.com/developer-guide/synology_package/wizard/WIZARD_UIFILES_v2.html",
+    "package_script_identity": "https://help.synology.com/developer-guide/breaking_changes.html",
+    "system_units": "https://help.synology.com/developer-guide/resource_acquisition/systemd_user_unit.html"
+  },
+  "source_sha256": {
+    "linux/scripts/build_spk.py": "4d3599e761778ed74ffca5583cd1d88682e6de2cc4dfff0c905524afc03764af",
+    "linux/synology/native_bootstrap.py": "5720b5302e0247b8d47e70bbae097e8c51bcb53a1629a1fd043a8e2ed0e94c94",
+    "linux/synology/native_runtime.py": "02b6f4fc01e71e5406647160b586a11c9d68fd573d08fe18c9b4195e6627db62",
+    "linux/tests/test_native_installation.py": "a599d59deb9dde4b3b962094f743dd9b5ef1e607155c5a5e01eaf3a4638bcb5c",
+    "linux/tests/test_spk.py": "d943580d28964097ba4003e2bf1e558dc3f21ad7baf0eeefabc4486c667b18b2",
+    "linux/tests/native_spk_smoke.py": "8843da104d13f2c3ca9988250c8de500712bece6f40fb2cd9b275bd02b2a3d71"
+  }
+}

@@ -5,7 +5,7 @@
 FAN_TELEMETRY_MAX_SAMPLES="${FAN_TELEMETRY_MAX_SAMPLES:-9000}"
 
 fan_telemetry_history_path() {
-    printf '%s\n' "${VAR_DIR:-/var/apps/App.Native.UGreenLED/var}/fan-telemetry.tsv"
+    printf '%s\n' "${VAR_DIR:-/var/lib/ugreen-nas}/fan-telemetry.tsv"
 }
 
 fan_telemetry_number() {

@@ -1,7 +1,12 @@
 #!/bin/bash
+# Only the local broker invokes this adapter; never expose it as a public CGI.
+if [[ "${UGREEN_INTERNAL_CGI:-}" != "1" ]]; then
+    printf 'Status: 403 Forbidden\nContent-Type: application/json\n\n{"ok":false,"error":"local broker required"}\n'
+    exit 0
+fi
 APP_NAME="App.Native.UGreenLED"
-APP_ROOT="${TRIM_APPDEST:-/var/apps/${APP_NAME}}"
-VAR_DIR="${TRIM_PKGVAR:-${APP_ROOT}/var}"
+APP_ROOT="${APP_ROOT:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
+VAR_DIR="${VAR_DIR:-/var/lib/ugreen-nas}"
 
 SERVER_DIR=""
 for d in "${APP_ROOT}/server" "${APP_ROOT}/target/server"; do
@@ -117,12 +122,7 @@ ABOUT_README_CACHE_FILE="${RUNTIME_DIR}/github_readme.cache"
 ABOUT_README_RAW_URL="${ABOUT_README_RAW_URL_OVERRIDE:-https://raw.githubusercontent.com/${UPDATE_REPOSITORY}/main/README.md}"
 ABOUT_README_SOURCE_URL="https://github.com/${UPDATE_REPOSITORY}/blob/main/README.md"
 ABOUT_README_CACHE_TTL=21600
-UGREEN_CLI="${UGREEN_CLI_OVERRIDE:-}"
-if [[ -z "$UGREEN_CLI" ]]; then
-    for c in "${SERVER_DIR}/bin/ugreen_leds_cli" "${APP_ROOT}/target/server/bin/ugreen_leds_cli"; do
-        [[ -x "$c" ]] && UGREEN_CLI="$c" && break
-    done
-fi
+UGREEN_CLI="${SERVER_DIR}/bin/ugreen_leds_cli"
 
 export TARGET="$APP_ROOT" SERVER_DIR
 export UGREEN_CLI LED_API_CACHE_DIR="${RUNTIME_DIR}/led_cache" DISK_IO_CACHE_DIR="${RUNTIME_DIR}/disk_io"
@@ -263,25 +263,14 @@ query_value() {
 }
 
 current_app_version() {
-    local manifest_file version
-    for manifest_file in \
-        "${APP_ROOT}/manifest" \
-        "${APP_ROOT}/target/manifest" \
-        "${APP_ROOT}/../manifest" \
-        "/var/apps/@appcenter/${APP_NAME}/manifest"; do
-        [[ -f "$manifest_file" ]] || continue
-        version=$(sed -n 's/^version[[:space:]]*=[[:space:]]*//p' "$manifest_file" | head -n 1)
-        version="${version//[[:space:]]/}"
-        [[ -n "$version" ]] && { printf '%s' "$version"; return; }
-    done
-    printf '%s' "unknown"
+    python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["version"])' "${APP_ROOT}/app-info.json"
 }
 
 fetch_latest_release_tag() {
     local response="" tag="" effective_url="" location=""
     if command -v curl >/dev/null 2>&1; then
         response=$(curl -fsSL --retry 2 --connect-timeout 5 --max-time 20 \
-            -H 'Accept: application/vnd.github+json' -H 'User-Agent: UGreenLED-fnOS' \
+            -H 'Accept: application/vnd.github+json' -H 'User-Agent: UGREEN-Toolbox-Platform' \
             "$UPDATE_API_URL" 2>/dev/null || true)
         tag=$(printf '%s\n' "$response" | sed -n 's/.*"tag_name"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' | head -n 1)
         if [[ -z "$tag" ]]; then
@@ -291,7 +280,7 @@ fetch_latest_release_tag() {
         fi
     elif command -v wget >/dev/null 2>&1; then
         response=$(wget -qO- --timeout=20 --header='Accept: application/vnd.github+json' \
-            --header='User-Agent: UGreenLED-fnOS' "$UPDATE_API_URL" 2>/dev/null || true)
+            --header='User-Agent: UGREEN-Toolbox-Platform' "$UPDATE_API_URL" 2>/dev/null || true)
         tag=$(printf '%s\n' "$response" | sed -n 's/.*"tag_name"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' | head -n 1)
         if [[ -z "$tag" ]]; then
             location=$(wget --spider --server-response --max-redirect=10 --timeout=20 "$UPDATE_LATEST_URL" 2>&1 | \
@@ -351,11 +340,11 @@ fetch_github_readme() {
         cat "${ABOUT_README_RAW_URL#file://}"
     elif command -v curl >/dev/null 2>&1; then
         curl -fsSL --retry 2 --connect-timeout 5 --max-time 20 \
-            -H 'Accept: text/plain' -H 'User-Agent: UGREEN-Toolbox-fnOS' \
+            -H 'Accept: text/plain' -H 'User-Agent: UGREEN-Toolbox-Platform' \
             "$ABOUT_README_RAW_URL" 2>/dev/null
     elif command -v wget >/dev/null 2>&1; then
         wget -qO- --timeout=20 --header='Accept: text/plain' \
-            --header='User-Agent: UGREEN-Toolbox-fnOS' "$ABOUT_README_RAW_URL" 2>/dev/null
+            --header='User-Agent: UGREEN-Toolbox-Platform' "$ABOUT_README_RAW_URL" 2>/dev/null
     else
         return 1
     fi

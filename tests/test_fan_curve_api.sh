@@ -20,13 +20,14 @@ level=off
 [fan_curve]
 enabled=false
 EOF
-for model in dx4600 dxp4800 dxp4800plus dxp4800s dxp480tplus dxp6800pro dxp6800plus; do : > "$PLUGINS/$model.so"; done
+for model in idx6012 dxp2800 dx4600 dxp4800 dxp4800plus dxp4800s dxp480tplus dxp6800pro dxp6800plus dxp6800 dxp8800pro; do : > "$PLUGINS/$model.so"; done
 cat > "$BIN" <<'EOF'
 #!/bin/sh
 printf 'CALL' >> "$UGREENCTL_CALLS"
 for arg in "$@"; do printf ' <%s>' "$arg" >> "$UGREENCTL_CALLS"; done
 printf '\n' >> "$UGREENCTL_CALLS"
 case " $* " in
+  *" model "*) echo idx6012 ;;
   *" fan status "*) echo 'fan sys: pwm=64 mode=manual tach=750 rpm=900' ;;
   *" power startup get "*) echo restore ;;
 esac
@@ -119,6 +120,24 @@ assert_contains "$json" '"ok":true'
 json=$(request /bios/fan-curve 'action=stop' POST)
 assert_contains "$json" '"ok":true'
 
+export UGREEN_PRODUCT_NAME="DXP6800"
+json=$(request /bios/fan-curve 'action=start&mode=stock-6800pro&confirm=firmware-reversed' POST)
+assert_contains "$json" '"ok":false'
+json=$(request /bios/fan-curve 'action=start&mode=stock-6800&confirm=firmware-reversed' POST)
+assert_contains "$json" '"ok":true'
+assert_contains "$json" '"available":true,"profile":"stock-6800"'
+[[ "$(sed -n 's/^profile=//p' "$CONFIG")" == "stock-6800" ]] || fail "DXP6800 Pro-parameter compatibility preset was not persisted"
+json=$(request /bios/fan-curve 'action=stop' POST)
+assert_contains "$json" '"ok":true'
+json=$(request /bios/fan-curve 'action=start&mode=custom&confirm=firmware-reversed&interval=10&downshift=60&minimum=40&cpu=42%2C50%2C70%2C78%2C90&hdd=30%2C40%2C46%2C52%2C55&ssd=50%2C55%2C60%2C65%2C70&pwm=65%2C125%2C200%2C235&require_storage=false' POST)
+assert_contains "$json" '"ok":true'
+[[ "$(sed -n 's/^cpu=//p' "$CONFIG")" == "42,50,70,78,90" ]] || fail "URL-encoded CPU curve was not decoded"
+[[ "$(sed -n 's/^hdd=//p' "$CONFIG")" == "30,40,46,52,55" ]] || fail "URL-encoded HDD curve was not decoded"
+[[ "$(sed -n 's/^ssd=//p' "$CONFIG")" == "50,55,60,65,70" ]] || fail "URL-encoded SSD curve was not decoded"
+[[ "$(sed -n 's/^pwm=//p' "$CONFIG")" == "65,125,200,235" ]] || fail "URL-encoded PWM curve was not decoded"
+json=$(request /bios/fan-curve 'action=stop' POST)
+assert_contains "$json" '"ok":true'
+
 : > "$CALLS"
 export UGREEN_PRODUCT_NAME="DXP4800S"
 json=$(request /bios/fan-curve 'action=start&mode=custom' POST)
@@ -126,4 +145,43 @@ assert_contains "$json" '"ok":false'
 assert_contains "$json" '需要先确认风险'
 [[ ! -s "$CALLS" ]] || fail "unconfirmed curve start reached ugreenctl"
 
+export UGREEN_PRODUCT_NAME="DXP2800" UGREEN_PRODUCT_VERSION="EM_DXP2800_V1.0.26"
+json=$(request /bios/fan-curve 'action=start&mode=custom&confirm=firmware-reversed&interval=10&downshift=60&minimum=40&cpu=42%2C50%2C70%2C78%2C90&hdd=30%2C40%2C46%2C52%2C55&ssd=50%2C55%2C60%2C65%2C70&pwm=65%2C125%2C200%2C235&require_storage=false' POST)
+assert_contains "$json" '"ok":true'
+[[ "$(sed -n 's/^profile=//p' "$CONFIG")" == "custom" ]] || fail "EM26 custom curve was not saved"
+[[ "$(sed -n 's/^allow_unvalidated_writes=//p' "$CONFIG")" == "true" ]] || fail "EM26 curve lost write acknowledgement"
+json=$(request /bios/fan-curve 'action=stop' POST)
+assert_contains "$json" '"ok":true'
+json=$(request /bios/fan-curve 'action=start&mode=stock-4800&confirm=firmware-reversed' POST)
+assert_contains "$json" '"ok":false'
+unset UGREEN_PRODUCT_VERSION
+
+export UGREEN_PRODUCT_NAME="DXP8800 Pro"
+json=$(request /bios/fan-curve 'action=start&mode=stock-8800pro&confirm=firmware-reversed&require_storage=false' POST)
+assert_contains "$json" '"ok":true'
+[[ "$(sed -n 's/^profile=//p' "$CONFIG")" == stock-8800pro ]] || fail '8800 must use its own stock profile'
+json=$(request /bios/fan-curve 'action=stop' POST)
+assert_contains "$json" '"ok":true'
 echo "fan curve API tests passed"
+
+export UGREEN_PRODUCT_NAME="iDX6012"
+json=$(request /bios/fan-curve 'action=start&mode=custom&pwm=64,128,170,198&confirm=firmware-reversed' POST)
+FAND_PID=$(cat "$TMP/run/fan-curve.pid")
+assert_contains "$json" '"ok":true'
+assert_contains "$(cat "$TMP/var/fan-curve.conf")" 'failsafe_pwm=198'
+json=$(request /bios/fan-curve 'action=start&mode=custom&pwm=64,128,170,199&confirm=firmware-reversed' POST)
+assert_contains "$json" '"ok":false'
+json=$(request /bios/fan-curve 'action=start&mode=custom&minimum=199&confirm=firmware-reversed' POST)
+assert_contains "$json" '"ok":false'
+json=$(request /bios/fan-curve 'action=stop' POST)
+assert_contains "$json" '"ok":true'
+echo 'iDX6012 custom curve API passed'
+
+json=$(request /bios/fan-curve 'action=start&mode=stock-idx6012-compat&confirm=firmware-reversed' POST)
+FAND_PID=$(cat "$TMP/run/fan-curve.pid")
+assert_contains "$json" '"ok":true'
+assert_contains "$(cat "$CONFIG")" 'failsafe_pwm=198'
+assert_contains "$(cat "$CONFIG")" 'minimum_pwm=64'
+json=$(request /bios/fan-curve 'action=stop' POST)
+assert_contains "$json" '"ok":true'
+echo 'iDX6012 compatible preset API passed'

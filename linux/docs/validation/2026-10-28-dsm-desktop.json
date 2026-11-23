@@ -1,0 +1,50 @@
+{
+  "date": "2026-10-28",
+  "scope": "isolated QEMU Linux; actual DSM desktop/Package Center not tested; no hardware writes",
+  "spk": "UGreenToolbox-3.0.1-1002-x86_64.spk",
+  "spk_sha256": "473e58f2b6a0e62b508ed395995b949ae5d0e5975025f726064f70316834f8a3",
+  "payload_sha256": "75341c14f21b0b05f1d559ed6c281785ddf5e0449dc0844ac5000587f8117e88",
+  "proxy": "nginx version: nginx/1.28.3",
+  "native": {
+    "environment": "disposable Debian container; DSM Package Center not emulated",
+    "checks": {
+      "non_root_install_scripts_and_one_use_credentials": true,
+      "systemd_ready_is_sent_after_private_runtime_and_socket_are_ready": true,
+      "dedicated_package_group_overrides_unrelated_account_primary_group": true,
+      "native_web_broker_authentication_and_secret_cleanup": true,
+      "real_https_nginx_desktop_login_assets_api_csrf_and_logout": true,
+      "root_sealed_code_and_policy_not_package_writable": true,
+      "untrusted_package_payload_rejected_and_cached_trusted_restart_recovers": true,
+      "trusted_native_upgrade_switches_code_preserves_auth_and_data": true,
+      "web_restart_invalidates_browser_session_preserves_install_password": true
+    }
+  },
+  "tests": {
+    "linux_python_passed": 48,
+    "windows_python_passed": 47,
+    "windows_python_skipped": 1,
+    "frontend_passed": 9,
+    "frontend_typecheck": true,
+    "frontend_build": true
+  },
+  "canonical_led_bytes_unchanged": true,
+  "baseline_validation": "2026-10-28-local-platform.json",
+  "not_verified": [
+    "actual DSM Vue desktop window and Package Center Open",
+    "DSM web-config resource install/start/stop/uninstall",
+    "DSM system-unit authorization, sandbox and native ABI",
+    "DSM ACL and actual model-specific hardware"
+  ],
+  "source_sha256": {
+    "linux/scripts/build_spk.py": "1dec9fdc41553ba4dabf21078208ebc7f511e651d5064ac5388d1b7a952dfcc4",
+    "linux/synology/native_bootstrap.py": "3728962b4242de5fe9d8e5bcc0f7c0df0720cbebd9beac0388161e36d423d2b5",
+    "linux/synology/native_runtime.py": "c47b7289d06a481e3dd9c54d05f487421d58b445f3651e47091bc7dee114658c",
+    "linux/synology/native_desktop.py": "44f1681055d93d4e763259cacb33779b25234016e32369e005937e83e4b69893",
+    "linux/synology/dsm-desktop.conf": "3cec66c9db4d3d53d5610dbdfccaf5809cc6d02625b62b68195b8dab2ceeeaec",
+    "linux/synology/ui/UGreenToolbox.js": "bd95caaf88cdff6d6ac420ac2aa6557f9d168c3c11bb2201a05a49c6207e61a3",
+    "linux/app/server/portable_runtime.py": "77db204ae888bc169d2754801b056e64f0fc53bcd8c1be7f7c6eb9300fa5a2ca",
+    "linux/app/www/index.html": "9dcaa133cbcff5b96131fffc3aef82acd1a0d279258393a05138d347332ddcba",
+    "linux/web-ui/src/lib/api.ts": "3a158db39a214b0b47ad69ad324e65f09dbc1f2f6dec6bf025e104ec3bb35c7e",
+    "linux/tests/native_spk_smoke.py": "97bf2a6cd5b45557c157a8999037ba08ffa1632437ec462840a4fb64361024ea"
+  }
+}
