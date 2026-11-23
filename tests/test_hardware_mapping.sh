@@ -15,12 +15,19 @@ source "$LIB/settings.sh"
 settings_init "$SETTINGS_FILE"
 source "$LIB/hardware_profile.sh"
 
+hardware_upstream_model() {
+  case "${UGREEN_PRODUCT_NAME:-}" in
+    "UGREEN DXP6800 Pro"|"DXP6800 Pro") echo dxp6800pro ;;
+    DX4600) echo dx4600 ;;
+    DXP4800S) echo dxp4800s ;;
+    DH2600) echo dh2600 ;;
+    *) echo "${UGREEN_TEST_MODEL:-unknown}" ;;
+  esac
+}
+
 BIOS_CONTROL="$LIB/bios_control.sh"
 grep -Fq 'server/bin/ugreenctl' "$BIOS_CONTROL" || fail "BIOS operations must use the bundled ugreenctl adapter"
-grep -Fq 'DXP480T Plus' "$BIOS_CONTROL" || fail "BIOS adapter must retain the exact DXP480T Plus guard"
-grep -Fq '"DX4600"' "$BIOS_CONTROL" || fail "BIOS adapter must retain the exact DX4600 guard"
-grep -Fq '"DXP4800"' "$BIOS_CONTROL" || fail "BIOS adapter must retain the exact DXP4800 guard"
-grep -Fq '"DXP6800 PRO"' "$BIOS_CONTROL" || fail "BIOS adapter must retain the exact DXP6800 Pro guard"
+grep -Fq 'hardware_upstream_model' "$BIOS_CONTROL" || fail "BIOS adapter must resolve its model through the upstream helper"
 grep -Fq 'dxp4800.so' "$BIOS_CONTROL" || fail "BIOS adapter must require the DXP4800 upstream plugin"
 grep -Fq 'dx4600.so' "$BIOS_CONTROL" || fail "BIOS adapter must require the DX4600 upstream plugin"
 grep -Fq 'dxp6800pro.so' "$BIOS_CONTROL" || fail "BIOS adapter must require the DXP6800 Pro upstream plugin"
@@ -84,11 +91,11 @@ assert_eq "$(hardware_profile_display_name)" "UGREEN DH2600"
 assert_eq "$(hardware_support_level)" "experimental"
 assert_eq "$(hardware_disk_count)" "2"
 assert_eq "$(hardware_netdev_count)" "0"
-assert_eq "$(hardware_hctl_profile)" "dh2600"
+assert_eq "$(hardware_hctl_profile)" "upstream-managed"
 assert_eq "$(hardware_network_leds)" ""
 LED_N76_DIRECT_SPEC=4:0x31
-assert_eq "$(hardware_cli_led_name disk1)" "disk2"
-assert_eq "$(hardware_cli_led_name disk2)" "disk1"
+assert_eq "$(hardware_cli_led_name disk1)" "disk1"
+assert_eq "$(hardware_cli_led_name disk2)" "disk2"
 LED_N76_DIRECT_SPEC=""
 assert_eq "$(hardware_cli_led_name disk1)" "disk1"
 settings_set "$SETTINGS_FILE" hardware profile dxp480t_plus
@@ -128,8 +135,15 @@ fi
 settings_set "$SETTINGS_FILE" hardware profile dxp6800
 source "$LIB/disk_map.sh"
 settings_set "$SETTINGS_FILE" hardware profile dh2600
-assert_eq "$(disk_guess_led_by_hctl 0:0:0:0)" "disk2"
-assert_eq "$(disk_guess_led_by_hctl 1:0:0:0)" "disk1"
+disk_upstream_map_tsv() {
+  printf 'device\tinterface\tslot_name\tled\n'
+  printf '/dev/sdf\tsata\tata5\tdisk5\n'
+  printf '/dev/sdb\tsata\tata3\tdisk1\n'
+  printf '/dev/sdc\tsata\tata4\tdisk2\n'
+  printf '/dev/sdd\tsata\tata5\tdisk3\n'
+  printf '/dev/sde\tsata\tata2\tdisk6\n'
+  printf '/dev/sda\tsata\tata1\tdisk4\n'
+}
 settings_set "$SETTINGS_FILE" hardware profile dxp6800
 led_list_disk_slots() { printf '%s\n' disk1 disk2 disk3 disk4 disk5 disk6; }
 disk_inventory_rows() {
@@ -141,9 +155,10 @@ disk_inventory_rows() {
     '/dev/sde|1:0:0:0|SER6B|MODEL|8T|sata' \
     '/dev/sdd|4:0:0:0|SER3|MODEL|8T|sata'
 }
+disk_inventory_is_block() { return 0; }
 mapping=$(disk_build_mapping)
-assert_has_line "$mapping" '/dev/sdf|0:0:0:0|disk5|SER5'
-assert_has_line "$mapping" '/dev/sdb|2:0:0:0|disk1|SER1'
+assert_has_line "$mapping" '/dev/sdf|0:0:0:0|disk5|SER5|sata|ata5'
+assert_has_line "$mapping" '/dev/sdb|2:0:0:0|disk1|SER1|sata|ata3'
 disk_load_mapping_from_settings "$SETTINGS_FILE"
 assert_eq "${DISK_LED_MAP[/dev/sdf]}" "disk5"
 snapshot=$(disk_snapshot_devices)

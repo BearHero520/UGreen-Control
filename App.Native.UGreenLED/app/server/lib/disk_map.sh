@@ -1,5 +1,6 @@
 #!/bin/bash
-# 硬盘 HCTL 自动映射及既有自定义映射兼容。
+# 硬盘身份和物理盘位由随包 UGREEN-NAS-Hardware 的 disk map 提供。
+# 本文件只保存应用的手动绑定配置，并把上游 TSV 转成旧 API 使用的行格式。
 
 
 disk_inventory_field() {
@@ -49,72 +50,57 @@ disk_detect_by_hctl() {
     done < <(disk_inventory_rows)
 }
 
-disk_guess_led_by_hctl() {
-    local hctl="$1" profile
-    profile=$(hardware_hctl_profile)
-    if [[ "$profile" == "dxp6800" ]]; then
-        case "$hctl" in
-            0:0:0:0) echo "disk5" ;;
-            1:0:0:0) echo "disk6" ;;
-            2:0:0:0) echo "disk1" ;;
-            3:0:0:0) echo "disk2" ;;
-            4:0:0:0) echo "disk3" ;;
-            5:0:0:0) echo "disk4" ;;
-            *) echo "" ;;
-        esac
-    elif [[ "$profile" == "dh2600" ]]; then
-        case "$hctl" in
-            0:0:0:0) echo "disk2" ;;
-            1:0:0:0) echo "disk1" ;;
-            *) echo "" ;;
-        esac
-    elif [[ "$hctl" =~ ^([0-7]):0:0:0$ ]]; then
-        printf 'disk%s\n' "$((BASH_REMATCH[1] + 1))"
-    else
-        echo ""
-    fi
+disk_upstream_map_tsv() {
+    local binary directory
+    for binary in \
+        "${UGREENCTL_BINARY:-}" \
+        "${SERVER_DIR:-}/bin/ugreenctl" \
+        "${APP_ROOT:-}/target/server/bin/ugreenctl"; do
+        [[ -n "$binary" && -x "$binary" ]] || continue
+        for directory in \
+            "${UGREENCTL_PLUGIN_DIR:-}" \
+            "${SERVER_DIR:-}/lib/ugreenctl/models" \
+            "${APP_ROOT:-}/target/server/lib/ugreenctl/models"; do
+            [[ -n "$directory" && -r "$directory" ]] || continue
+            if command -v timeout >/dev/null 2>&1; then
+                timeout 5 "$binary" --plugin-dir "$directory" disk map --tsv
+            else
+                "$binary" --plugin-dir "$directory" disk map --tsv
+            fi
+            return $?
+        done
+    done
+    return 127
 }
 
-# The GT's SATA and U.2 endpoints can share a bay. The upstream physical
-# scanner checks that conflict before returning a slot. Do not fall back to HCTL.
-disk_gt_physical_rows() {
-    local rows header dev interface slot led extra row
-    local -a decoded=()
-    rows=$(timeout 5 "${SERVER_DIR}/bin/ugreenctl" disk map --tsv) || return 1
+# Output device|hctl|led|serial|interface|slot. The LED and physical-slot
+# decisions come exclusively from the upstream TSV. Inventory data is joined
+# only to preserve the application's existing manual-mapping format.
+disk_build_mapping() {
+    local rows header row dev interface slot led extra inv_dev inv_hctl inv_serial inv_model inv_size inv_transport
+    declare -A inventory_hctl=() inventory_serial=()
+    while IFS='|' read -r inv_dev inv_hctl inv_serial inv_model inv_size inv_transport; do
+        [[ -n "$inv_dev" ]] || continue
+        inventory_hctl["$inv_dev"]="$inv_hctl"
+        inventory_serial["$inv_dev"]="$inv_serial"
+    done < <(disk_inventory_rows)
+
+    rows=$(disk_upstream_map_tsv) || return 1
     {
         IFS= read -r header
         [[ "$header" == $'device\tinterface\tslot_name\tled' ]] || return 1
         while IFS= read -r row; do
             IFS=$'\t' read -r dev interface slot led extra <<< "$row"
-            [[ "$dev" =~ ^/dev/(sd[a-z]+|nvme[0-9]+n[0-9]+)$ && -z "$extra" ]] || return 1
+            [[ -z "$extra" && "$dev" =~ ^/dev/(sd[a-z]+|nvme[0-9]+n[0-9]+)$ ]] || return 1
             [[ "$interface" =~ ^(sata|nvme|u2)$ ]] || return 1
             [[ "$slot" == - || "$slot" =~ ^(ata|nvme)[1-9][0-9]*$ ]] || return 1
-            [[ "$led" == - || ( "$slot" != - && "$led" =~ ^disk[1-4]$ ) ]] || return 1
+            [[ "$led" =~ ^disk[1-9][0-9]*$ ]] || continue
             disk_inventory_is_block "$dev" || continue
-            decoded+=("$dev||${led#-}||$interface|${slot#-}")
+            printf '%s|%s|%s|%s|%s|%s\n' \
+                "$dev" "${inventory_hctl[$dev]:-}" "$led" "${inventory_serial[$dev]:-}" \
+                "$interface" "${slot#-}"
         done
-        if (( ${#decoded[@]} )); then printf '%s\n' "${decoded[@]}"; fi
     } <<< "$rows"
-}
-
-# 自动生成映射行：device|hctl|led|serial[|interface|slot]
-disk_build_mapping() {
-    if declare -F hardware_detected_product_name >/dev/null && [[ "$(hardware_detected_product_name)" == 'DXP4800 GT' ]]; then
-        disk_gt_physical_rows
-        return
-    fi
-    local dev hctl serial model size transport led slot
-    declare -A valid_led=() used_led=()
-    while IFS= read -r slot; do
-        [[ -n "$slot" ]] && valid_led["$slot"]=1
-    done < <(disk_available_slots)
-    while IFS='|' read -r dev hctl serial model size transport; do
-        [[ -n "$dev" && -n "$hctl" ]] || continue
-        led=$(disk_guess_led_by_hctl "$hctl")
-        [[ -n "$led" && -n "${valid_led[$led]:-}" && -z "${used_led[$led]:-}" ]] || continue
-        used_led["$led"]=1
-        printf '%s|%s|%s|%s\n' "$dev" "$hctl" "$led" "$serial"
-    done < <(disk_inventory_rows | sort -t'|' -k2,2V -k1,1)
 }
 
 declare -gA DISK_LED_MAP=() DISK_MAP_INTERFACE=() DISK_MAP_SLOT=()
@@ -272,7 +258,7 @@ disk_refresh_mapping() {
         echo "[disk_map]"
         echo "# product_name=${product:-unknown}"
         echo "# hardware_profile=$profile"
-        echo "# hctl_profile=$(hardware_hctl_profile "$profile")"
+        echo "# mapping_source=UGREEN-NAS-Hardware ugreenctl disk map --tsv"
         if [[ ${#lines[@]} -eq 0 ]]; then
             echo "# 未检测到可自动映射的硬盘"
         else

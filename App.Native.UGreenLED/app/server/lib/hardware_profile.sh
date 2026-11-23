@@ -1,7 +1,8 @@
 #!/bin/bash
-# 绿联机型档案：将 DMI 型号转换为控制协议、LED 布局与 HCTL 规则。
+# 应用适配层只保存显示与配置所需的机型信息。硬件识别、LED 布局、盘位
+# 映射和写入保护由随包的 UGREEN-NAS-Hardware 程序负责。
 
-UGREEN_CLI_RELEASE="local-dh2600-n76-direct-20261122-swap"
+UGREEN_CLI_RELEASE="local-dh2600-n76-direct-20261122-upstream-map"
 
 hardware_detected_product_name() {
     local product="${UGREEN_PRODUCT_NAME:-}" file
@@ -33,27 +34,25 @@ hardware_detected_product_version() {
     printf '%s\n' "$version"
 }
 
-hardware_profile_from_name() {
-    local normalized="${1^^}"
-    case "$normalized" in
-        DH2600) echo "dh2600" ;;
-        *IDX6011*PRO*) echo "idx6011_pro" ;;
-        *IDX6011*) echo "idx6011" ;;
-        *IDX6012*) echo "idx6012" ;;
-        *DXP480T*) echo "dxp480t_plus" ;;
-        *DXP2800*GT*) echo "dxp2800_gt" ;;
-        *DXP2800*) echo "dxp2800" ;;
-        *DXP4800*GT*) echo "dxp4800_gt" ;;
-        *DXP4800S*) echo "dxp4800s" ;;
-        *DXP4800*PLUS*) echo "dxp4800_plus" ;;
-        *DXP4800*PRO*) echo "dxp4800_pro" ;;
-        *DXP4800*) echo "dxp4800" ;;
-        *DXP6800*) echo "dxp6800" ;;
-        *DXP8800*) echo "dxp8800" ;;
-        *DX4700*) echo "dx4700" ;;
-        *DX4600*) echo "dx4600" ;;
-        *) echo "unknown" ;;
-    esac
+hardware_upstream_model() {
+    local binary directory model
+    for binary in \
+        "${UGREENCTL_BINARY:-}" \
+        "${SERVER_DIR:-}/bin/ugreenctl" \
+        "${APP_ROOT:-}/target/server/bin/ugreenctl"; do
+        [[ -n "$binary" && -x "$binary" ]] || continue
+        for directory in \
+            "${UGREENCTL_PLUGIN_DIR:-}" \
+            "${SERVER_DIR:-}/lib/ugreenctl/models" \
+            "${APP_ROOT:-}/target/server/lib/ugreenctl/models"; do
+            [[ -n "$directory" && -r "$directory" ]] || continue
+            model=$("$binary" --plugin-dir "$directory" model 2>/dev/null) || continue
+            [[ "$model" =~ ^[a-z0-9_+-]+$ ]] || continue
+            printf '%s\n' "$model"
+            return 0
+        done
+    done
+    return 1
 }
 
 hardware_profile_key() {
@@ -66,20 +65,14 @@ hardware_profile_key() {
             echo "$override"
             ;;
         *)
-            local product vendor
-            product=$(hardware_detected_product_name)
-            vendor="${UGREEN_SYS_VENDOR:-}"
-            if [[ -z "$vendor" && -r /sys/class/dmi/id/sys_vendor ]]; then
-                vendor=$(</sys/class/dmi/id/sys_vendor)
-            fi
-            # The user confirmed this exact shared-board signature is iDX6012.
-            # This selects application layout only; the CLI independently checks DMI.
-            if [[ "$product" == 'Default string' && "$vendor" == UGREEN &&
-                  "$(hardware_detected_product_version)" == 'iDX6011_iDX6012 V3.0 241112' ]]; then
-                echo idx6012
-            else
-                hardware_profile_from_name "$product"
-            fi
+            local upstream_model
+            upstream_model=$(hardware_upstream_model 2>/dev/null || true)
+            case "$upstream_model" in
+                dxp6800pro|dxp6800plus) echo dxp6800 ;;
+                dxp8800pro|dxp8800plus|dxp8800ultra) echo dxp8800 ;;
+                "") echo unknown ;;
+                *) echo "$upstream_model" ;;
+            esac
             ;;
     esac
 }
@@ -205,30 +198,14 @@ hardware_n76_direct_address_candidates() {
 }
 
 hardware_hctl_profile() {
-    case "${1:-$(hardware_profile_key)}" in
-        # DH2600 firmware reverses the two SATA LED positions.
-        dh2600) echo "dh2600" ;;
-        # Intel hosts 0/1 -> bays 5/6; ASMedia hosts 2..5 -> bays 1..4.
-        # iDX6012 shares the existing six-bay routing, not sequential HCTL+1.
-        dxp6800|idx6012) echo "dxp6800" ;;
-        *) echo "sequential" ;;
-    esac
+    echo "upstream-managed"
 }
 
-# Almighty owns exact-model LED channel mappings, including netdev2.
+# Exact LED channel names and physical mappings belong to the upstream CLI.
+# Keep this adapter identity-preserving so the app cannot create a second
+# hardware mapping table.
 hardware_cli_led_name() {
-    local led="${1:-}"
-    # The fnOS N76 path exposes the two DH2600 outputs in the opposite order
-    # from the physical bay labels. Keep the application mapping in physical
-    # bay order and translate only direct userspace commands. Bound-driver
-    # sysfs names already follow the kernel driver's logical names.
-    if [[ -n "${LED_N76_DIRECT_SPEC:-}" && "$(hardware_profile_key)" == dh2600 ]]; then
-        case "$led" in
-            disk1) echo disk2; return ;;
-            disk2) echo disk1; return ;;
-        esac
-    fi
-    printf '%s\n' "$led"
+    printf '%s\n' "${1:-}"
 }
 
 hardware_network_leds() {

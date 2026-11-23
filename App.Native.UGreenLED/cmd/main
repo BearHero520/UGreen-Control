@@ -75,11 +75,6 @@ start)
         "app_root=$APP_ROOT" "var_dir=$VAR_DIR" "runtime_dir=$RUNTIME_DIR" \
         "server_dir=$SERVER_DIR" "uid=$(id -u 2>/dev/null || echo unknown)" \
         "kernel=$(uname -r 2>/dev/null || echo unknown)" "cli=${UGREEN_CLI:-missing}"
-    if modprobe i2c-dev 2>/dev/null; then
-        ugreen_log_debug "kernel.i2c_dev_ready" "i2c-dev 模块已就绪"
-    else
-        ugreen_log_warn "kernel.i2c_dev_failed" "无法加载 i2c-dev，灯控后端可能不可用"
-    fi
     configured_backend=$(led_backend_configured)
     ugreen_log_info "backend.configured" "读取灯控后端配置" "configured_backend=$configured_backend"
     if false && [[ "$configured_backend" != "cli" ]] && driver_managed_by_app && ! driver_sysfs_ready; then

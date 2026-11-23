@@ -70,34 +70,26 @@ _bios_log_error() {
 }
 
 bios_detected_profile() {
-    local product
-    product=$(hardware_detected_product_name 2>/dev/null || true)
-    case "${product^^}" in
-        "DXP2800")
-            if [[ "$(hardware_detected_product_version)" == "EM_DXP2800_V1.0.26" ]]; then
-                echo "dxp2800"
-            else echo "unknown"; fi ;;
-        "DX4600"|"DX4600+"|"DX4600 PRO") echo "dx4600" ;;
-        "DXP480T PLUS"|"UGREEN DXP480T PLUS") echo "dxp480t_plus" ;;
-        "DXP4800") echo "dxp4800" ;;
-        "DXP4800 GT") echo "dxp4800gt" ;;
-        "DXP4800S") echo "dxp4800s" ;;
-        "DXP4800 PLUS"|"UGREEN DXP4800 PLUS") echo "dxp4800_plus" ;;
-        "DXP4800 PRO"|"UGREEN DXP4800 PRO") echo "dxp4800_pro" ;;
-        "DXP6800") echo "dxp6800" ;;
-        "DXP6800 PLUS") echo "dxp6800plus" ;;
-        "DXP6800 PRO") echo "dxp6800pro" ;;
-        "DXP8800 PRO") echo "dxp8800pro" ;;
-        "DEFAULT STRING"|"IDX6012")
-            # Resolve the compound OEM identity in upstream; no local register/DMI bypass.
-            local binary resolved directory
-            binary=$(bios_ugreenctl_binary) || { echo unknown; return; }
-            directory="${BIOS_UGREENCTL_PLUGIN_DIR:-${SERVER_DIR:-}/lib/ugreenctl/models}"
-            resolved=$("$binary" --plugin-dir "$directory" model 2>/dev/null) || resolved=unknown
-            [[ "$resolved" == idx6012 ]] && echo idx6012 || echo unknown
-            ;;
-        *) echo unknown ;;
-    esac
+    local binary directory resolved
+    if declare -F hardware_upstream_model >/dev/null; then
+        resolved=$(hardware_upstream_model 2>/dev/null || true)
+        if [[ "$resolved" =~ ^[a-z0-9_+-]+$ ]]; then
+            printf '%s\n' "$resolved"
+            return 0
+        fi
+    fi
+    binary=$(bios_ugreenctl_binary) || { echo unknown; return; }
+    for directory in \
+        "${BIOS_UGREENCTL_PLUGIN_DIR:-}" \
+        "${SERVER_DIR:-}/lib/ugreenctl/models" \
+        "${APP_ROOT:-}/target/server/lib/ugreenctl/models"; do
+        [[ -n "$directory" && -r "$directory" ]] || continue
+        resolved=$("$binary" --plugin-dir "$directory" model 2>/dev/null) || resolved=unknown
+        [[ "$resolved" != unknown && -n "$resolved" ]] || continue
+        printf '%s\n' "$resolved"
+        return 0
+    done
+    echo unknown
 }
 
 bios_supported_model() {
@@ -129,14 +121,7 @@ bios_rtc_supported_model() {
 }
 
 bios_direct_fan_fallback_active() {
-    local test_path="${BIOS_TEST_IT87_MODULE_PATH:-}"
-    case "$(bios_detected_profile)" in dxp4800gt|idx6012) return 1 ;; esac
-
-    if [[ -n "$test_path" ]]; then
-        [[ ! -e "$test_path" ]]
-        return
-    fi
-    [[ -d /sys/module && ! -e /sys/module/it87 ]]
+    return 1
 }
 
 bios_write_confirmation_required() {

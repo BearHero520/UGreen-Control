@@ -42,7 +42,6 @@ ugreen_log_info "install.started" "开始准备 UGREEN工具箱运行环境" \
     "kernel=$(uname -r 2>/dev/null || echo unknown)"
 
 MISSING_PACKAGES=()
-command -v i2cdetect >/dev/null 2>&1 || MISSING_PACKAGES+=(i2c-tools)
 command -v hdparm >/dev/null 2>&1 || MISSING_PACKAGES+=(hdparm)
 command -v ip >/dev/null 2>&1 || MISSING_PACKAGES+=(iproute2)
 if [[ ${#MISSING_PACKAGES[@]} -gt 0 ]] && command -v apt-get >/dev/null 2>&1; then
@@ -61,10 +60,6 @@ elif [[ ${#MISSING_PACKAGES[@]} -gt 0 ]]; then
 else
     ugreen_log_info "install.dependencies_ready" "系统依赖检查通过"
 fi
-if ! modprobe i2c-dev 2>/dev/null; then
-    ugreen_log_warn "install.i2c_module_failed" "无法加载 i2c-dev 内核模块"
-fi
-
 cli_checksum_ok() {
     local f="$1" actual
     [[ -f "$f" ]] || return 1

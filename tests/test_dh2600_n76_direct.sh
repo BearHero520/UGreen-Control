@@ -31,7 +31,7 @@ case "$*" in
         printf '%s\n' 'power: mode=off brightness=unknown color=unknown timing=unknown'
         exit 0
         ;;
-    *'disk2 -color 0 255 0 -blink 250 250 -brightness 128 --n76-direct 4:0x31 --force --apply'*)
+    *'disk1 -color 0 255 0 -blink 250 250 -brightness 128 --n76-direct 4:0x31 --force --apply'*)
         printf '%s\n' 'ok'
         exit 0
         ;;
@@ -57,7 +57,7 @@ led_set_blink disk1 0 255 0 500 250 128 >/dev/null || {
     echo 'FAIL: DH2600 disk blink was not sent through the direct backend' >&2
     exit 1
 }
-grep -Fq -- 'disk2 -color 0 255 0 -blink 250 250 -brightness 128 --n76-direct 4:0x31 --force --apply' "$CLI_LOG" || {
+grep -Fq -- 'disk1 -color 0 255 0 -blink 250 250 -brightness 128 --n76-direct 4:0x31 --force --apply' "$CLI_LOG" || {
     echo 'FAIL: direct N76 disk command lost its selector or write acknowledgement' >&2
     exit 1
 }
