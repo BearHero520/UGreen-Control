@@ -53,7 +53,7 @@ desired_pwm=64
 applied_pwm=64
 detail=
 STATE
-sleep 30
+exec sleep 30
 EOF
 chmod +x "$BIN" "$FAND"
 : > "$IT87_MODULE"

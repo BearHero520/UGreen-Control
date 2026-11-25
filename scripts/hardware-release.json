@@ -1,6 +1,6 @@
 {
   "archive": "ugreenctl-almighty-0.2.0-linux-x86_64-preview.tar.gz",
-  "archive_sha256": "b76d2a0537e635addba194ae143134c955a2441bd4cd57771c9de596b9941605",
+  "archive_sha256": "5a000f4a336c835ee459ffc5ef49010f75aece123b0093da65d7fc37e6009cb3",
   "artifact_path": ".work-almighty-release/dxp4800gt/release-fnos-20261116",
   "base": {
     "archive": "ugreenctl-almighty-0.2.0-linux-x86_64-preview.tar.gz",
@@ -118,11 +118,11 @@
     "source_type": "application-local-artifact",
     "tag": "local-dxp4800gt-diagnostics-20261115"
   },
-  "checksums_sha256": "1510005bc17370e6d13d37b6823e9c14747ef3f3c29dc0871f1d82bf52cb2ab1",
+  "checksums_sha256": "6f84e953e59c8788b183001f1d88bc915ba1b492201bf1dc28048d87f6e3ca3c",
   "commit": "aff7991ee58709ad34b5afbc2787f0d21300368d",
   "extension_id": "dxp4800gt-fnos-20261116",
   "manifest": "ugreenctl-almighty-0.2.0-linux-x86_64-preview.manifest.json",
-  "manifest_sha256": "47db89e8d3426a1ec647bd4fe38b2ee9308bc4886618ced4566bd082715cd1c1",
+  "manifest_sha256": "ec01776eb22281d8c4ff425c3e50718e9676816e078c9bc966caf339e731aec4",
   "repository": "BearHero520/UGREEN-NAS-Hardware",
   "source_type": "application-local-artifact",
   "tag": "local-dxp4800gt-fnos-20261116"

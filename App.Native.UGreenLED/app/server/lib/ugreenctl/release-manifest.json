@@ -363,14 +363,14 @@
     {
       "mode": "0755",
       "path": "usr/local/bin/ugreen_leds_cli",
-      "sha256": "d92e4a7f10ad8f112908db3c7a636bd3e8f014aa756ffeae9ce06dd9886ba069",
-      "size": 631928
+      "sha256": "797cc7fdb2994eabdd78932d2e04434013cbf3a43a43475a16210105e0795b5e",
+      "size": 640792
     },
     {
       "mode": "0755",
       "path": "usr/local/bin/ugreenctl",
-      "sha256": "e08337ebdd126acb2a9d38383197aa9b76cc485baca223134bb927ef29564145",
-      "size": 812184
+      "sha256": "cc4c7d15f5b392978dabce81ce2130875f268727407863b41cdf1c9fdf8f55c9",
+      "size": 817576
     },
     {
       "mode": "0755",
@@ -1460,6 +1460,12 @@
     },
     {
       "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt-fnos-extension/App.Native.UGreenLED/app/server/vendor/ugreen_leds_controller/patches/mcu-i2c-resilience.patch",
+      "sha256": "d596476fe50b2d283ea6ae8ee8ec9e5a0b7085926286dd1d1548d539b8c079e8",
+      "size": 22163
+    },
+    {
+      "mode": "0644",
       "path": "usr/local/share/doc/ugreenctl/dxp4800gt-fnos-extension/docs/DXP4800GT_LED_SUPPORT.md",
       "sha256": "34b69c7c602ec04c2c3034eb3dc9d58d64e564a21d3fe9ffc45106c5e1dd0a95",
       "size": 5267
@@ -1467,8 +1473,8 @@
     {
       "mode": "0644",
       "path": "usr/local/share/doc/ugreenctl/dxp4800gt-fnos-extension/scripts/build_led_compat.py",
-      "sha256": "0e19f93f2f865ee8798decd27f40bf70c5df305ccf7653b8fc2dc20d17753b40",
-      "size": 8119
+      "sha256": "8e46dcb14bee7c4163935ba7762b1bc2d1082b3504b7d3de2829b983141f2367",
+      "size": 9041
     },
     {
       "mode": "0644",
@@ -1479,8 +1485,8 @@
     {
       "mode": "0644",
       "path": "usr/local/share/doc/ugreenctl/dxp4800gt-fnos-extension/tests/run_dxp4800gt_runtime.py",
-      "sha256": "277b6b05de909c1ebab7be6c943d0be7fcb48045a246df54ed1507696773f7ba",
-      "size": 3764
+      "sha256": "09a1ec2d0a4f41e9a749888ac379cec1db15589eb132cbd2f6a9af335210bd72",
+      "size": 3999
     },
     {
       "mode": "0644",
@@ -1508,6 +1514,12 @@
     },
     {
       "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt-fnos-extension/tests/test_led_mcu_resilience.c",
+      "sha256": "8f9ac5eff457ba861988c44fd470a630e83e09684343b1534a5d64aebf3a2620",
+      "size": 17263
+    },
+    {
+      "mode": "0644",
       "path": "usr/local/share/doc/ugreenctl/dxp4800gt-fnos-extension/upstream/core/hardware_cli.c",
       "sha256": "894e7056e5384b6ebffb0b3cc3306c63b3898f55fb3e819aa5a0f9962dad08fe",
       "size": 59284
@@ -1521,26 +1533,26 @@
     {
       "mode": "0644",
       "path": "usr/local/share/doc/ugreenctl/dxp4800gt-fnos-extension/upstream/core/main.c",
-      "sha256": "e3e31d940a487db005f802079b2ea59cea8d086b554323044bfe0638392dd3e6",
-      "size": 23422
+      "sha256": "22111de06d53a85186b48d707a3c320323b2adee94e58eca417983bb662bc4fe",
+      "size": 23389
     },
     {
       "mode": "0644",
       "path": "usr/local/share/doc/ugreenctl/dxp4800gt-fnos-extension/upstream/disk/disk.c",
-      "sha256": "5d29b9786b5d3555574d49d7ba177a8d28e3fe215f056ad2e92201ff7da3f314",
-      "size": 77045
+      "sha256": "2b7359754c44deb114a5ece64dbed4a7bbdf91cdeef0f9940bf5919c026ab520",
+      "size": 79690
     },
     {
       "mode": "0644",
       "path": "usr/local/share/doc/ugreenctl/dxp4800gt-fnos-extension/upstream/disk/firmware_profiles.c",
-      "sha256": "6a1c2bb1842f31c15c83e1f6ac33ca0b5d2f15dcb166932bb8a143c751668399",
-      "size": 19335
+      "sha256": "7a8c0f6c2b0278031199d3a25d043c102d8a470ec4cba662eb442866e2477b0c",
+      "size": 19392
     },
     {
       "mode": "0644",
       "path": "usr/local/share/doc/ugreenctl/dxp4800gt-fnos-extension/upstream/docs/ALL_MODELS_DISK_EVIDENCE.zh-CN.md",
-      "sha256": "897c8639e51831acaac2e7d6b6cd03680eaa4ad47d2e2d8edf8219d86360cb96",
-      "size": 27175
+      "sha256": "f25f3a2f104b573f753fee4fb60498ccd0303d07539590d04227e331f39b66df",
+      "size": 27354
     },
     {
       "mode": "0644",
@@ -1563,8 +1575,8 @@
     {
       "mode": "0644",
       "path": "usr/local/share/doc/ugreenctl/dxp4800gt-fnos-extension/upstream/tests/test_disk_mapping.c",
-      "sha256": "f15ba66b26843c3ca2ec7cf9a28f81d523731e9222ac8d495e82b494ca6a8c2d",
-      "size": 65983
+      "sha256": "ff171106f1e51713d18ff71ada867f08221d3b7bd51a6424aeddd82d9bb3e2bd",
+      "size": 67929
     },
     {
       "mode": "0644",
@@ -4377,12 +4389,13 @@
     ],
     "id": "dxp4800gt-fnos-20261116",
     "led_build": {
-      "binary_sha256": "d92e4a7f10ad8f112908db3c7a636bd3e8f014aa756ffeae9ce06dd9886ba069",
+      "binary_sha256": "797cc7fdb2994eabdd78932d2e04434013cbf3a43a43475a16210105e0795b5e",
       "patch_sha256": "7c923f16e72f1095c21382b804467a590cf20cc9984b0778adb562fc75849ee4",
       "patches": {
         "dxp2800-em26.patch": "7c923f16e72f1095c21382b804467a590cf20cc9984b0778adb562fc75849ee4",
         "dxp4800gt-multibus.patch": "4b3994de46ba8c2f9d7da617795786f698621ac6510bef59bd767670e3f4916e",
-        "idx6012-block.patch": "73fbec5666cc2d0e31f49fae1b774f308d0f28649d93622a29215c7efee2f09b"
+        "idx6012-block.patch": "73fbec5666cc2d0e31f49fae1b774f308d0f28649d93622a29215c7efee2f09b",
+        "mcu-i2c-resilience.patch": "d596476fe50b2d283ea6ae8ee8ec9e5a0b7085926286dd1d1548d539b8c079e8"
       },
       "physical_validation": "not-performed",
       "source_revision": "aff7991ee58709ad34b5afbc2787f0d21300368d",
@@ -4390,48 +4403,53 @@
         "App.Native.UGreenLED/app/server/vendor/ugreen_leds_controller/patches/dxp2800-em26.patch": "7c923f16e72f1095c21382b804467a590cf20cc9984b0778adb562fc75849ee4",
         "App.Native.UGreenLED/app/server/vendor/ugreen_leds_controller/patches/dxp4800gt-multibus.patch": "4b3994de46ba8c2f9d7da617795786f698621ac6510bef59bd767670e3f4916e",
         "App.Native.UGreenLED/app/server/vendor/ugreen_leds_controller/patches/idx6012-block.patch": "73fbec5666cc2d0e31f49fae1b774f308d0f28649d93622a29215c7efee2f09b",
-        "scripts/build_led_compat.py": "0e19f93f2f865ee8798decd27f40bf70c5df305ccf7653b8fc2dc20d17753b40",
+        "App.Native.UGreenLED/app/server/vendor/ugreen_leds_controller/patches/mcu-i2c-resilience.patch": "d596476fe50b2d283ea6ae8ee8ec9e5a0b7085926286dd1d1548d539b8c079e8",
+        "scripts/build_led_compat.py": "8e46dcb14bee7c4163935ba7762b1bc2d1082b3504b7d3de2829b983141f2367",
         "tests/test_dxp2800_led.c": "c877253e8514cc1d787936d1544d297fc96ff48179dc6c93aca2914385d208bb",
         "tests/test_dxp4800gt_bus.c": "21866dbe16f1d6b05c9bd39145d7f6791952c37f5e463c138f0484d9b93efbd5",
         "tests/test_dxp4800gt_discovery.c": "09882cd4b62c59aed7e459c00a1adb5cd4319ea72f00335cae0953d77d9b6e00",
-        "tests/test_idx6012_led.c": "621ddb2f231174c147f8a594ce8b470194f13f5af05da4b6565a8cfbd95d8ca6"
+        "tests/test_idx6012_led.c": "621ddb2f231174c147f8a594ce8b470194f13f5af05da4b6565a8cfbd95d8ca6",
+        "tests/test_led_mcu_resilience.c": "8f9ac5eff457ba861988c44fd470a630e83e09684343b1534a5d64aebf3a2620"
       },
       "tests": {
-        "test-dxp2800-led": "be78e8ceea250c38cc18f654a84021ba61893c67870581b0f08ef6eccc20f5db",
-        "test-dxp4800gt-bus": "2cffcd9e4422548f18e30650e79eea736a4929ff3919775507c4e274683f5bac",
-        "test-dxp4800gt-discovery": "4be2e743c23b955cdd948de45f3f6b6067c6fb17a2edb798def4116d9c3520e5",
-        "test-idx6012-led": "31668c219c4c297e368d25394ec87c91888fc33d7e83ac616eec3e26ec2c6949"
+        "test-dxp2800-led": "ecca13ae33c38ffe346cc4213a6f4d9ee09b458b1572edf6eceb7f5ba05c38f0",
+        "test-dxp4800gt-bus": "73db9e13aa8dda4f2264331a027c6da29621ab5e03784f281ceb94bd46f4e95a",
+        "test-dxp4800gt-discovery": "50db1814c3f15f3d165ca57b10f35423cd3f7a6a1bb782993645118c11216c70",
+        "test-idx6012-led": "76a3f7f77431dbab0a0fd256f928aec354066e7c563e02ed8147a1ba74cea2e5",
+        "test-led-mcu-resilience": "612681ec3ea7c4752018eb3cc2e7bb16510fd194f2d47ac842df437281d1c5e5"
       }
     },
     "physical_validation": "not-performed",
     "runtime_tests": {
-      "binary_sha256": "d92e4a7f10ad8f112908db3c7a636bd3e8f014aa756ffeae9ce06dd9886ba069",
-      "cases": 14,
+      "binary_sha256": "797cc7fdb2994eabdd78932d2e04434013cbf3a43a43475a16210105e0795b5e",
+      "cases": 18,
       "physical_validation": "not-performed",
-      "test_source_sha256": "277b6b05de909c1ebab7be6c943d0be7fcb48045a246df54ed1507696773f7ba"
+      "test_source_sha256": "09a1ec2d0a4f41e9a749888ac379cec1db15589eb132cbd2f6a9af335210bd72"
     },
     "source_sha256": {
       "App.Native.UGreenLED/app/server/vendor/ugreen_leds_controller/patches/dxp2800-em26.patch": "7c923f16e72f1095c21382b804467a590cf20cc9984b0778adb562fc75849ee4",
       "App.Native.UGreenLED/app/server/vendor/ugreen_leds_controller/patches/dxp4800gt-multibus.patch": "4b3994de46ba8c2f9d7da617795786f698621ac6510bef59bd767670e3f4916e",
       "App.Native.UGreenLED/app/server/vendor/ugreen_leds_controller/patches/idx6012-block.patch": "73fbec5666cc2d0e31f49fae1b774f308d0f28649d93622a29215c7efee2f09b",
+      "App.Native.UGreenLED/app/server/vendor/ugreen_leds_controller/patches/mcu-i2c-resilience.patch": "d596476fe50b2d283ea6ae8ee8ec9e5a0b7085926286dd1d1548d539b8c079e8",
       "docs/DXP4800GT_LED_SUPPORT.md": "34b69c7c602ec04c2c3034eb3dc9d58d64e564a21d3fe9ffc45106c5e1dd0a95",
-      "scripts/build_led_compat.py": "0e19f93f2f865ee8798decd27f40bf70c5df305ccf7653b8fc2dc20d17753b40",
+      "scripts/build_led_compat.py": "8e46dcb14bee7c4163935ba7762b1bc2d1082b3504b7d3de2829b983141f2367",
       "scripts/prepare_dxp4800gt_diagnostics.py": "8d1e6d2c23d6127ba55357b547cfcbfc5410493ee8d9a944db950fc4285d4ccc",
-      "tests/run_dxp4800gt_runtime.py": "277b6b05de909c1ebab7be6c943d0be7fcb48045a246df54ed1507696773f7ba",
+      "tests/run_dxp4800gt_runtime.py": "09a1ec2d0a4f41e9a749888ac379cec1db15589eb132cbd2f6a9af335210bd72",
       "tests/test_dxp2800_led.c": "c877253e8514cc1d787936d1544d297fc96ff48179dc6c93aca2914385d208bb",
       "tests/test_dxp4800gt_bus.c": "21866dbe16f1d6b05c9bd39145d7f6791952c37f5e463c138f0484d9b93efbd5",
       "tests/test_dxp4800gt_discovery.c": "09882cd4b62c59aed7e459c00a1adb5cd4319ea72f00335cae0953d77d9b6e00",
       "tests/test_idx6012_led.c": "621ddb2f231174c147f8a594ce8b470194f13f5af05da4b6565a8cfbd95d8ca6",
+      "tests/test_led_mcu_resilience.c": "8f9ac5eff457ba861988c44fd470a630e83e09684343b1534a5d64aebf3a2620",
       "upstream/core/hardware_cli.c": "894e7056e5384b6ebffb0b3cc3306c63b3898f55fb3e819aa5a0f9962dad08fe",
       "upstream/core/hardware_cli.h": "cd4f1aa124bea7fc064e5e70837880d9c6458991d538dfcf4ecbb3f5f299d41d",
-      "upstream/core/main.c": "e3e31d940a487db005f802079b2ea59cea8d086b554323044bfe0638392dd3e6",
-      "upstream/disk/disk.c": "5d29b9786b5d3555574d49d7ba177a8d28e3fe215f056ad2e92201ff7da3f314",
-      "upstream/disk/firmware_profiles.c": "6a1c2bb1842f31c15c83e1f6ac33ca0b5d2f15dcb166932bb8a143c751668399",
-      "upstream/docs/ALL_MODELS_DISK_EVIDENCE.zh-CN.md": "897c8639e51831acaac2e7d6b6cd03680eaa4ad47d2e2d8edf8219d86360cb96",
+      "upstream/core/main.c": "22111de06d53a85186b48d707a3c320323b2adee94e58eca417983bb662bc4fe",
+      "upstream/disk/disk.c": "2b7359754c44deb114a5ece64dbed4a7bbdf91cdeef0f9940bf5919c026ab520",
+      "upstream/disk/firmware_profiles.c": "7a8c0f6c2b0278031199d3a25d043c102d8a470ec4cba662eb442866e2477b0c",
+      "upstream/docs/ALL_MODELS_DISK_EVIDENCE.zh-CN.md": "f25f3a2f104b573f753fee4fb60498ccd0303d07539590d04227e331f39b66df",
       "upstream/docs/DXP4800GT_HARDWARE_AUDIT.zh-CN.md": "0801f16f3a22d40f4205daf0a61ccfb0847c53b6229d18a5b59f9ccb5864093c",
       "upstream/ec/it55_dxp4800gt.c": "b42f0e86594eee6f6ae22a76f41526f14e93005216f9687b879b70e47674fbb9",
       "upstream/ec/it55_dxp4800gt.h": "8f3b520323a18ae48177d0934fe27853c23ab4c2e799e31e0c25752da99062f2",
-      "upstream/tests/test_disk_mapping.c": "f15ba66b26843c3ca2ec7cf9a28f81d523731e9222ac8d495e82b494ca6a8c2d",
+      "upstream/tests/test_disk_mapping.c": "ff171106f1e51713d18ff71ada867f08221d3b7bd51a6424aeddd82d9bb3e2bd",
       "upstream/tests/test_hardware_cli.c": "377a02777e53bcf486cff74f17590ccc1fcae22c2d4edbe513f294f703895e5a",
       "upstream/tests/test_it55_dxp4800gt.c": "00c6951a01a1f70f22535ac03c087f2b41ef01630088c52970d72db90e71d35a"
     }

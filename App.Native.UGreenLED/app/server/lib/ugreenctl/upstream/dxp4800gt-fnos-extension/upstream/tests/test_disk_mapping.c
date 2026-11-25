@@ -472,8 +472,8 @@ static void test_6800pro_layout(void)
 static void test_firmware_controller_role_layouts(void)
 {
     static const char *const four_models[] = {"DX4600 Pro", "DX4600+", "DX4600", "DX4700", "DX4700+", "DXP4800", "DXP4800S"};
-    static const char *const six_models[] = {"DXP6800", "DXP6800 Plus", "DXP6800 Pro", "DXP6800 Ultra"};
-    static const char *const eight_models[] = {"DXP8800", "DXP8800 Plus", "DXP8800 Pro", "DXP8800 Ultra"};
+    static const char *const six_models[] = {"DXP6800", "DXP6800S", "DXP6800 Plus", "DXP6800 Pro", "DXP6800 Ultra", "iDX6011", "iDX6012", "iDX6011/iDX6012 OEM V3.0"};
+    static const char *const eight_models[] = {"DXP8800", "DXP8800S", "DXP8800 Plus", "DXP8800 Pro", "DXP8800 Ultra"};
     static const unsigned int intel_ports[] = {12,67}, asm_a[] = {103,32,91,5}, asm_b[] = {45,28,76,114};
     struct ugreenctl_disk_scan scan;
     char error[256], path[4096];
@@ -529,6 +529,29 @@ static void test_firmware_controller_role_layouts(void)
     snprintf(path, sizeof(path), "%s/devices/pci0000:00/0000:00:1c.6/device", fixture);
     write_file(path, "0x51bc\n"); /* Two identical bridge roles are ambiguous. */
     CHECK(ugreenctl_disk_scan_at(fixture, "DXP8800 Plus", NULL, &scan, error, sizeof(error)) == 0);
+    CHECK(!find_disk(&scan, "sdz")->mapped && !find_disk(&scan, "sda")->mapped);
+    teardown();
+
+    /* Real DXP8800 Pro topology: ASM1164 pair under 00:1d.0 (51b0) and 00:1d.2 (51b2). */
+    setup();
+    add_asm1164("0000:59:00.0", asm_a);
+    attach_sata_bridge("0000:59:00.0", "0000:00:1d.0", 0x51b0, 4, asm_a);
+    add_asm1164("0000:5a:00.0", asm_b);
+    attach_sata_bridge("0000:5a:00.0", "0000:00:1d.2", 0x51b2, 4, asm_b);
+    add_disk("sdz", "0000:59:00.0", 32, 2, 135, "FIRST-1D0-SECOND");
+    add_disk("sda", "0000:5a:00.0", 76, 3, 90, "SECOND-1D2-THIRD");
+    for (i = 0; i < sizeof(eight_models)/sizeof(eight_models[0]); ++i) {
+        CHECK(ugreenctl_disk_scan_at(fixture, eight_models[i], NULL, &scan, error, sizeof(error)) == 0);
+        CHECK(find_disk(&scan, "sdz")->mapped && find_disk(&scan, "sdz")->slot == 2);
+        CHECK(find_disk(&scan, "sda")->mapped && find_disk(&scan, "sda")->slot == 7);
+    }
+    /* Mixed bridge families (1d.0 + 51be) or duplicate IDs must not match. */
+    snprintf(path, sizeof(path), "%s/devices/pci0000:00/0000:00:1d.2/device", fixture);
+    write_file(path, "0x51be\n");
+    CHECK(ugreenctl_disk_scan_at(fixture, "DXP8800 Pro", NULL, &scan, error, sizeof(error)) == 0);
+    CHECK(!find_disk(&scan, "sdz")->mapped && !find_disk(&scan, "sda")->mapped);
+    write_file(path, "0x51b0\n");
+    CHECK(ugreenctl_disk_scan_at(fixture, "DXP8800 Pro", NULL, &scan, error, sizeof(error)) == 0);
     CHECK(!find_disk(&scan, "sdz")->mapped && !find_disk(&scan, "sda")->mapped);
     teardown();
 
@@ -749,6 +772,10 @@ static void test_dxp2800_em_single_controller(void)
     CHECK(ugreenctl_disk_scan_at(fixture, "DXP2800", NULL, &scan, error, sizeof(error)) == 0);
     CHECK(scan.profile_known && scan.count == 1 && find_disk(&scan, "sdz")->slot == 2);
     CHECK(!strcmp(find_disk(&scan, "sdz")->mapping_source, "firmware-intel-ahci-topology"));
+    write_file(path, "EM_DXP2800_V1.0.26\n");
+    CHECK(ugreenctl_disk_scan_at(fixture, "DXP2800", NULL, &scan, error, sizeof(error)) == 0);
+    CHECK(scan.profile_known && scan.count == 1 && find_disk(&scan, "sdz")->slot == 2);
+    CHECK(!strcmp(find_disk(&scan, "sdz")->mapping_source, "firmware-intel-ahci-topology"));
     check_singleton_unknown("DXP2800 GT");
     check_singleton_unknown("DXP2800 extra");
     /* Port 1 is empty but remains part of the identity/port-count check. */
@@ -832,6 +859,8 @@ static void test_official_nvme_connector_matrix(void)
         {"DXP8800 Plus", {0x464d,0x51b8,0x463d}, 3},
         {"DXP8800 Pro", {0x464d,0x51b8,0x463d}, 3},
         {"DXP8800 Ultra", {0xa74d,0x51b8,0xa73d}, 3},
+        {"iDX6012", {0x7e4d,0x7eca,0x7ecc}, 3},
+        {"iDX6011/iDX6012 OEM V3.0", {0x7e4d,0x7eca,0x7ecc}, 3},
         {"iDX6011 Pro", {0x7eca,0x7ecb,0}, 2}
     };
     static const char *const old_block_name_models[] = {

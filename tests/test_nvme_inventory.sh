@@ -18,23 +18,34 @@ rows=$(disk_inventory_rows)
 [[ $(wc -l <<< "$rows") -eq 3 ]]
 grep -Fxq '/dev/nvme0n1||U2-A|NVMe U2|4T|nvme' <<< "$rows"
 grep -Fxq '/dev/nvme1n1||M2-A|NVMe M2|1T|nvme' <<< "$rows"
-hardware_hctl_profile() { echo dxp4800; }
-disk_available_slots() { printf 'disk1\ndisk2\ndisk3\ndisk4\n'; }
-[[ $(disk_build_mapping) == '/dev/sda|2:0:0:0|disk3|SATA-A' ]]
+disk_upstream_map_tsv() {
+    printf 'device\tinterface\tslot_name\tled\n/dev/sda\tsata\tata3\tdisk3\n/dev/nvme0n1\tnvme\t-\t-\n/dev/nvme1n1\tnvme\t-\t-\n'
+}
+[[ $(disk_build_mapping) == '/dev/sda|2:0:0:0|disk3|SATA-A|sata|ata3' ]]
+unset -f disk_upstream_map_tsv
+source "$ROOT/App.Native.UGreenLED/app/server/lib/disk_map.sh"
+disk_inventory_is_block() { [[ "$1" != /dev/missing ]]; }
 echo 'SATA/NVMe inventory, partitions excluded, unknown NVMe LED mapping preserved: passed'
 
 # Exercise the production loader and /mapping response with the known GT layout.
 fixture=$(mktemp -d)
-trap 'rm -f "$fixture/settings" "$fixture/status"; rmdir "$fixture"' EXIT
+trap 'rm -f "$fixture/settings" "$fixture/status" "$fixture/ugreenctl"; rmdir "$fixture"' EXIT
 SETTINGS_FILE="$fixture/settings"
 DISK_STATUS_FILE="$fixture/status"
 : > "$SETTINGS_FILE"
 settings_get() { printf '%s\n' auto; }
 hardware_detected_product_name() { printf '%s\n' 'DXP4800 GT'; }
 SERVER_DIR="$ROOT/App.Native.UGreenLED/app/server"
+EXPECTED_UGREENCTL="$SERVER_DIR/bin/ugreenctl"
+if [[ ! -x "$EXPECTED_UGREENCTL" ]]; then
+    printf '#!/bin/sh\nexit 0\n' > "$fixture/ugreenctl"
+    chmod +x "$fixture/ugreenctl"
+    UGREENCTL_BINARY="$fixture/ugreenctl"
+    EXPECTED_UGREENCTL="$UGREENCTL_BINARY"
+fi
 topology_unavailable=false
 timeout() {
-    [[ "$*" == "5 $SERVER_DIR/bin/ugreenctl disk map --tsv" ]] || return 99
+    [[ "$*" == "5 $EXPECTED_UGREENCTL --plugin-dir $SERVER_DIR/lib/ugreenctl/models disk map --tsv" ]] || return 99
     ! $topology_unavailable || return 1
     printf 'device\tinterface\tslot_name\tled\n/dev/sda\tsata\tata3\tdisk3\n/dev/nvme0n1\tu2\tata1\tdisk1\n/dev/nvme1n1\tnvme\tnvme2\t-\n'
 }

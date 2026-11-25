@@ -67,6 +67,10 @@ def main():
         run(['git', 'apply', '--check', patch], cwd=source)
         run(['git', 'apply', patch], cwd=source)
         patches.append(patch)
+        patch = PATCH.with_name('mcu-i2c-resilience.patch')
+        run(['git', 'apply', '--check', patch], cwd=source)
+        run(['git', 'apply', patch], cwd=source)
+        patches.append(patch)
     test = ROOT / 'tests/test_dxp2800_led.c'
     cmake_file = source / 'CMakeLists.txt'
     cmake_file.write_text(cmake_file.read_text(encoding='utf-8') + f'''
@@ -102,6 +106,13 @@ target_include_directories(test-dxp4800gt-discovery PRIVATE ${{CMAKE_CURRENT_SOU
 target_compile_definitions(test-dxp4800gt-discovery PRIVATE UGREENCTL_LED_TESTING)
 target_compile_options(test-dxp4800gt-discovery PRIVATE -Wall -Wextra -Wpedantic)
 add_test(NAME dxp4800gt-discovery COMMAND test-dxp4800gt-discovery)
+add_executable(test-led-mcu-resilience "{(ROOT / 'tests/test_led_mcu_resilience.c').as_posix()}"
+    led/led_n76_protocol.c led/led_protocol.c led/led_sysfs.c led/led_gpio.c
+    led/led_service.c led/led_cs201x.c models/led_profiles.c core/identity.c)
+target_include_directories(test-led-mcu-resilience PRIVATE ${{CMAKE_CURRENT_SOURCE_DIR}} ${{CMAKE_CURRENT_SOURCE_DIR}}/include)
+target_compile_definitions(test-led-mcu-resilience PRIVATE UGREENCTL_LED_TESTING)
+target_compile_options(test-led-mcu-resilience PRIVATE -Wall -Wextra -Wpedantic)
+add_test(NAME led-mcu-resilience COMMAND test-led-mcu-resilience)
 ''')
     configure = [args.cmake, '-S', source, '-B', build, '-G', 'Ninja',
                  '-DCMAKE_BUILD_TYPE=Release',
@@ -114,6 +125,7 @@ add_test(NAME dxp4800gt-discovery COMMAND test-dxp4800gt-discovery)
     if args.dxp4800gt:
         targets.append('test-dxp4800gt-bus')
         targets.append('test-dxp4800gt-discovery')
+        targets.append('test-led-mcu-resilience')
     run([args.cmake, '--build', build, '--target', *targets, '-j', '4'], env=env)
     logs = []
     for target in targets[1:]:
@@ -135,6 +147,7 @@ add_test(NAME dxp4800gt-discovery COMMAND test-dxp4800gt-discovery)
     if args.dxp4800gt:
         inputs.append(ROOT / 'tests/test_dxp4800gt_bus.c')
         inputs.append(ROOT / 'tests/test_dxp4800gt_discovery.c')
+        inputs.append(ROOT / 'tests/test_led_mcu_resilience.c')
     receipt['source_sha256'] = {p.relative_to(ROOT).as_posix(): hashlib.sha256(p.read_bytes()).hexdigest() for p in inputs}
     (work / 'led-build.json').write_text(json.dumps(receipt, indent=2) + '\n', encoding='utf-8')
 

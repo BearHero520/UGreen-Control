@@ -491,8 +491,19 @@ collect_i2c() {
     elif [[ -z "$LED_CLI" || ! -x "$LED_CLI" ]]; then
         printf 'probe=<bundled CLI unavailable>\n'
     else
+        local app_lock_dir="${UGREEN_RUNTIME_DIR:-/run/$APP_NAME}/led_cache" app_lock_fd=""
+        if command -v flock >/dev/null 2>&1 && [[ -d "$app_lock_dir" && ! -L "$app_lock_dir" ]]; then
+            if exec {app_lock_fd}>"$app_lock_dir/.operation.lock" 2>/dev/null; then
+                flock -w 6 "$app_lock_fd" 2>/dev/null || true
+            else
+                app_lock_fd=""
+            fi
+        fi
         output=$(run_with_timeout "$LED_CLI" all -status 2>&1)
         rc=$?
+        if [[ -n "$app_lock_fd" ]]; then
+            exec {app_lock_fd}>&- 2>/dev/null || true
+        fi
         printf 'command=all -status\n'
         printf 'exit_code=%d\n%s\n' "$rc" "${output:-<no output>}"
     fi
@@ -559,12 +570,15 @@ collect_controller() {
     output=$(run_with_timeout "$controller" "${controller_args[@]}" power startup get 2>&1)
     rc=$?
     printf 'command=power startup get\nexit_code=%d\n%s\n' "$rc" "${output:-<no output>}"
-    if [[ "$PRODUCT_NAME" == 'DXP4800 GT' ]]; then
-        # The TSV contract carries no serials, WWNs or model strings.
-        output=$(run_with_timeout "$controller" disk map --tsv 2>&1)
-        rc=$?
-        printf 'command=disk map --tsv\nexit_code=%d\n%s\n' "$rc" "${output:-<no output>}"
-    fi
+    case "$PRODUCT_NAME" in
+        *DXP480T*|unknown|"") ;;
+        *)
+            # The TSV contract carries no serials, WWNs or model strings.
+            output=$(run_with_timeout "$controller" "${controller_args[@]}" disk map --tsv 2>&1)
+            rc=$?
+            printf 'command=disk map --tsv\nexit_code=%d\n%s\n' "$rc" "${output:-<no output>}"
+            ;;
+    esac
 }
 
 collect_application() {

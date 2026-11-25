@@ -1,12 +1,12 @@
 {
   "branch": "Almighty",
-  "revision": "local-source-sha256:8c978ab9a889f19248e06ce28fc2f3b01a04b0b7ff690533a22692cf075a778d",
+  "revision": "local-source-sha256:8cae41ee8f9647f0c078d7b3e35eddb7af8b1901c778f63a869e0fbe5b22df59",
   "release_tag": "local-dxp4800gt-fnos-20261116",
-  "archive_sha256": "b76d2a0537e635addba194ae143134c955a2441bd4cd57771c9de596b9941605",
+  "archive_sha256": "5a000f4a336c835ee459ffc5ef49010f75aece123b0093da65d7fc37e6009cb3",
   "architecture": "x86_64",
   "status": "experimental-local-dxp4800gt-fnos",
   "files": {
-    "ugreenctl": "e08337ebdd126acb2a9d38383197aa9b76cc485baca223134bb927ef29564145",
+    "ugreenctl": "cc4c7d15f5b392978dabce81ce2130875f268727407863b41cdf1c9fdf8f55c9",
     "ugreenctl-fand": "5e8a2e34c918a62a40625b6bdf9765d6ed9daadfc31faf8874c0c38161aa32f7",
     "ugreen_leds_cli": "344dde6094dbe8b0e37e3f602baba4c8adc09ae58a0500dd40f109c3543c8fd4",
     "ugreenctl-ledd": "1cecbbabba72aaf132e0e6f0c9e4037dd3fd4688a5b4b5a875682aae34b2622f",

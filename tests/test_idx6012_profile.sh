@@ -7,7 +7,7 @@ UGREEN_PRODUCT_VERSION='iDX6011_iDX6012 V3.0 241112'
 UGREEN_SYS_VENDOR=UGREEN
 [[ $(hardware_profile_key) == idx6012 ]]
 [[ $(hardware_disk_count) == 6 ]]
-[[ $(hardware_hctl_profile) == dxp6800 ]]
+[[ $(hardware_hctl_profile) == upstream-managed ]]
 [[ $(hardware_netdev_count) == 1 ]]
 [[ $(hardware_network_leds) == netdev ]]
 [[ $(hardware_profile_display_name) == 'UGREEN iDX6012' ]]

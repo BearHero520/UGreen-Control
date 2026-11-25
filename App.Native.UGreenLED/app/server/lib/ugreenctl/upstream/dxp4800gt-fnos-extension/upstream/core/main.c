@@ -13,7 +13,7 @@
 #include "core/identity.h"
 #include "ugreenctl.h"
 
-#define UGREENCTL_VERSION "0.3.0"
+
 
 struct cli_options {
     const char *model_directory;

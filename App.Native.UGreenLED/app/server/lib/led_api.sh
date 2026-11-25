@@ -71,7 +71,7 @@ led_cli_available() {
 
 led_cli_version() {
     led_cli_available || { printf 'unavailable\n'; return; }
-    printf '%s\n' "${UGREEN_CLI_RELEASE:-local-dxp2800-em26-20261101}"
+    printf '%s\n' "${UGREEN_CLI_RELEASE:-local-mcu-resilience-20261125-upstream-map}"
 }
 
 ensure_cli() {
@@ -217,7 +217,7 @@ _led_cli_run_raw_unlocked() {
     fi
     if [[ "$rc" -ne 0 ]]; then
         if (( ${#access[@]} )) && [[ "$rc" == 3 || "$rc" == 5 || "$rc" == 124 ]]; then
-            printf '%s\n' "$(( $(date +%s) + 10 ))" > "$LED_API_CACHE_DIR/.write-retry-at"
+            printf '%s\n' "$(( $(date +%s) + 5 ))" > "$LED_API_CACHE_DIR/.write-retry-at"
         fi
         output="${output//$'\n'/ }"
         led_set_error "LED CLI command failed: $logical $action (rc=$rc${output:+, $output})"
@@ -227,6 +227,9 @@ _led_cli_run_raw_unlocked() {
                 "exit_code=$rc" "output=$output"
         fi
         return "$rc"
+    fi
+    if (( ${#access[@]} )) && [[ -f "$LED_API_CACHE_DIR/.write-retry-at" ]]; then
+        rm -f "$LED_API_CACHE_DIR/.write-retry-at" 2>/dev/null || true
     fi
     LED_LAST_ERROR=""
     printf '%s' "$output"
@@ -445,7 +448,6 @@ _led_set_color_unlocked() {
     ensure_led_backend || return 1
     key="${r},${g},${b},${brightness}"
     [[ "$(led_read_cached_state "$led")" == "$key" ]] && return 0
-    led_ensure_on "$led" || true
     led_cli_run "$led" -color "$r" "$g" "$b" -brightness "$brightness" -on >/dev/null || return 1
     led_write_cached_state "$led" "$key"
 }

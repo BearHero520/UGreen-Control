@@ -2,7 +2,7 @@
 # 应用适配层只保存显示与配置所需的机型信息。硬件识别、LED 布局、盘位
 # 映射和写入保护由随包的 UGREEN-NAS-Hardware 程序负责。
 
-UGREEN_CLI_RELEASE="local-dh2600-n76-direct-20261122-upstream-map"
+UGREEN_CLI_RELEASE="local-mcu-resilience-20261125-upstream-map"
 
 hardware_detected_product_name() {
     local product="${UGREEN_PRODUCT_NAME:-}" file
@@ -34,16 +34,58 @@ hardware_detected_product_version() {
     printf '%s\n' "$version"
 }
 
+hardware_profile_from_name() {
+    local normalized="${1^^}"
+    case "$normalized" in
+        DH2600|"UGREEN DH2600") echo "dh2600" ;;
+        *IDX6011*PRO*) echo "idx6011_pro" ;;
+        *IDX6011*) echo "idx6011" ;;
+        *IDX6012*) echo "idx6012" ;;
+        *DXP480T*) echo "dxp480t_plus" ;;
+        *DXP2800*GT*) echo "dxp2800_gt" ;;
+        *DXP2800*) echo "dxp2800" ;;
+        *DXP4800*GT*) echo "dxp4800_gt" ;;
+        *DXP4800S*) echo "dxp4800s" ;;
+        *DXP4800*PLUS*) echo "dxp4800_plus" ;;
+        *DXP4800*PRO*) echo "dxp4800_pro" ;;
+        *DXP4800*) echo "dxp4800" ;;
+        *DXP6800*) echo "dxp6800" ;;
+        *DXP8800*) echo "dxp8800" ;;
+        *DX4700*) echo "dx4700" ;;
+        *DX4600*) echo "dx4600" ;;
+        *) echo "unknown" ;;
+    esac
+}
+
+hardware_profile_from_dmi() {
+    local product vendor
+    product=$(hardware_detected_product_name)
+    vendor="${UGREEN_SYS_VENDOR:-}"
+    if [[ -z "$vendor" && -r /sys/class/dmi/id/sys_vendor ]]; then
+        vendor=$(</sys/class/dmi/id/sys_vendor)
+        vendor="${vendor//$'\r'/}"
+        vendor="${vendor//$'\n'/}"
+    fi
+    if [[ "$product" == "Default string" && "$vendor" == "UGREEN" &&
+          "$(hardware_detected_product_version)" == "iDX6011_iDX6012 V3.0 241112" ]]; then
+        echo "idx6012"
+    else
+        hardware_profile_from_name "$product"
+    fi
+}
+
 hardware_upstream_model() {
-    local binary directory model
+    local binary directory model default_server=""
+    [[ -z "${UGREEN_PRODUCT_NAME:-}" ]] || return 1
+    default_server=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." 2>/dev/null && pwd || true)
     for binary in \
         "${UGREENCTL_BINARY:-}" \
-        "${SERVER_DIR:-}/bin/ugreenctl" \
+        "${SERVER_DIR:-$default_server}/bin/ugreenctl" \
         "${APP_ROOT:-}/target/server/bin/ugreenctl"; do
         [[ -n "$binary" && -x "$binary" ]] || continue
         for directory in \
             "${UGREENCTL_PLUGIN_DIR:-}" \
-            "${SERVER_DIR:-}/lib/ugreenctl/models" \
+            "${SERVER_DIR:-$default_server}/lib/ugreenctl/models" \
             "${APP_ROOT:-}/target/server/lib/ugreenctl/models"; do
             [[ -n "$directory" && -r "$directory" ]] || continue
             model=$("$binary" --plugin-dir "$directory" model 2>/dev/null) || continue
@@ -65,12 +107,18 @@ hardware_profile_key() {
             echo "$override"
             ;;
         *)
-            local upstream_model
+            local upstream_model product
             upstream_model=$(hardware_upstream_model 2>/dev/null || true)
             case "$upstream_model" in
+                dxp4800plus)
+                    product=$(hardware_detected_product_name)
+                    if [[ "${product^^}" == *PRO* ]]; then echo dxp4800_pro; else echo dxp4800_plus; fi
+                    ;;
+                dxp480tplus) echo dxp480t_plus ;;
+                dxp4800gt) echo dxp4800_gt ;;
                 dxp6800pro|dxp6800plus) echo dxp6800 ;;
                 dxp8800pro|dxp8800plus|dxp8800ultra) echo dxp8800 ;;
-                "") echo unknown ;;
+                ""|unknown) hardware_profile_from_dmi ;;
                 *) echo "$upstream_model" ;;
             esac
             ;;

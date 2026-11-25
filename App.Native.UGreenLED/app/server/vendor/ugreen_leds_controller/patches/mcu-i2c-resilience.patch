@@ -1,0 +1,450 @@
+diff --git a/led/led.c b/led/led.c
+index 206e71a..9ae5f48 100644
+--- a/led/led.c
++++ b/led/led.c
+@@ -87,14 +87,21 @@ static int read_text(const char *path, char *buffer, size_t capacity)
+     size_t length;
+     if (capacity < 2) return -EINVAL;
+     buffer[0] = '\0';
++    errno = 0;
+     stream = fopen(path, "r");
+     if (stream == NULL) return -errno;
++    errno = 0;
+     if (fgets(buffer, (int)capacity, stream) == NULL) {
+-        int result = ferror(stream) ? -EIO : 0;
++        int err = errno;
++        int result = ferror(stream) ? (err != 0 ? -err : -EIO) : 0;
+         (void)fclose(stream);
+         return result;
+     }
+-    if (ferror(stream)) { (void)fclose(stream); return -EIO; }
++    if (ferror(stream)) {
++        int err = errno;
++        (void)fclose(stream);
++        return err != 0 ? -err : -EIO;
++    }
+     (void)fclose(stream);
+     length = strlen(buffer);
+     while (length > 0 && isspace((unsigned char)buffer[length - 1])) buffer[--length] = '\0';
+@@ -217,12 +224,28 @@ static bool command_is_owner(const char *comm, const char *executable,
+     return false;
+ }
+ 
++static bool is_transient_proc_error(int code)
++{
++    return code == -ENOENT || code == -ESRCH || code == -EACCES ||
++           code == -EPERM || code == -EINVAL;
++}
++
+ static int process_owners_except(pid_t authenticated_pid)
+ {
+     DIR *directory = opendir("/proc");
+     struct dirent *entry;
++    char self_exe[4096] = "", self_wrapper[4096] = "";
++    ssize_t self_length;
+     int result = 0;
+     if (directory == NULL) return -errno;
++    self_length = readlink("/proc/self/exe", self_exe, sizeof(self_exe) - 1);
++    if (self_length > 0) {
++        self_exe[self_length] = '\0';
++        if ((size_t)self_length > 7 && strcmp(self_exe + self_length - 7, ".compat") == 0) {
++            memcpy(self_wrapper, self_exe, (size_t)self_length - 7);
++            self_wrapper[self_length - 7] = '\0';
++        }
++    }
+     while ((entry = readdir(directory)) != NULL) {
+         char path[256], name[256], executable[4096] = "", *end;
+         const char *arguments[128];
+@@ -234,31 +257,51 @@ static int process_owners_except(pid_t authenticated_pid)
+         if (!isdigit((unsigned char)entry->d_name[0])) continue;
+         errno = 0;
+         pid = strtol(entry->d_name, &end, 10);
+-        if (errno != 0 || *end != '\0' || pid <= 0 || pid == (long)getpid() || pid==(long)authenticated_pid) continue;
++        if (errno != 0 || *end != '\0' || pid <= 0 ||
++            pid == (long)getpid() || pid == (long)getppid() || pid == (long)authenticated_pid) continue;
+         (void)snprintf(path, sizeof(path), "/proc/%ld/comm", pid);
+         result = read_text(path, name, sizeof(name));
+-        if (result == -ENOENT || result == -ESRCH) { result = 0; continue; }
++        if (is_transient_proc_error(result)) { result = 0; continue; }
+         if (result < 0) break;
+-        if (process_name_is_owner(name, true)) { result = -EBUSY; break; }
+         (void)snprintf(path, sizeof(path), "/proc/%ld/exe", pid);
++        errno = 0;
+         executable_length = readlink(path, executable, sizeof(executable) - 1);
+         if (executable_length >= 0) executable[executable_length] = '\0';
+-        else if (errno != ENOENT && errno != ESRCH) { result = -errno; break; }
++        else if (!is_transient_proc_error(-errno)) { result = -errno; break; }
++        if (self_exe[0] != '\0' && strcmp(executable, self_exe) == 0) continue;
+         (void)snprintf(path, sizeof(path), "/proc/%ld/cmdline", pid);
++        errno = 0;
+         stream = fopen(path, "rb");
+         if (stream == NULL) {
+             if (errno == ENOENT || errno == ESRCH) continue;
+-            result = -errno; break;
++            if (errno == EACCES || errno == EPERM) {
++                if (process_name_is_owner(name, true) || process_name_is_owner(executable, false)) {
++                    result = -EBUSY;
++                    break;
++                }
++                continue;
++            }
++            result = -errno;
++            break;
+         }
++        errno = 0;
+         length = fread(command, 1, sizeof(command) - 1, stream);
+-        if (ferror(stream)) result = -EIO;
++        if (ferror(stream)) {
++            int err = errno;
++            (void)fclose(stream);
++            if (err != 0 && is_transient_proc_error(-err)) { result = 0; continue; }
++            result = err != 0 ? -err : -EIO;
++            break;
++        }
+         (void)fclose(stream);
+-        if (result < 0) break;
+         command[length] = '\0';
+         for (position = 0; position < length && argument_count < sizeof(arguments) / sizeof(arguments[0]);) {
+             arguments[argument_count++] = (const char *)command + position;
+             position += strlen(arguments[argument_count - 1]) + 1;
+         }
++        if (self_wrapper[0] != '\0' &&
++            ((argument_count >= 1 && strcmp(arguments[0], self_wrapper) == 0) ||
++             (argument_count >= 2 && strcmp(arguments[1], self_wrapper) == 0))) continue;
+         if (command_is_owner(name, executable, arguments, argument_count)) result = -EBUSY;
+         if (result < 0) break;
+     }
+@@ -305,20 +348,41 @@ static int production_owners(void *opaque)
+     return result;
+ }
+ 
++static void production_pause(void *opaque, unsigned int milliseconds);
++
+ static int production_lock(void *opaque)
+ {
+     struct ugreenctl_led_session *session = opaque;
+     struct stat metadata;
++    unsigned int attempt;
+     int result;
+     session->lock_fd = open("/run/ugreenctl-led-mcu.lock",
+                             O_CREAT | O_RDWR | O_CLOEXEC | O_NOFOLLOW, 0600);
+     if (session->lock_fd < 0) return -errno;
+-    if (fstat(session->lock_fd, &metadata) < 0) return -errno;
+-    if (!S_ISREG(metadata.st_mode) || metadata.st_uid != 0 || metadata.st_nlink != 1)
++    if (fstat(session->lock_fd, &metadata) < 0) {
++        result = -errno;
++        (void)close(session->lock_fd);
++        session->lock_fd = -1;
++        return result;
++    }
++    if (!S_ISREG(metadata.st_mode) || metadata.st_uid != 0 || metadata.st_nlink != 1) {
++        (void)close(session->lock_fd);
++        session->lock_fd = -1;
+         return -EPERM;
+-    result = flock(session->lock_fd, LOCK_EX | LOCK_NB);
+-    if (result < 0) return errno == EWOULDBLOCK ? -EBUSY : -errno;
+-    return 0;
++    }
++    for (attempt = 0; ; ++attempt) {
++        result = flock(session->lock_fd, LOCK_EX | LOCK_NB);
++        if (result == 0) return 0;
++        if (errno == EINTR) continue;
++        if ((errno != EWOULDBLOCK && errno != EAGAIN) || attempt >= 250) {
++            result = (errno == EWOULDBLOCK || errno == EAGAIN) ? -EBUSY : -errno;
++            (void)close(session->lock_fd);
++            session->lock_fd = -1;
++            return result;
++        }
++        if (session->io.pause_ms != NULL) session->io.pause_ms(session->opaque, 20);
++        else production_pause(session, 20);
++    }
+ }
+ 
+ static void production_unlock(void *opaque)
+@@ -370,7 +434,8 @@ static int production_chip_id(void *opaque, uint16_t *chip_id)
+ {
+     struct ugreenctl_led_session *session = opaque;
+     union i2c_smbus_data data;
+-    int result;
++    unsigned int attempt, max_attempts;
++    int result = -EIO;
+     if (session->access.n76_direct) {
+         uint8_t high, low;
+         result = session->io.read_byte(session->opaque, 0x5a, &high);
+@@ -379,10 +444,21 @@ static int production_chip_id(void *opaque, uint16_t *chip_id)
+         if (!result) *chip_id = (uint16_t)((unsigned int)high << 8 | low);
+         return result;
+     }
+-    memset(&data, 0, sizeof(data));
+-    result = smbus(session, I2C_SMBUS_READ, session->identity.profile->chip_register,
+-                    I2C_SMBUS_WORD_DATA, &data);
+-    if (result == 0) *chip_id = data.word;
++    max_attempts = session->io.pause_ms != NULL ? 5U : 1U;
++    for (attempt = 0; attempt < max_attempts; ++attempt) {
++        if (session->io.pause_ms != NULL)
++            session->io.pause_ms(session->opaque, attempt == 0 ? 2U : 8U);
++        memset(&data, 0, sizeof(data));
++        result = smbus(session, I2C_SMBUS_READ, session->identity.profile->chip_register,
++                        I2C_SMBUS_WORD_DATA, &data);
++        if (result == 0) {
++            *chip_id = data.word;
++            if (data.word != 0) return 0;
++        } else if (result != -EIO && result != -ENXIO &&
++                   result != -EREMOTEIO && result != -EAGAIN) {
++            return result;
++        }
++    }
+     return result;
+ }
+ 
+@@ -420,11 +496,20 @@ static int production_ack(void *opaque)
+ {
+     struct ugreenctl_led_session *session = opaque;
+     union i2c_smbus_data data;
+-    int result;
+-    memset(&data, 0, sizeof(data));
+-    result = smbus(session, I2C_SMBUS_READ, 0x80, I2C_SMBUS_BYTE_DATA, &data);
+-    if (result < 0) return result;
+-    return data.byte == 1 ? 0 : -EIO;
++    unsigned int attempt, max_attempts;
++    int result = -EIO;
++    max_attempts = session->io.pause_ms != NULL ? 8U : 1U;
++    for (attempt = 0; attempt < max_attempts; ++attempt) {
++        if (attempt > 0 && session->io.pause_ms != NULL)
++            session->io.pause_ms(session->opaque, 4);
++        memset(&data, 0, sizeof(data));
++        result = smbus(session, I2C_SMBUS_READ, 0x80, I2C_SMBUS_BYTE_DATA, &data);
++        if (result == 0 && data.byte == 1) return 0;
++        if (result < 0 && result != -EIO && result != -ENXIO &&
++            result != -EREMOTEIO && result != -EAGAIN)
++            return result;
++    }
++    return result < 0 ? result : -EIO;
+ }
+ 
+ static void production_pause(void *opaque, unsigned int milliseconds)
+@@ -521,6 +606,19 @@ static int gt_probe_candidate(void *opaque, unsigned int bus)
+     return result;
+ }
+ 
++static bool is_i801_dw_multibus(const struct ugreenctl_led_identity *identity)
++{
++    const char *id;
++    if (identity == NULL || identity->profile == NULL) return false;
++    id = identity->profile->id;
++    return !strcmp(id, "dx4600-legacy") ||
++           !strcmp(id, "dx4600plus-legacy") ||
++           !strcmp(id, "dx4600pro-legacy") ||
++           !strcmp(id, "dx4700-legacy") ||
++           !strcmp(id, "dx4700plus-legacy") ||
++           !strcmp(id, "dxp4800s-legacy");
++}
++
+ /* Only enumerate the adapter family documented by each current profile.
+  * Do not probe arbitrary devices, issue SMBus quick commands or guess bus 1. */
+ static int find_bus(struct ugreenctl_led_session *session, char *error, size_t error_size)
+@@ -532,6 +630,8 @@ static int find_bus(struct ugreenctl_led_session *session, char *error, size_t e
+     size_t candidate_count[2] = {0};
+     bool gt = !strcmp(session->identity.product_name, "DXP4800 GT") &&
+               !strcmp(session->identity.profile->id, "dxp4800gt-block");
++    bool i801_dw = !gt && is_i801_dw_multibus(&session->identity);
++    bool multibus = gt || i801_dw;
+     int result = 0;
+     if (directory == NULL)
+         return fail(error, error_size, -errno,
+@@ -547,9 +647,9 @@ static int find_bus(struct ugreenctl_led_session *session, char *error, size_t e
+             result = read_text(path, name, sizeof(name));
+         }
+         if (result < 0) break;
+-        if (gt) {
+-            enum gt_bus_family family = gt_bus_family(name);
+-            if (family == GT_BUS_OTHER) continue;
++        if (multibus) {
++            int family = gt ? (int)gt_bus_family(name) : (int)i801_dw_bus_family(name);
++            if (family < 0) continue;
+             if (candidate_count[0] + candidate_count[1] == 32) { result = -EOVERFLOW; break; }
+             candidates[family][candidate_count[family]++] = number;
+             continue;
+@@ -563,34 +663,37 @@ static int find_bus(struct ugreenctl_led_session *session, char *error, size_t e
+     }
+     (void)closedir(directory);
+     if (result < 0) return fail(error, error_size, result, "cannot inspect I2C adapters: %s", strerror(-result));
+-    if (gt) {
++    if (multibus) {
+         uint16_t chip = 0;
+         const char *stage;
+         struct gt_probe_context ctx = {.session = session};
+-        /* Same-model hardware confirmed DesignWare. Try that family first;
+-         * the stock PIIX4 candidates are a fallback only on a clean no-match.
+-         * An unrelated auxiliary bus EIO cannot veto a verified DesignWare MCU. */
+-        result = gt_select_bus(candidates[GT_BUS_DESIGNWARE], candidate_count[GT_BUS_DESIGNWARE], gt_probe_candidate, &ctx, &selected);
++        /* Probe the primary documented family first; fall back to the secondary
++         * documented family only on a clean no-match. */
++        result = gt_select_bus(candidates[0], candidate_count[0], gt_probe_candidate, &ctx, &selected);
+         if (!result)
+-            result = gt_select_bus(candidates[GT_BUS_PIIX4], candidate_count[GT_BUS_PIIX4], gt_probe_candidate, &ctx, &selected);
++            result = gt_select_bus(candidates[1], candidate_count[1], gt_probe_candidate, &ctx, &selected);
+         if (result <= 0) {
+             if (!result) result = -ENODEV;
+             return fail(error, error_size, result,
+-                "DXP4800 GT LED discovery 0x3a/0xc5b2: %s [%s]", strerror(-result), ctx.trace[0] ? ctx.trace : "no eligible adapters");
++                "%s LED discovery 0x3a/0xc5b2: %s [%s]",
++                session->identity.product_name, strerror(-result),
++                ctx.trace[0] ? ctx.trace : "no eligible adapters");
+         }
+         result = gt_open_candidate(session, selected, &stage);
+         if (!result) stage = "ID recheck";
+         if (!result) result = session->io.read_chip_id(session->opaque, &chip);
+         if (!result && chip != 0xc5b2) result = -ESTALE;
+-        if (result < 0) return fail(error, error_size, result, "DXP4800 GT selected %s (%s): %s", session->bus, stage, strerror(-result));
++        if (result < 0) return fail(error, error_size, result,
++            "%s selected %s (%s): %s",
++            session->identity.product_name, session->bus, stage, strerror(-result));
+         /* Common capability checks below still gate all protocol operations. */
+     }
+-    if (!gt && found != 1) return fail(error, error_size, -ENOTSUP,
++    if (!multibus && found != 1) return fail(error, error_size, -ENOTSUP,
+                                "expected exactly one documented '%s' adapter, found %u",
+                                session->identity.profile->bus_prefix, found);
+     result = session->io.owners(session->opaque);
+     if (result < 0) return fail(error, error_size, result, "LED controller has a driver/process owner or ownership is unreadable");
+-    if (!gt) session->fd = open(session->bus, O_RDWR | O_CLOEXEC | O_NOFOLLOW);
++    if (!multibus) session->fd = open(session->bus, O_RDWR | O_CLOEXEC | O_NOFOLLOW);
+     if (session->fd < 0) return fail(error, error_size, -errno, "cannot open %s: %s", session->bus, strerror(errno));
+     {
+         unsigned long functions = 0;
+@@ -612,7 +715,16 @@ static int find_bus(struct ugreenctl_led_session *session, char *error, size_t e
+ 
+ static int acquire(struct ugreenctl_led_session *session, char *error, size_t error_size)
+ {
+-    int result = session->io.owners(session->opaque);
++    int result;
++    if (session->io.lock == production_lock) {
++        result = session->io.lock(session->opaque);
++        if (result < 0) return fail(error, error_size, result, "cannot acquire fixed LED controller lock: %s", strerror(-result));
++        session->locked = true;
++        result = session->io.owners(session->opaque);
++        if (result < 0) return fail(error, error_size, result, "LED controller has another driver/process owner or ownership is unreadable");
++        return 0;
++    }
++    result = session->io.owners(session->opaque);
+     if (result < 0) return fail(error, error_size, result, "LED controller has another driver/process owner or ownership is unreadable");
+     result = session->io.lock(session->opaque);
+     if (result < 0) return fail(error, error_size, result, "cannot acquire fixed LED controller lock: %s", strerror(-result));
+@@ -846,6 +958,23 @@ static int authorize_write(struct ugreenctl_led_session *session, char *error, s
+     return 0;
+ }
+ 
++static bool expected_fields_match(const struct ugreenctl_led_patch *expected,
++                                  const struct ugreenctl_led_value *readback)
++{
++    const struct ugreenctl_led_value *wanted = &expected->value;
++    if ((expected->fields & UGREENCTL_LED_PATCH_RGB) &&
++        (readback->red != wanted->red || readback->green != wanted->green || readback->blue != wanted->blue))
++        return false;
++    if ((expected->fields & UGREENCTL_LED_PATCH_BRIGHTNESS) && readback->brightness != wanted->brightness)
++        return false;
++    if ((expected->fields & UGREENCTL_LED_PATCH_MODE) && readback->mode != wanted->mode)
++        return false;
++    if ((expected->fields & UGREENCTL_LED_PATCH_TIMING) &&
++        (readback->on_ms != wanted->on_ms || readback->off_ms != wanted->off_ms))
++        return false;
++    return true;
++}
++
+ static int change(struct ugreenctl_led_session *session, uint8_t id,
+                   uint8_t command, const uint8_t parameters[4],
+                   const struct ugreenctl_led_patch *expected,
+@@ -853,7 +982,7 @@ static int change(struct ugreenctl_led_session *session, uint8_t id,
+                   char *error, size_t error_size)
+ {
+     uint8_t frame[UGREENCTL_LED_COMMAND_SIZE];
+-    const struct ugreenctl_led_value *wanted = &expected->value;
++    unsigned int attempt, max_attempts;
+     int result = authorize_write(session, error, error_size);
+     if (result < 0) return result;
+     if (strncmp(session->identity.profile->protocol,"smbus-block-",12)==0)
+@@ -861,22 +990,41 @@ static int change(struct ugreenctl_led_session *session, uint8_t id,
+             strcmp(session->identity.profile->protocol,"smbus-block-le")==0,frame);
+     else result = ugreenctl_led_encode(id, command, parameters, frame);
+     if (result < 0) return result;
+-    session->io.pause_ms(session->opaque, 1);
+-    result = session->io.write_command(session->opaque, id, frame);
+-    if (result < 0) return fail(error, error_size, result, "LED command write failed; state may have changed: %s", strerror(-result));
+-    session->io.pause_ms(session->opaque, 2);
+-    result = session->io.read_ack(session->opaque);
+-    if (result < 0) return fail(error, error_size, result, "LED MCU did not acknowledge command; state may have changed");
+-    result = ugreenctl_led_read(session, id, readback, error, error_size);
+-    if (result < 0) return result;
+-    if (((expected->fields & UGREENCTL_LED_PATCH_RGB) &&
+-         (readback->red != wanted->red || readback->green != wanted->green || readback->blue != wanted->blue)) ||
+-        ((expected->fields & UGREENCTL_LED_PATCH_BRIGHTNESS) && readback->brightness != wanted->brightness) ||
+-        ((expected->fields & UGREENCTL_LED_PATCH_MODE) && readback->mode != wanted->mode) ||
+-        ((expected->fields & UGREENCTL_LED_PATCH_TIMING) &&
+-         (readback->on_ms != wanted->on_ms || readback->off_ms != wanted->off_ms)))
+-        return fail(error, error_size, -EIO, "LED %u target fields did not match after writing; controller may use another protocol", id);
+-    return 0;
++    max_attempts = session->io.write_command == production_write ? 4U : 1U;
++    for (attempt = 0; attempt < max_attempts; ++attempt) {
++        if (attempt > 0) {
++            session->io.pause_ms(session->opaque, 25);
++            result = authorize_write(session, error, error_size);
++            if (result < 0) return result;
++        } else {
++            session->io.pause_ms(session->opaque, 2);
++        }
++        result = session->io.write_command(session->opaque, id, frame);
++        if (result < 0) {
++            if (attempt + 1 < max_attempts &&
++                (result == -EIO || result == -ENXIO || result == -EREMOTEIO || result == -EAGAIN))
++                continue;
++            return fail(error, error_size, result, "LED command write failed; state may have changed: %s", strerror(-result));
++        }
++        session->io.pause_ms(session->opaque, 3);
++        result = session->io.read_ack(session->opaque);
++        if (result < 0) {
++            if (attempt + 1 < max_attempts &&
++                (result == -EIO || result == -ENXIO || result == -EREMOTEIO || result == -EAGAIN))
++                continue;
++            return fail(error, error_size, result, "LED MCU did not acknowledge command; state may have changed");
++        }
++        result = ugreenctl_led_read(session, id, readback, error, error_size);
++        if (result < 0) return result;
++        if (expected_fields_match(expected, readback)) return 0;
++        if (attempt + 1 < max_attempts) {
++            session->io.pause_ms(session->opaque, 10);
++            result = ugreenctl_led_read(session, id, readback, error, error_size);
++            if (result < 0) return result;
++            if (expected_fields_match(expected, readback)) return 0;
++        }
++    }
++    return fail(error, error_size, -EIO, "LED %u target fields did not match after writing; controller may use another protocol", id);
+ }
+ 
+ /* Wire facts from official leds-mcu.ko probe 0x16e9..0x17d6.
+diff --git a/led/led_gt_bus.h b/led/led_gt_bus.h
+index 1292b05..f6108b6 100644
+--- a/led/led_gt_bus.h
++++ b/led/led_gt_bus.h
+@@ -8,6 +8,7 @@
+ #include <string.h>
+ 
+ enum gt_bus_family { GT_BUS_OTHER = -1, GT_BUS_DESIGNWARE, GT_BUS_PIIX4 };
++enum i801_dw_bus_family { I801_DW_BUS_OTHER = -1, I801_DW_BUS_I801, I801_DW_BUS_DESIGNWARE };
+ 
+ static enum gt_bus_family gt_bus_family(const char *name)
+ {
+@@ -16,6 +17,13 @@ static enum gt_bus_family gt_bus_family(const char *name)
+     return GT_BUS_OTHER;
+ }
+ 
++static inline enum i801_dw_bus_family i801_dw_bus_family(const char *name)
++{
++    if (!strncmp(name, "SMBus I801 adapter", 18)) return I801_DW_BUS_I801;
++    if (!strncmp(name, "Synopsys DesignWare", 19)) return I801_DW_BUS_DESIGNWARE;
++    return I801_DW_BUS_OTHER;
++}
++
+ /* Both probe and selection return 1 for verified, 0 for no matching ID,
+  * negative for a hard failure. Keep no-match distinct from -ENODEV caused by
+  * an invalid character device; only the former permits another family. */
