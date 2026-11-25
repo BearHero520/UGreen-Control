@@ -51,15 +51,16 @@ disk_detect_by_hctl() {
 }
 
 disk_upstream_map_tsv() {
-    local binary directory
+    local binary directory default_server=""
+    default_server=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." 2>/dev/null && pwd || true)
     for binary in \
         "${UGREENCTL_BINARY:-}" \
-        "${SERVER_DIR:-}/bin/ugreenctl" \
+        "${SERVER_DIR:-$default_server}/bin/ugreenctl" \
         "${APP_ROOT:-}/target/server/bin/ugreenctl"; do
         [[ -n "$binary" && -x "$binary" ]] || continue
         for directory in \
             "${UGREENCTL_PLUGIN_DIR:-}" \
-            "${SERVER_DIR:-}/lib/ugreenctl/models" \
+            "${SERVER_DIR:-$default_server}/lib/ugreenctl/models" \
             "${APP_ROOT:-}/target/server/lib/ugreenctl/models"; do
             [[ -n "$directory" && -r "$directory" ]] || continue
             if command -v timeout >/dev/null 2>&1; then
@@ -94,10 +95,11 @@ disk_build_mapping() {
             [[ -z "$extra" && "$dev" =~ ^/dev/(sd[a-z]+|nvme[0-9]+n[0-9]+)$ ]] || return 1
             [[ "$interface" =~ ^(sata|nvme|u2)$ ]] || return 1
             [[ "$slot" == - || "$slot" =~ ^(ata|nvme)[1-9][0-9]*$ ]] || return 1
-            [[ "$led" =~ ^disk[1-9][0-9]*$ ]] || continue
+            [[ "$led" == - || "$led" =~ ^disk[1-9][0-9]*$ ]] || return 1
+            [[ "$led" != - || "$slot" != - ]] || continue
             disk_inventory_is_block "$dev" || continue
             printf '%s|%s|%s|%s|%s|%s\n' \
-                "$dev" "${inventory_hctl[$dev]:-}" "$led" "${inventory_serial[$dev]:-}" \
+                "$dev" "${inventory_hctl[$dev]:-}" "${led#-}" "${inventory_serial[$dev]:-}" \
                 "$interface" "${slot#-}"
         done
     } <<< "$rows"
@@ -241,11 +243,23 @@ disk_remove_section() {
 
 # 重写 settings 中的自动 [disk_map]。
 disk_refresh_mapping() {
-    local settings="$1" tmp product profile dev hctl led serial interface slot
+    local settings="$1" tmp product profile rows dev hctl led serial interface slot
     local -a lines=()
+    # Keep the current configuration intact when the upstream scanner cannot
+    # produce a confirmed mapping. This matters during upgrades because the
+    # previous release may already have a usable mapping, while a stricter
+    # upstream topology check can temporarily return no rows.
+    if ! rows=$(disk_build_mapping); then
+        disk_load_auto_mapping_from_settings "$settings" >/dev/null 2>&1 || true
+        return 1
+    fi
     while IFS='|' read -r dev hctl led serial interface slot; do
         [[ -n "$dev" && -n "$led" ]] && lines+=("${dev}=${led}")
-    done < <(disk_build_mapping)
+    done <<< "$rows"
+    if [[ ${#lines[@]} -eq 0 ]]; then
+        disk_load_auto_mapping_from_settings "$settings" >/dev/null 2>&1 || true
+        return 1
+    fi
     product=$(hardware_detected_product_name)
     profile=$(hardware_profile_key)
 
@@ -267,7 +281,16 @@ disk_refresh_mapping() {
     } > "${tmp}.next" || { rm -f "$tmp" "${tmp}.next"; return 1; }
     mv "${tmp}.next" "$settings"
     rm -f "$tmp"
-    disk_load_mapping_from_settings "$settings"
+    DISK_LED_MAP=()
+    DISK_MAP_INTERFACE=()
+    DISK_MAP_SLOT=()
+    while IFS='|' read -r dev hctl led serial interface slot; do
+        [[ -n "$dev" ]] || continue
+        [[ -z "$led" ]] || DISK_LED_MAP["$dev"]="$led"
+        [[ -z "$interface" ]] || DISK_MAP_INTERFACE["$dev"]="$interface"
+        [[ -z "$slot" ]] || DISK_MAP_SLOT["$dev"]="$slot"
+    done <<< "$rows"
+    [[ ${#DISK_LED_MAP[@]} -gt 0 ]]
 }
 
 disk_available_slots() {

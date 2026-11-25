@@ -338,6 +338,7 @@ static const struct single_sata_profile *single_sata_profile_find(const char *ro
         {"DXP4800 Plus", NULL, 0x1b21, 0x1164, 4, "firmware-asm1164-topology"},
         {"DXP4800 Pro", NULL, 0x1b21, 0x1164, 4, "firmware-asm1164-topology"},
         {"DXP2800", "EM_DXP2800_V1.0.24", 0x8086, 0x54d3, 2, "firmware-intel-ahci-topology"},
+        {"DXP2800", "EM_DXP2800_V1.0.26", 0x8086, 0x54d3, 2, "firmware-intel-ahci-topology"},
         {"DXP2800", "DXP2800 V1.2 251215", 0x8086, 0x54d3, 2, "firmware-intel-ahci-topology"}
     };
     size_t i;
@@ -1058,6 +1059,48 @@ static unsigned int firmware_arm_ata_index(const char *root, const char *model,
            pci_ports == (four ? 3U : 0U) ? result : 0;
 }
 
+static unsigned int eight_bay_bridge_role(const char *root, const char *resolved,
+                                          unsigned int *family, unsigned int *bridge_device)
+{
+    static const char *const root_ports[2] = {
+        "/devices/pci0000:00/0000:00:1d.0",
+        "/devices/pci0000:00/0000:00:1d.2"
+    };
+    const char *relative;
+    unsigned int i;
+    *family = 0;
+    *bridge_device = 0;
+    if (bridge_matches(resolved, "8086:51b0")) { *family = 1; *bridge_device = 0x51b0; return 1; }
+    if (bridge_matches(resolved, "8086:51b2")) { *family = 1; *bridge_device = 0x51b2; return 2; }
+    if (bridge_matches(resolved, "8086:51bc")) { *family = 2; *bridge_device = 0x51bc; return 1; }
+    if (bridge_matches(resolved, "8086:51be")) { *family = 2; *bridge_device = 0x51be; return 2; }
+    if (strncmp(resolved, root, strlen(root)) != 0)
+        return 0;
+    relative = resolved + strlen(root);
+    for (i = 0; i < 2; ++i) {
+        size_t prefix_len = strlen(root_ports[i]);
+        char bridge_path[PATH_MAX], attr_path[PATH_MAX];
+        unsigned int vendor = 0, device = 0, class_code = 0;
+        if (strncmp(relative, root_ports[i], prefix_len) != 0 || relative[prefix_len] != '/')
+            continue;
+        if (snprintf(bridge_path, sizeof(bridge_path), "%s%s", root, root_ports[i]) >= (int)sizeof(bridge_path))
+            return 0;
+        snprintf(attr_path, sizeof(attr_path), "%s/vendor", bridge_path);
+        if (read_hex(attr_path, &vendor) || vendor != 0x8086)
+            return 0;
+        snprintf(attr_path, sizeof(attr_path), "%s/class", bridge_path);
+        if (read_hex(attr_path, &class_code) || (class_code >> 8) != 0x0604)
+            return 0;
+        snprintf(attr_path, sizeof(attr_path), "%s/device", bridge_path);
+        if (read_hex(attr_path, &device) || !device)
+            return 0;
+        *family = 3;
+        *bridge_device = device;
+        return i + 1;
+    }
+    return 0;
+}
+
 /* Convert the official global-ATA table only after recognizing the complete
  * factory controller roles and all empty ports. Endpoint bus numbers and
  * global ATA/host counters do not participate in this conversion. */
@@ -1065,7 +1108,10 @@ static unsigned int firmware_ata_index(const char *root,
                                        const struct ugreenctl_disk_firmware_layout *layout,
                                        const struct ugreenctl_disk *disk)
 {
-    struct controller { char pci[16], path[PATH_MAX]; unsigned int vendor, device, ports, bridge; } controllers[4];
+    struct controller {
+        char pci[16], path[PATH_MAX];
+        unsigned int vendor, device, ports, bridge, bridge_family, bridge_device;
+    } controllers[4];
     char directory[PATH_MAX], path[PATH_MAX];
     DIR *dir;
     struct dirent *entry;
@@ -1115,8 +1161,9 @@ static unsigned int firmware_ata_index(const char *root,
             if (controller_ports(root, controller->pci, n)) { controller->ports = n; break; }
         if (!controller->ports) { valid = false; break; }
         total_ports += controller->ports;
-        if (bridge_matches(controller->path, "8086:51bc")) controller->bridge = 1;
-        if (bridge_matches(controller->path, "8086:51be")) controller->bridge = 2;
+        controller->bridge = eight_bay_bridge_role(root, controller->path,
+                                                   &controller->bridge_family,
+                                                   &controller->bridge_device);
     }
     closedir(dir);
     if (!valid || total_ports != expected)
@@ -1142,12 +1189,18 @@ static unsigned int firmware_ata_index(const char *root,
             recognized = true;
         if (count == 2 && (expected == 4 || expected == 6)) {
             const struct controller *other = &controllers[1 - i];
-            if (c->vendor == 0x8086 && c->ports == 2 && other->vendor == 0x1b21 &&
+            bool c_two_port_pair = c->ports == 2 &&
+                (c->vendor == 0x8086 ||
+                 (expected == 6 && c->vendor == 0x1b21 && (c->device == 0x0612 || c->device == 0x1062)));
+            bool other_two_port_pair = other->ports == 2 &&
+                (other->vendor == 0x8086 ||
+                 (expected == 6 && other->vendor == 0x1b21 && (other->device == 0x0612 || other->device == 0x1062)));
+            if (c_two_port_pair && other->vendor == 0x1b21 &&
                 other->ports == expected - 2 &&
                 ((expected == 4 && (other->device == 0x0612 || other->device == 0x1062)) ||
                  (expected == 6 && other->device == 0x1164)))
                 recognized = true;
-            if (c->vendor == 0x1b21 && other->vendor == 0x8086 && other->ports == 2 &&
+            if (c->vendor == 0x1b21 && other_two_port_pair &&
                 c->ports == expected - 2 &&
                 ((expected == 4 && (c->device == 0x0612 || c->device == 0x1062)) ||
                  (expected == 6 && c->device == 0x1164))) {
@@ -1158,7 +1211,9 @@ static unsigned int firmware_ata_index(const char *root,
             const struct controller *other = &controllers[1 - i];
             if (c->vendor == 0x1b21 && c->device == 0x1164 && c->ports == 4 && c->bridge &&
                 other->vendor == 0x1b21 && other->device == 0x1164 && other->ports == 4 &&
-                other->bridge && other->bridge != c->bridge) {
+                other->bridge && other->bridge != c->bridge &&
+                c->bridge_family == other->bridge_family &&
+                c->bridge_device != other->bridge_device) {
                 recognized = true; base = c->bridge == 1 ? 0 : 4;
             }
         }

@@ -121,13 +121,13 @@ DAEMON_RUN=true
 MAPPING_READY=false
 
 ensure_mapping() {
-    local mapping_mode profile product mapping_summary="" dev
+    local mapping_mode profile product mapping_summary="" dev mapping_rc=0
     mapping_mode=$(disk_mapping_mode "$SETTINGS_FILE")
     if [[ "$mapping_mode" == "position" || "$mapping_mode" == "disk" ]]; then
         DISK_LED_MAP=()
         disk_load_mapping_from_settings "$SETTINGS_FILE" 2>/dev/null || true
     else
-        disk_refresh_mapping "$SETTINGS_FILE"
+        disk_refresh_mapping "$SETTINGS_FILE" || mapping_rc=$?
     fi
     rm -f "${DISK_IO_CACHE_DIR}/"*.io "${DISK_IO_CACHE_DIR}/"*.power 2>/dev/null
     MAPPING_READY=true
@@ -139,6 +139,7 @@ ensure_mapping() {
     done < <(sorted_disk_mapping)
     ugreen_log_info "mapping.ready" "硬盘灯映射已生成" "mode=$mapping_mode" \
         "count=${#DISK_LED_MAP[@]}" "product=${product:-unknown}" "profile=$profile" "mapping=$mapping_summary"
+    return "$mapping_rc"
 }
 
 reload_runtime() {

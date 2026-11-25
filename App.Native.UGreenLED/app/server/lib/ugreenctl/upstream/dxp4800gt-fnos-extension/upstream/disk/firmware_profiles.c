@@ -417,6 +417,7 @@ static const struct ugreenctl_disk_firmware_layout layouts[] = {
     {"DXP480T Plus", "rev1", rows_26_0, 4},
     {"iDX6011", "rev1", rows_27_0, 9},
     {"iDX6012", "rev1", rows_28_0, 9},
+    {"iDX6011/iDX6012 OEM V3.0", "rev1", rows_28_0, 9},
     {"iDX6011 Pro", "rev1", rows_29_0, 9},
     {"iDX6021", "rev1", rows_30_0, 9},
     {"DH2300", "rev1", rows_32_0, 2},

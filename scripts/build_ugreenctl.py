@@ -110,9 +110,19 @@ def install_release(manifest, files, lock, server=SERVER):
         if key in lock:
             record[key] = lock[key]
     payloads = {}
+    existing_cli = server / 'bin/ugreen_leds_cli'
+    compat_wrapper = b''
+    if existing_cli.is_file():
+        candidate = existing_cli.read_bytes().replace(b'\r\n', b'\n')
+        if candidate.startswith(b'#!/bin/bash\n# Compatibility entry point'):
+            compat_wrapper = candidate
     for program in PROGRAMS:
         payloads[f'bin/{program}'] = files[f'usr/local/bin/{program}']
         record['files'][program] = digest(payloads[f'bin/{program}'])
+    if compat_wrapper:
+        payloads['bin/ugreen_leds_cli.compat'] = payloads['bin/ugreen_leds_cli']
+        payloads['bin/ugreen_leds_cli'] = compat_wrapper
+        record['files']['ugreen_leds_cli'] = digest(compat_wrapper)
     for model in MODELS:
         name = f'models/{model}.so'
         payloads[f'lib/ugreenctl/{name}'] = files[f'usr/local/lib/ugreenctl/{name}']

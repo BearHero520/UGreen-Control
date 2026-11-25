@@ -1119,19 +1119,24 @@ case "$API_PATH" in
             echo '{"ok":false,"error":"failed to reset mapping mode"}'
         else
             remap_rc=0
-            remap_output=""
-            if [[ -f "$PID_FILE" ]] && kill -0 "$(cat "$PID_FILE")" 2>/dev/null; then
-                kill -HUP "$(cat "$PID_FILE")" 2>/dev/null || remap_rc=$?
-                sleep 0.2
+            remap_err_file="${RUNTIME_DIR}/remap-err.$$"
+            if disk_refresh_mapping "$SETTINGS_FILE" >"$remap_err_file" 2>&1; then
+                remap_output=""
             else
-                if remap_output=$(bash "${SERVER_DIR}/led_daemon.sh" remap 2>&1); then :; else remap_rc=$?; fi
+                remap_rc=$?
+                remap_output=$(cat "$remap_err_file" 2>/dev/null || true)
             fi
-            rm -f "$DISK_STATUS_FILE"
-            if [[ "$remap_rc" -eq 0 ]] && disk_load_mapping_from_settings "$SETTINGS_FILE" 2>/dev/null; then
+            rm -f "$remap_err_file" "$DISK_STATUS_FILE"
+            if [[ "$remap_rc" -eq 0 && ${#DISK_LED_MAP[@]} -gt 0 ]]; then
+                led_clear_cache 2>/dev/null || true
+                if [[ -f "$PID_FILE" ]] && kill -0 "$(cat "$PID_FILE")" 2>/dev/null; then
+                    kill -HUP "$(cat "$PID_FILE")" 2>/dev/null || true
+                fi
                 n=${#DISK_LED_MAP[@]}
                 ugreen_log_info "mapping.remapped" "硬盘灯映射已重新检测" "disk_count=$n"
                 printf '{"ok":true,"message":"已重新检测 %s 块硬盘","disk_count":%s}' "$n" "$n"
             else
+                [[ "$remap_rc" -ne 0 ]] || remap_rc=1
                 ugreen_log_error "mapping.remap_failed" "硬盘灯映射重新检测失败" \
                     "exit_code=$remap_rc" "output=$remap_output"
                 echo '{"ok":false,"error":"重新检测硬盘映射失败，请查看诊断日志"}'

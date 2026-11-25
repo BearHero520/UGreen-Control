@@ -28,6 +28,10 @@ def main():
         ('Default string', 'unrelated', 3, 'no LED protocol profile'),
         ('iDX6012-other', 'iDX6011_iDX6012 V3.0 241112', 3, 'no LED protocol profile'),
         ('DXP2800', 'EM_DXP2800_V1.0.26', 5, 'i2c-dev is unavailable'),
+        ('DX4600', '', 5, 'i2c-dev is unavailable'),
+        ('DX4600 Pro', '', 5, 'i2c-dev is unavailable'),
+        ('DXP4800S', '', 5, 'i2c-dev is unavailable'),
+        ('DXP8800 Pro', 'RP0R0160', 5, 'i2c-dev is unavailable'),
     ]
     for product, version, code, marker in cases:
         env = dict(os.environ, UGREENCTL_TEST_VM_DMI=product, UGREENCTL_TEST_VM_DMI_VERSION=version)

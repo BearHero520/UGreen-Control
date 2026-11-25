@@ -57,10 +57,10 @@ HCTL 或已安装盘的顺序分配物理槽。串号使用有效 sysfs serial �
 | 转换 | 必须通过的运行时条件 |
 | --- | --- |
 | Plus/Pro 四盘 | 精确机型；唯一 `1b21:1164` / AHCI；恰好局部 1–4 四端口；无额外 SATA/ATA 父节点 |
-| DXP2800 两个精确修订 | 精确机型和真实 `product_version=EM_DXP2800_V1.0.24` 或 `DXP2800 V1.2 251215`；唯一 `8086:54d3` / AHCI；恰好两端口 |
+| DXP2800 三个精确修订 | 精确机型和真实 `product_version=EM_DXP2800_V1.0.24`、`EM_DXP2800_V1.0.26` 或 `DXP2800 V1.2 251215`；唯一 `8086:54d3` / AHCI；恰好两端口 |
 | 老四盘控制器角色 | 精确原厂机型表；完整 Intel 两口 + ASMedia `0612/1062` 两口，或唯一 `1164` 四口；Intel 对应原厂 ATA1–2、ASMedia 对应 ATA3–4 |
-| 六盘控制器角色 | 精确原厂表；完整 Intel 两口 + ASMedia `1164` 四口，或唯一 `1166` 六口；再应用该机型原厂槽序 |
-| 八盘控制器角色 | 两个完整 `1164` 四口；上游 Intel bridge ID 分别 `8086:51bc` 和 `8086:51be`；相同/缺少桥角色拒绝 |
+| 六盘控制器角色 | 精确原厂表（含 `iDX6011/iDX6012 OEM V3.0`）；完整两口（Intel 或 ASMedia `0612/1062`）+ ASMedia `1164` 四口，或唯一 `1166` 六口；再应用该机型原厂槽序 |
+| 八盘控制器角色 | 两个完整 `1164` 四口；上游 Intel 根端口为 `00:1d.0`/`00:1d.2`（`8086:51b0` 与 `8086:51b2`，DXP8800 Pro 实机确认）或 `8086:51bc` 与 `8086:51be`；混用、相同或缺少桥角色均拒绝 |
 | GT SATA | 原厂明确的 root PCI path 与完整局部端口；DXP2800 GT 两版 SATA 顺序相反，尚无精确 BIOS 与物理盘位配对证据，自动 SATA 映射保持 unknown；不再使用 `LL_`/else 兜底，现有管理员显式校准保留 |
 | NVMe `pcie_bridge_id` | 遍历 canonical PCI 祖先，精确 vendor/device 且 class 为 PCI bridge；不同物理控制器落同一槽则全部冲突失效，同控制器 namespace 先归并 |
 | NVMe `pcie_address` | 原厂 root port 固定；仅放宽直接 endpoint 的下游 BDF 编号，不把桥后其他任意设备当成同一连接器 |
