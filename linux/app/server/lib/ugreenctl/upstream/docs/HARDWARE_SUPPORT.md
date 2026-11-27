@@ -27,6 +27,13 @@ Supported and explicitly guarded reverse-engineered plugins may provide write
 commands. A placeholder must never map plausible-looking registers or reuse a
 controller map from another model.
 
+## DXP4800 GT
+
+For the distinct AMD DXP4800 GT, see [the firmware audit](DXP4800GT_HARDWARE_AUDIT.zh-CN.md).
+Its stock IT55xx EC fan and AC-recovery paths are not covered by the IT8613 plugins;
+an experimental GT fan/power plugin follows the stock EC protocol. Stock AC-policy reads are cached and
+the accepted `last` command is a no-op, so neither is sufficient for verified writes.
+
 ## DXP4800 Plus / DXP4800 Pro
 
 The dxp4800plus plugin supports DMI product names DXP4800 Plus and DXP4800
@@ -210,4 +217,28 @@ operation, not a BIOS or LED control operation.
 
 ## DXP6800 Plus
 
-Exact DMI `DXP6800 Plus` has an independent firmware-reversed plugin from UGOS Pro 1.20.0.0142. It provides CPU PWM, paired system PWM, three tachometers and AC recovery, with hwmon priority, guarded direct fallback and `--force --apply`. Custom software curves and `stock-6800plus` are supported. At the user's request, this compatibility preset adopts DXP6800 Pro parameters; it is not a recovered Plus factory curve. The user reports physical validation, but its detailed scope is unavailable. WOL remains unverified. See [firmware evidence](DXP6800_1.20_FIRMWARE_CHECK.zh-CN.md).
+Exact DMI `DXP6800 Plus` has an independent firmware-reversed plugin from UGOS Pro 1.20.0.0142. It provides CPU PWM, paired system PWM, three tachometers and AC recovery, with hwmon priority, guarded direct fallback and `--force --apply`. Custom software curves and `stock-6800plus` are supported. At the user's request, this compatibility preset adopts DXP6800 Pro parameters; it is not a recovered Plus factory curve. The user reports physical validation, but its detailed scope is unavailable. WOL and RTC are exposed as firmware-reversed: the 1.20 hwmonitor-480t route confirms eth0/eth1 Magic Packet policy, with the shared physical-PCI renamed-interface resolver on fnOS and other Linux distributions. Actual wake after shutdown remains unvalidated. See [firmware evidence](DXP6800_1.20_FIRMWARE_CHECK.zh-CN.md).
+
+
+## 2026-10-27 WOL / RTC 独立核对
+
+25 款的官方调用链和条件接入见 [WOL / RTC 核对表](ALL_MODELS_WAKE_EVIDENCE.zh-CN.md)。RTC 使用独立精确机型表，不再借用 WOL 标记；15 款 WOL 自动网口映射仍未确认，必须显式指定物理网卡。全部机型实际关机唤醒、逐 BIOS 行为和持久性仍待验证。此项不改变灯光/盘位未完成清单。
+
+## DXP6800
+
+Exact DMI `DXP6800` has an independent firmware-reversed IT8613 plugin for CPU PWM, paired system PWM, three tachometers and AC recovery. hwmon takes priority; guarded direct fallback is allowed only on ENODEV. Writes require `--force --apply`, PWM 40..255. Custom software curves and the user-selected `stock-6800` Pro-parameter compatibility preset are available; the original factory curve and physical validation remain unknown. See [evidence](DXP6800_SUPPORT.zh-CN.md).
+
+## DXP8800 Pro
+
+The exact `DXP8800 Pro` DMI uses `dxp8800pro.so` (reverse-engineered).
+CPU PWM and the paired system PWM, three RPM readings, AC recovery
+(on/off/restore), and guarded software temperature curves are implemented.
+The independent register evidence is from UGOS 1.20.0.0142;
+`stock-8800pro` uses the recovered UGOS 1.17 `dxp8800.conf` defaults.
+All existing owner, locking, chip identity, PWM 40..255 and readback guards apply.
+Other 8800 variants are not aliases. Physical validation remains pending.
+See [DXP8800 Pro evidence and audit](DXP8800_PRO_AUDIT.zh-CN.md).
+
+DXP4800 GT follow-up: an experimental EC plugin now exists (`ec/it55_dxp4800gt.c`).
+It supports manual PWM, stock-4800gt eight-point software control, and startup on/off with unknown persistent readback.
+The user authorized a GT-only exact-DMI plus stable-EC-version identity exception on 2026-11-14; the numeric chip ID remains unknown. Mock and QEMU tests are not physical validation. See the audit follow-up section.

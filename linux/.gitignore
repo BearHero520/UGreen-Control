@@ -8,3 +8,4 @@ __pycache__/
 /.work*/
 *.trace
 !/app/server/bin/ugreen_leds_cli
+!/app/server/bin/ugreen_leds_cli.compat

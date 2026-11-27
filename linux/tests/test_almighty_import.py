@@ -50,11 +50,25 @@ class ImportTests(unittest.TestCase):
         (server / 'bin/ugreen_leds_cli').write_bytes(b'old LED')
         build.install_release(manifest, files, lock, server)
         receipt = json.loads((server / 'lib/ugreenctl/build-info.json').read_text())
-        self.assertEqual(len(receipt['files']), 13)
+        self.assertEqual(len(receipt['files']), len(build.PROGRAMS) + len(build.MODELS))
         self.assertEqual(receipt['release_tag'], 'preview')
         for p in build.PROGRAMS:
             self.assertEqual((server / 'bin' / p).read_bytes(), self.files[f'usr/local/bin/{p}'])
         self.assertEqual((server / 'lib/ugreenctl/upstream/LICENSE').read_bytes(), b'notice')
+
+    def test_import_preserves_compatibility_wrapper_and_records_compat_elf(self):
+        lock = self.bundle()
+        manifest, files = build.validate_release(self.root, lock)
+        server = self.root / 'server'
+        (server / 'bin').mkdir(parents=True)
+        wrapper = b'#!/bin/bash\n# Compatibility entry point\nexec "$0.compat" "$@"\n'
+        (server / 'bin/ugreen_leds_cli').write_bytes(wrapper)
+        build.install_release(manifest, files, lock, server)
+        receipt = json.loads((server / 'lib/ugreenctl/build-info.json').read_text())
+        self.assertEqual((server / 'bin/ugreen_leds_cli').read_bytes(), wrapper)
+        self.assertEqual((server / 'bin/ugreen_leds_cli.compat').read_bytes(), self.files['usr/local/bin/ugreen_leds_cli'])
+        self.assertEqual(receipt['files']['ugreen_leds_cli'], build.digest(wrapper))
+        self.assertEqual(receipt['files']['ugreen_leds_cli.compat'], build.digest(self.files['usr/local/bin/ugreen_leds_cli']))
 
     def test_branch_download_pins_commit_and_preserves_binary_bytes(self):
         lock = self.bundle()
@@ -67,6 +81,20 @@ class ImportTests(unittest.TestCase):
         for call in fetch.call_args_list:
             self.assertIn('/' + 'b' * 40 + '/artifacts/snapshot/', call.args[0])
         self.assertEqual((self.root / lock['archive']).read_bytes(), expected)
+
+    def test_local_application_artifact_uses_application_repository(self):
+        lock = self.bundle()
+        lock.update(source_type='application-local-artifact', artifact_path='release')
+        directory = self.root / 'release'; directory.mkdir()
+        for name in (lock['archive'], lock['manifest'], 'SHA256SUMS'):
+            (directory / name).write_bytes((self.root / name).read_bytes())
+        destination = self.root / 'download'; destination.mkdir()
+        with patch.object(build, 'REPO_ROOT', self.root):
+            build.download_assets(lock, destination)
+        self.assertEqual((destination / lock['archive']).read_bytes(), (directory / lock['archive']).read_bytes())
+        lock['artifact_path'] = '../escape'
+        with patch.object(build, 'REPO_ROOT', self.root), self.assertRaisesRegex(ValueError, 'escapes'):
+            build.download_assets(lock, destination)
 
     def test_wrong_architecture(self):
         name = 'usr/local/bin/ugreen_leds_cli'

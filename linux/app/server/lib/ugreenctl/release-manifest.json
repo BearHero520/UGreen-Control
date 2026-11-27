@@ -363,20 +363,20 @@
     {
       "mode": "0755",
       "path": "usr/local/bin/ugreen_leds_cli",
-      "sha256": "718f69d9cd589f79d99c37b01f43edcdd4fb24ff47b333f7a0bfb872b5ba5466",
-      "size": 618680
+      "sha256": "797cc7fdb2994eabdd78932d2e04434013cbf3a43a43475a16210105e0795b5e",
+      "size": 640792
     },
     {
       "mode": "0755",
       "path": "usr/local/bin/ugreenctl",
-      "sha256": "07a0b1a20f47cac6d1427dccb1fa881f1692a6a5bf2891c63b20f47cf4e09ae9",
-      "size": 734928
+      "sha256": "cc4c7d15f5b392978dabce81ce2130875f268727407863b41cdf1c9fdf8f55c9",
+      "size": 817576
     },
     {
       "mode": "0755",
       "path": "usr/local/bin/ugreenctl-fand",
-      "sha256": "ee17d17b1c80a29b442d369ec72e08ec43e2edcd64f882359f9362a54ed01102",
-      "size": 90416
+      "sha256": "5e8a2e34c918a62a40625b6bdf9765d6ed9daadfc31faf8874c0c38161aa32f7",
+      "size": 120176
     },
     {
       "mode": "0755",
@@ -393,14 +393,20 @@
     {
       "mode": "0755",
       "path": "usr/local/lib/ugreenctl/models/dxp2800.so",
-      "sha256": "3bddd1fb642e9d3a73db6b563b750ff8e954f9a40f0ec8eb1ff751a034296836",
-      "size": 6664
+      "sha256": "82d981601b1fd89e86580429a663d298f42e86d1fc47369bbfcf93dc645c4cb4",
+      "size": 100008
     },
     {
       "mode": "0755",
       "path": "usr/local/lib/ugreenctl/models/dxp4800.so",
       "sha256": "4d261145b97ab91ab745526f99fe8015e5a3736ca075de62990a37c242a8873c",
       "size": 102104
+    },
+    {
+      "mode": "0755",
+      "path": "usr/local/lib/ugreenctl/models/dxp4800gt.so",
+      "sha256": "4c917a1c1e866c988e12d865cb21469e740182606edb9e0cbe1eece6e1f0d194",
+      "size": 69688
     },
     {
       "mode": "0755",
@@ -422,6 +428,12 @@
     },
     {
       "mode": "0755",
+      "path": "usr/local/lib/ugreenctl/models/dxp6800.so",
+      "sha256": "bb2d604e4d9961ad9fcc64e5603f55754d975c86a16f95e5e4f98e0ea6d08ebc",
+      "size": 75520
+    },
+    {
+      "mode": "0755",
       "path": "usr/local/lib/ugreenctl/models/dxp6800plus.so",
       "sha256": "d86635aff5b1a38ca79c63f64de0a2607609bdfc181945cf46c451a174e0cf62",
       "size": 75648
@@ -437,6 +449,18 @@
       "path": "usr/local/lib/ugreenctl/models/dxp8800plus.so",
       "sha256": "cd230c6da5a103881b30cc2bf4669176a78b39f858a868c25cfdbf641b0bf6e5",
       "size": 6672
+    },
+    {
+      "mode": "0755",
+      "path": "usr/local/lib/ugreenctl/models/dxp8800pro.so",
+      "sha256": "98d13b51995c0bf7e14f77da2f0fa6f3623ace94f09e6e3073283b282f6b63bf",
+      "size": 75608
+    },
+    {
+      "mode": "0755",
+      "path": "usr/local/lib/ugreenctl/models/idx6012.so",
+      "sha256": "97e25b1f26b020a5058ff45b81263bd9ae608044d6dfde42771a73921d15276f",
+      "size": 99976
     },
     {
       "mode": "0644",
@@ -548,9 +572,21 @@
     },
     {
       "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/docs/DXP2800_EM26_SUPPORT.md",
+      "sha256": "1716d2f9c42a4531899781590fa75149ae2c3c99e34cc9179614a8cce997a303",
+      "size": 5366
+    },
+    {
+      "mode": "0644",
       "path": "usr/local/share/doc/ugreenctl/docs/DXP2800_GT_LED_REVERSE.zh-CN.md",
       "sha256": "9f595565d9eb09c59e722c092247c8b2cc91851dab695e6a365021ba6348ab5f",
       "size": 14008
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/docs/DXP4800GT_HARDWARE_AUDIT.zh-CN.md",
+      "sha256": "79b37165667485c98b9ae00528fd9a442cb8a8e2d6977c6d0784aaa1ddc6fa7c",
+      "size": 10363
     },
     {
       "mode": "0644",
@@ -590,9 +626,21 @@
     },
     {
       "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/docs/DXP6800_SUPPORT.zh-CN.md",
+      "sha256": "8cc2853fdf0e297ec6fa5d2ca17b758b120e4bd1d471b2cb7bdf7b6f2ce893fb",
+      "size": 3258
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/docs/DXP8800_PRO_AUDIT.zh-CN.md",
+      "sha256": "10d09a45861db03c4afc0b8765dd26794e038b5d0401d4aa9bef3bc532b511d1",
+      "size": 5760
+    },
+    {
+      "mode": "0644",
       "path": "usr/local/share/doc/ugreenctl/docs/FAN_CURVE.md",
-      "sha256": "d3b46f933eb3c5908e44cf73ebc1011f5651eefc74fe239d56948a69e2ffcb35",
-      "size": 7505
+      "sha256": "7cd944598b3bf248c625dd4351d59c77e772a473aef5a6a41356649fbb77c73f",
+      "size": 11518
     },
     {
       "mode": "0644",
@@ -603,8 +651,14 @@
     {
       "mode": "0644",
       "path": "usr/local/share/doc/ugreenctl/docs/HARDWARE_SUPPORT.md",
-      "sha256": "a6aec4e8aed7760e4bc3dc1911bb7892a7c9e214f3ab001428a84223554ab31d",
-      "size": 11646
+      "sha256": "04402cbaedfce115235dd3dabd79d303d7c3e4f37be37fb7f3cd2a70adef89aa",
+      "size": 14403
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/docs/IDX6012_EC_INTAKE.zh-CN.md",
+      "sha256": "b9d0374c7500e1c9a5441b2788096e9f47ff92c7536b01be5e846a5487833f46",
+      "size": 12178
     },
     {
       "mode": "0644",
@@ -649,6 +703,2256 @@
       "size": 3666
     },
     {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/application/App.Native.UGreenLED/app/server/vendor/ugreen_leds_controller/patches/dxp2800-em26.patch",
+      "sha256": "7c923f16e72f1095c21382b804467a590cf20cc9984b0778adb562fc75849ee4",
+      "size": 642
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/application/docs/DXP2800_EM26_SUPPORT.md",
+      "sha256": "1716d2f9c42a4531899781590fa75149ae2c3c99e34cc9179614a8cce997a303",
+      "size": 5366
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/application/scripts/build_led_compat.py",
+      "sha256": "2bcb68270bd7302022e5e08137f5dd29d758c2a1cf5867439b7665b25265594a",
+      "size": 4355
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/application/scripts/prepare_dxp2800.py",
+      "sha256": "434a3364ce7410b7c42c495d9abb25048a51f389913b44c98601011727899fd7",
+      "size": 5747
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/application/tests/run_dxp2800_runtime.py",
+      "sha256": "ccfdbf168f06cfd8de3e8f62a34d2a239d726979b0fb589e4188bc4c1b68ee64",
+      "size": 2595
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/application/tests/test_dxp2800_led.c",
+      "sha256": "c877253e8514cc1d787936d1544d297fc96ff48179dc6c93aca2914385d208bb",
+      "size": 3950
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/application/tests/test_dxp2800_runtime.c",
+      "sha256": "a55cf79e305c907584e299685253b3e57497927617b38011bf693749e4d94968",
+      "size": 4219
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/CMakeLists.txt",
+      "sha256": "591709839ee9a8e41b7c1f3fb89e9aedddf06d74b582068db883e491faf94caa",
+      "size": 18647
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/core/fan_daemon.c",
+      "sha256": "9c7956201560806713d1dbfe8cdcec656d2144454ec2e8d12fd807f8dd8f79b0",
+      "size": 16238
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/core/hardware_cli.c",
+      "sha256": "1fbe0e7d982c1b74119fe93ea31c8154c9233d67de3939755aa78c53668b1a08",
+      "size": 58367
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/core/hardware_cli.h",
+      "sha256": "796e8d85655000a3a8c17dda073f585cb202432b8a386a68bae56dccef54f86e",
+      "size": 1992
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/core/identity.c",
+      "sha256": "443c12f5b4d45b4ba257a3522a0b4714dd558b24c50420ab696f7b57cec410d5",
+      "size": 6337
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/core/identity.h",
+      "sha256": "fd0d59a63ee133e8da1ed86568b75b13b9fb9997daa2a69343d36091dc2de8cb",
+      "size": 1187
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/core/led_compat_main.c",
+      "sha256": "825237a8aa848cc2bbb8f11f89994accf9f44692b06b94e7262aa83ede38d065",
+      "size": 116
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/core/led_daemon_main.c",
+      "sha256": "e9add637221c5613573ccb61d85ad4d3979e46723e8a266118d065f4778dd33f",
+      "size": 2348
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/core/loader.c",
+      "sha256": "f17141b1bfd9ef3da69173e5fae7bf8723bf077016dfe9c05908c10e5a2a4270",
+      "size": 6299
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/core/loader.h",
+      "sha256": "f73eb103132a4b8fff2d5c175ec9ad64f391a0ce8fc8a65c5b9ddcf35abfd5dc",
+      "size": 963
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/core/main.c",
+      "sha256": "2c364863a812f7c1844f1dbc4163eef4f6657ae35865594243a578f68b6dde9b",
+      "size": 21905
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/core/wake_cli.c",
+      "sha256": "1970888aada0a5b38b952256736cf9460896b6278f4b901e64c12e10691d9d6a",
+      "size": 8615
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/core/wake_cli.h",
+      "sha256": "0a3abc62659f63a696898a3940ae480d9bafa14581a9943c2602db3265663b22",
+      "size": 188
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/disk/disk.c",
+      "sha256": "5d29b9786b5d3555574d49d7ba177a8d28e3fe215f056ad2e92201ff7da3f314",
+      "size": 77045
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/disk/disk.h",
+      "sha256": "49d357f0c60a0b9113f7618aeacf9dcd19c6ef811c82fc11ab4c2d7d145128f5",
+      "size": 2430
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/disk/firmware_profiles.c",
+      "sha256": "6a1c2bb1842f31c15c83e1f6ac33ca0b5d2f15dcb166932bb8a143c751668399",
+      "size": 19335
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/disk/firmware_profiles.h",
+      "sha256": "0be8210c779e8e5d650d1b536b5577435fe09bd7ab46b5810f505321961c35f1",
+      "size": 823
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/docs/DXP2800_EM26_SUPPORT.md",
+      "sha256": "87a039f5dfef80b84f8381dbda274327bef8ad4af575badeb5c3bd503640c290",
+      "size": 4281
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/ec/ec.c",
+      "sha256": "811d4d762f5511882bd3421824a32c2d960b9404a8de10307156a20c9f0c59be",
+      "size": 352
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/ec/ec.h",
+      "sha256": "f3b3b4505ef59a5b336df7dea9736b16d1dff3dd832a439367d4df5adba683ec",
+      "size": 128
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/fan/it8613_direct.c",
+      "sha256": "41fe99d15b4a9aa5f90113bd40e4bddf60ce5a5c09ab5dbb3ecf33c0f766518d",
+      "size": 5969
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/fan/it8613_direct.h",
+      "sha256": "ff5d58c9cc6c4f4eefa7c2dece07a9399cae892ee8e6783725834c8c5a6fa97d",
+      "size": 1192
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/fan/it8613_dx4600.c",
+      "sha256": "714055011a935c287aa836e0af349f3b7294d1d3f416182e7f6cc967d3d149a0",
+      "size": 1603
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/fan/it8613_dx4600.h",
+      "sha256": "b6fcc4d7092575fd1d02b178f09988e5db0ace24ee3ba3672c4641f7478688c6",
+      "size": 409
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/fan/it8613_dxp2800.c",
+      "sha256": "510b715b587d01a2cbe41235000720fec9fdea4b95597b447c522f008d38d1fa",
+      "size": 2393
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/fan/it8613_dxp2800.h",
+      "sha256": "d2b1b71d706292854e6635fde7bd78505b0d86b23c716ce96717ca05cbc42fc1",
+      "size": 520
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/fan/it8613_dxp4800.c",
+      "sha256": "fc4043eb01e07dccf38e097c97364acd5d46b618c0d8358902b25e386ba7f64a",
+      "size": 1530
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/fan/it8613_dxp4800.h",
+      "sha256": "c62d04e303724c7afa1c9dbb8ba9a0775ce7325cc2a3e1521d8c7d30251922f7",
+      "size": 415
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/fan/it8613_dxp4800s.c",
+      "sha256": "b56aec50d354bda172f255d62af2459b0ded2963ad8f90a1c9d947127e5ed238",
+      "size": 1584
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/fan/it8613_dxp4800s.h",
+      "sha256": "2e10bf015ccbd2d2ff09623eb0171d8031df98d2fa8ff18bd163dc8fc5e3d8f6",
+      "size": 435
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/fan/it8613_dxp480t.c",
+      "sha256": "e7bfd6c97122d855ea2e32cecf6620199113df7d23efd698e0656d05839c186a",
+      "size": 3347
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/fan/it8613_dxp480t.h",
+      "sha256": "85ea7c08feff331048d1c64b8da56e7e444936e5aea06633c309451a997fed51",
+      "size": 461
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/fan/it8613_dxp6800.c",
+      "sha256": "0b3201d7fb3a6b98bcfb8c27c3d4ab28957ad8b5bc85c47b158d6431504b0360",
+      "size": 2825
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/fan/it8613_dxp6800.h",
+      "sha256": "3425e168792d72c06e78561ffda2dc9a604a2856e922390bbd5ea4799af8a4ed",
+      "size": 458
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/fan/it8613_dxp6800plus.c",
+      "sha256": "d0bd947b85422dac259538dd95429cb487f10f9adc883e5ace8f79ed05c1afb6",
+      "size": 2854
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/fan/it8613_dxp6800plus.h",
+      "sha256": "7c9620d5253bce9dba2b8d46aad373b661366a661c26b4fdf2853eba914defa3",
+      "size": 474
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/fan/it8613_dxp6800pro.c",
+      "sha256": "8e3f59737485abd13d67bf5ccf79843b2210bd409836bb3330e3c15bad2bb24d",
+      "size": 2724
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/fan/it8613_dxp6800pro.h",
+      "sha256": "3b9361cc4125ed2579afdc4509be7db7e2e64d45f12b0dd358dc898c3301d5d4",
+      "size": 470
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/fan/it8613_fan.c",
+      "sha256": "3f8e7f6470fe68adaba283714c953652ce12865321b1349af7097f68f8253941",
+      "size": 2240
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/fan/it8613_fan.h",
+      "sha256": "3c7029b0722582c939f529d5d4d3e0ac21460eb1679a33fc36c04d8ef20a9a80",
+      "size": 433
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/fan/it8613_hwmon.c",
+      "sha256": "c86d241b4380c4722662e6c7c2a40d9a91b7808dd8f6b9aa10065846520a6444",
+      "size": 15514
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/fan/it8613_hwmon.h",
+      "sha256": "6dad251e862864bf3e3cc14024c3dcb4ca05922c43c63648735ed9ca7e35f571",
+      "size": 749
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/fan/thermal_curve.c",
+      "sha256": "33d2031f0287f72e51acac44cd0db552e9822584dc369a39edad4b5071664a6c",
+      "size": 34201
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/fan/thermal_curve.h",
+      "sha256": "44cbbf068e535cc4ba57ef0f0eefb2544277a8f78c1c74395850f9c4f4317fad",
+      "size": 3925
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/include/ugreenctl.h",
+      "sha256": "2386e31f48eae6ccbcee458efe00f3ce3da82a3b2797c719314fb5325ff8bc47",
+      "size": 3625
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/led/led.c",
+      "sha256": "085dd5863850fb0f149f3dcff82041ac3e1d9b2df2f694b124269df7109fa204",
+      "size": 55063
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/led/led.h",
+      "sha256": "4ab26b5ddbbef5cf77c02f23a17e11b0920567f3af0f6ff71d2680594cb2f33e",
+      "size": 8393
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/led/led_cs201x.c",
+      "sha256": "8f36539539128cc77f7df079f15e6e8979156766f99a50ea7b9d687b1924a319",
+      "size": 31484
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/led/led_cs201x.h",
+      "sha256": "d4ad1e52beb3596e1ae66edfc8d5a5f21cb0c397cf1cf77bce7e401ba7229dfd",
+      "size": 3479
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/led/led_gpio.c",
+      "sha256": "f1d7e35bec26d79173b0c7dd14d0d6f244dedb9b0531767abab072f5ec9ce526",
+      "size": 21909
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/led/led_gpio.h",
+      "sha256": "c82082a19e91e9b81b1d0e881f7e6bc090e8b98250760cacd3e603e9663486e2",
+      "size": 2197
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/led/led_n76_protocol.c",
+      "sha256": "58db4c39011414a8b05e2eeaaff7871a4ae330790c4a83edeedfdd9b5d18db0e",
+      "size": 5000
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/led/led_n76_protocol.h",
+      "sha256": "33eed8e7bd4ddbd03d3e2804f166eac90bbe49abbbb3312cf747172f6bddfc92",
+      "size": 759
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/led/led_protocol.c",
+      "sha256": "b5cc858798b4d783e16403fe7183cbbed3884d880fe1ea10d668a79d353be709",
+      "size": 10966
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/led/led_protocol.h",
+      "sha256": "6732e325c6611ce7f4ee824f22f1361b7ad769b12bcc3c6f078a642655faa91e",
+      "size": 752
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/led/led_service.c",
+      "sha256": "74f7745d47dcc5e865da115b7967ee8c8058074fbe97f5d4318ebfee4b7e742b",
+      "size": 26253
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/led/led_service.h",
+      "sha256": "dac8baadcf58046dbc96286e0c2261c9f0dca4e9a40d3aa85ae72ff59683cd27",
+      "size": 1938
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/led/led_service_test.h",
+      "sha256": "8772b5b45a62244c52dbbcf21851e8886440e0805401d24edee74d2b35af810a",
+      "size": 990
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/led/led_sysfs.c",
+      "sha256": "7a20af1be127c12cb9cb221c48407ff2a31ba8950f148a9a8ac2b8a52671b72f",
+      "size": 27852
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/led/led_sysfs.h",
+      "sha256": "e66a06334f5e58663986864e2a056bddaa6f92fb28f271e8eafa6aa22446aa3b",
+      "size": 1938
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/led/led_test.h",
+      "sha256": "5a59f56f32e4aeca4e110ac3340fe025a9c4801ebe4d6a9e3aa4ca4397c74339",
+      "size": 2118
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/models/compatibility.json",
+      "sha256": "71c433816ba8502596da9264406c15cd80e132c6fb92de6505a9a0a86a18c843",
+      "size": 73418
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/models/dx4600.c",
+      "sha256": "47eeb6bf0b218fe09680d75d38fcbfa463cd638de118db6ee3379fd92fdbb021",
+      "size": 4487
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/models/dxp2800.c",
+      "sha256": "5448ceb42cfafa3a341a4c3842f48efc35e9bdf7a5c21e699ca39b7064f43105",
+      "size": 2859
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/models/dxp4800.c",
+      "sha256": "ba0680629d3305bec955b81f47e5fffa826c2ecb680cb979179ae85408e16ad4",
+      "size": 4424
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/models/dxp4800plus.c",
+      "sha256": "eff2f126026b7f829b6c8fefccdd1eeb144ad4be3bfc75ab98d600c69929b6fd",
+      "size": 4329
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/models/dxp4800s.c",
+      "sha256": "ff11cbb2a1d9cbf0138f50a4f5083df146852e7d77dd354764bb800be6138285",
+      "size": 4436
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/models/dxp480tplus.c",
+      "sha256": "0b38b337aa0b8ed3789164b56e9ad9a404677b68ac2ca6914ebad4a0b8335c01",
+      "size": 4208
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/models/dxp6800.c",
+      "sha256": "43f71710e6ee54d6ad6598862ae7bab0cd793c6f41716f88625f5e5488906098",
+      "size": 3575
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/models/dxp6800plus.c",
+      "sha256": "b0f591f1c22b39920e4b4e47a715ae57127bcfd62fdaaa23e732ae89536a2f8b",
+      "size": 4473
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/models/dxp6800pro.c",
+      "sha256": "e7cd4fb68e3512580b674ec2890f50b922456ab941c7b5c4f25efc116c2bb48a",
+      "size": 4471
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/models/led_profiles.c",
+      "sha256": "02dcb86901dac47a83a87b2a70c0f3c4e53d5baa3fcc8d4af1110f570dd63768",
+      "size": 8648
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/models/unsupported_model.c",
+      "sha256": "bb704a4da12e5b732e78f41fd2af5d5c3af228bf879b8ee0d42a22bd9aff3dd1",
+      "size": 1309
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/models/wake_profiles.c",
+      "sha256": "1149077075cc3872271748f7754300274d335b0670dd145030b6be2521a94e73",
+      "size": 4103
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/models/wake_profiles.h",
+      "sha256": "02b801f314cc68f2e78b579b17e93e29878f36d425eebfd2e0bde046fb37687e",
+      "size": 911
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/network/wol.c",
+      "sha256": "ce5d28e00bc62539d3f1c5d44860144f7670b1a116dfb8ec4e37e532a367cb25",
+      "size": 14117
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/network/wol.h",
+      "sha256": "177086414f688a505d73233a3824f853f0f69b806854ae5e95e1d46b3afea117",
+      "size": 1547
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/network/wol_dx4600.c",
+      "sha256": "f7b0861f2adc212bd45665ccf6c3cdd642d91b16e5042c5ab0557f77b839725b",
+      "size": 1558
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/network/wol_dx4600.h",
+      "sha256": "fd37804b616f5aa9a50fd0af922f623f732fc0032a7d24862120df780af2de12",
+      "size": 425
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/network/wol_dxp4800.c",
+      "sha256": "f7bc7de16b2d220278a53bb1751c862a194d108ab59c1ce24bedb92ee8a9b932",
+      "size": 1094
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/network/wol_dxp4800.h",
+      "sha256": "6bb22b5f1a56ce0d3046386e63c06a6e1a4e81b4149503452d425bf2a15ef35a",
+      "size": 432
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/network/wol_dxp4800plus.c",
+      "sha256": "843869c03e5d1330a75e19bbb671ac844ea7e01fae3e87acc6ab9172ce872cad",
+      "size": 1212
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/network/wol_dxp4800plus.h",
+      "sha256": "fcccb4ba7dc9e8df6bfc6d506ab759d605e35c174b1818a61eb2ad15442860f5",
+      "size": 460
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/network/wol_dxp4800s.c",
+      "sha256": "223048c23774bc4346804b0777d3a0d7158c3319ac711631e3af34c6267661ce",
+      "size": 1181
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/network/wol_dxp4800s.h",
+      "sha256": "4e30c1dfe82a7c57d0a6be0cead31ad610e63f515562ab52da206c9f6ee28587",
+      "size": 439
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/network/wol_dxp480tplus.c",
+      "sha256": "e5722a63046a2fa28961532d730a6b075455a4b05fa94f24d32a56eccb51ac2e",
+      "size": 1623
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/network/wol_dxp480tplus.h",
+      "sha256": "750be485ee647223df9e6792fd7d76d6600a2c7164a8d322a986bce3c9f0997a",
+      "size": 460
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/network/wol_dxp6800plus.c",
+      "sha256": "d730ce75d142d9e7d7166f132f52dc074ac07d08745a8dd133ad439c6b15d6b3",
+      "size": 1254
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/network/wol_dxp6800plus.h",
+      "sha256": "11c1b6157357ee7b2754cfc39005576c6af70f21a3bfe9e1bc97b3d95747ecc6",
+      "size": 472
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/network/wol_dxp6800pro.c",
+      "sha256": "2ad82d5840ce24895e9276d178f86e8cc135f5f4774b337bbc7dcdf37792cf18",
+      "size": 1190
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/network/wol_dxp6800pro.h",
+      "sha256": "310c42dc18ad72f6b685cd9d7c7d9942276eb78fc229c9a1d29e399e7313b273",
+      "size": 453
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/network/wol_interface.c",
+      "sha256": "b4bf1e7ef19d76b42706bea34208654e2f7987d2fa608e0ce3587ace5476165d",
+      "size": 6510
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/network/wol_interface.h",
+      "sha256": "868d538f221448dd369c9f015f25eb69c46e67066164beb88648631947bc8dca",
+      "size": 917
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/power/it8613_power.c",
+      "sha256": "c4d84371d63970956902c1abd61b3eb11738a4422622832d5c1c8ac29e5cb9cb",
+      "size": 2430
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/power/it8613_power.h",
+      "sha256": "2d98734ee0060851107a4b02cdd258af93a4985781ce93b39936ae84801bd7bc",
+      "size": 444
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/power/rtc_wake.c",
+      "sha256": "4be23bcf82c220c36b26aeae214c9ebe58d923d4ebb57caba0b1a0cc8e4732ed",
+      "size": 9640
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/power/rtc_wake.h",
+      "sha256": "083580c05791a0b9582942125deb4ee7efdd69988d398253211d05eecba96f3a",
+      "size": 976
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/superio/it86x.c",
+      "sha256": "1ba98fe8d572e9ad9fc967f0b6ed455664365bf4c3784e9f37a8506fa2d09273",
+      "size": 4456
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/superio/it86x.h",
+      "sha256": "ef943ce952062a259d8b7d4f7da7bb1fa2f83c6c2dfa1bfb7271274f0531606b",
+      "size": 577
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/superio/it86x_unavailable.c",
+      "sha256": "6e13008410b530b4222a8586f03f97f79b43a87b6bff091217f23f2b28d0ed37",
+      "size": 950
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/tests/test_dxp2800_plugin.c",
+      "sha256": "f9b4e9834518c26748df1546cf702135e4a73e55d0b449afc4280091ee0a40ae",
+      "size": 2510
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp2800-extension-source/hardware/tests/test_it8613_dxp2800.c",
+      "sha256": "cd2eb583aefaef725d4936fa824ff7fc63b05d9b1e9fa06138b6680b600c2e2f",
+      "size": 4194
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt-diagnostics-extension/App.Native.UGreenLED/app/server/vendor/ugreen_leds_controller/patches/dxp2800-em26.patch",
+      "sha256": "7c923f16e72f1095c21382b804467a590cf20cc9984b0778adb562fc75849ee4",
+      "size": 642
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt-diagnostics-extension/App.Native.UGreenLED/app/server/vendor/ugreen_leds_controller/patches/dxp4800gt-multibus.patch",
+      "sha256": "17adc9a0089932d325efe090e9f6a5c07bc623cfc4081a2e3f8012188f225780",
+      "size": 6242
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt-diagnostics-extension/App.Native.UGreenLED/app/server/vendor/ugreen_leds_controller/patches/idx6012-block.patch",
+      "sha256": "73fbec5666cc2d0e31f49fae1b774f308d0f28649d93622a29215c7efee2f09b",
+      "size": 10511
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt-diagnostics-extension/docs/DXP4800GT_LED_SUPPORT.md",
+      "sha256": "898728ab9553ddc47983a3186738ab8287b054f00f2951da9b4968e47a3ab622",
+      "size": 3790
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt-diagnostics-extension/scripts/build_led_compat.py",
+      "sha256": "0e19f93f2f865ee8798decd27f40bf70c5df305ccf7653b8fc2dc20d17753b40",
+      "size": 8119
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt-diagnostics-extension/scripts/prepare_dxp4800gt_diagnostics.py",
+      "sha256": "ebe664875a5393e18dfe21563b6e870ae5f2ae495afe994cf6f098aac02b50fe",
+      "size": 5451
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt-diagnostics-extension/tests/run_dxp4800gt_runtime.py",
+      "sha256": "277b6b05de909c1ebab7be6c943d0be7fcb48045a246df54ed1507696773f7ba",
+      "size": 3764
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt-diagnostics-extension/tests/test_dxp2800_led.c",
+      "sha256": "c877253e8514cc1d787936d1544d297fc96ff48179dc6c93aca2914385d208bb",
+      "size": 3950
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt-diagnostics-extension/tests/test_dxp4800gt_bus.c",
+      "sha256": "c9e26695f9651a7dfc2fe244e4a65397f12670e79b6848e081af78a5dea0b986",
+      "size": 1877
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt-diagnostics-extension/tests/test_dxp4800gt_discovery.c",
+      "sha256": "4eee9666d90aa13a354eba464ea01d54d72b800ef5f13a9f75a72ffad4615420",
+      "size": 4603
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt-diagnostics-extension/tests/test_idx6012_led.c",
+      "sha256": "621ddb2f231174c147f8a594ce8b470194f13f5af05da4b6565a8cfbd95d8ca6",
+      "size": 8124
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt-diagnostics-extension/upstream/ec/it55_dxp4800gt.c",
+      "sha256": "bb62f902b3cab7a13f3c8843a1409098804afae9617f848bed3f756bdce56554",
+      "size": 8874
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt-diagnostics-extension/upstream/ec/it55_dxp4800gt.h",
+      "sha256": "dc048378945b1e6b533e44a3cab3bc382660daa8d6cae865543ef191a0e1cad5",
+      "size": 757
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt-diagnostics-extension/upstream/tests/test_it55_dxp4800gt.c",
+      "sha256": "5a7f2ddc101607f1b7ff3bab04c0bdaf1501998d3a381c85070fd6f9077ae119",
+      "size": 4417
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt-fnos-extension/App.Native.UGreenLED/app/server/vendor/ugreen_leds_controller/patches/dxp2800-em26.patch",
+      "sha256": "7c923f16e72f1095c21382b804467a590cf20cc9984b0778adb562fc75849ee4",
+      "size": 642
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt-fnos-extension/App.Native.UGreenLED/app/server/vendor/ugreen_leds_controller/patches/dxp4800gt-multibus.patch",
+      "sha256": "4b3994de46ba8c2f9d7da617795786f698621ac6510bef59bd767670e3f4916e",
+      "size": 7932
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt-fnos-extension/App.Native.UGreenLED/app/server/vendor/ugreen_leds_controller/patches/idx6012-block.patch",
+      "sha256": "73fbec5666cc2d0e31f49fae1b774f308d0f28649d93622a29215c7efee2f09b",
+      "size": 10511
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt-fnos-extension/App.Native.UGreenLED/app/server/vendor/ugreen_leds_controller/patches/mcu-i2c-resilience.patch",
+      "sha256": "d596476fe50b2d283ea6ae8ee8ec9e5a0b7085926286dd1d1548d539b8c079e8",
+      "size": 22163
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt-fnos-extension/docs/DXP4800GT_LED_SUPPORT.md",
+      "sha256": "34b69c7c602ec04c2c3034eb3dc9d58d64e564a21d3fe9ffc45106c5e1dd0a95",
+      "size": 5267
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt-fnos-extension/scripts/build_led_compat.py",
+      "sha256": "8e46dcb14bee7c4163935ba7762b1bc2d1082b3504b7d3de2829b983141f2367",
+      "size": 9041
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt-fnos-extension/scripts/prepare_dxp4800gt_diagnostics.py",
+      "sha256": "8d1e6d2c23d6127ba55357b547cfcbfc5410493ee8d9a944db950fc4285d4ccc",
+      "size": 6023
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt-fnos-extension/tests/run_dxp4800gt_runtime.py",
+      "sha256": "09a1ec2d0a4f41e9a749888ac379cec1db15589eb132cbd2f6a9af335210bd72",
+      "size": 3999
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt-fnos-extension/tests/test_dxp2800_led.c",
+      "sha256": "c877253e8514cc1d787936d1544d297fc96ff48179dc6c93aca2914385d208bb",
+      "size": 3950
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt-fnos-extension/tests/test_dxp4800gt_bus.c",
+      "sha256": "21866dbe16f1d6b05c9bd39145d7f6791952c37f5e463c138f0484d9b93efbd5",
+      "size": 1983
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt-fnos-extension/tests/test_dxp4800gt_discovery.c",
+      "sha256": "09882cd4b62c59aed7e459c00a1adb5cd4319ea72f00335cae0953d77d9b6e00",
+      "size": 5488
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt-fnos-extension/tests/test_idx6012_led.c",
+      "sha256": "621ddb2f231174c147f8a594ce8b470194f13f5af05da4b6565a8cfbd95d8ca6",
+      "size": 8124
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt-fnos-extension/tests/test_led_mcu_resilience.c",
+      "sha256": "8f9ac5eff457ba861988c44fd470a630e83e09684343b1534a5d64aebf3a2620",
+      "size": 17263
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt-fnos-extension/upstream/core/hardware_cli.c",
+      "sha256": "894e7056e5384b6ebffb0b3cc3306c63b3898f55fb3e819aa5a0f9962dad08fe",
+      "size": 59284
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt-fnos-extension/upstream/core/hardware_cli.h",
+      "sha256": "cd4f1aa124bea7fc064e5e70837880d9c6458991d538dfcf4ecbb3f5f299d41d",
+      "size": 1997
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt-fnos-extension/upstream/core/main.c",
+      "sha256": "22111de06d53a85186b48d707a3c320323b2adee94e58eca417983bb662bc4fe",
+      "size": 23389
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt-fnos-extension/upstream/disk/disk.c",
+      "sha256": "2b7359754c44deb114a5ece64dbed4a7bbdf91cdeef0f9940bf5919c026ab520",
+      "size": 79690
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt-fnos-extension/upstream/disk/firmware_profiles.c",
+      "sha256": "7a8c0f6c2b0278031199d3a25d043c102d8a470ec4cba662eb442866e2477b0c",
+      "size": 19392
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt-fnos-extension/upstream/docs/ALL_MODELS_DISK_EVIDENCE.zh-CN.md",
+      "sha256": "f25f3a2f104b573f753fee4fb60498ccd0303d07539590d04227e331f39b66df",
+      "size": 27354
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt-fnos-extension/upstream/docs/DXP4800GT_HARDWARE_AUDIT.zh-CN.md",
+      "sha256": "0801f16f3a22d40f4205daf0a61ccfb0847c53b6229d18a5b59f9ccb5864093c",
+      "size": 11939
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt-fnos-extension/upstream/ec/it55_dxp4800gt.c",
+      "sha256": "b42f0e86594eee6f6ae22a76f41526f14e93005216f9687b879b70e47674fbb9",
+      "size": 11458
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt-fnos-extension/upstream/ec/it55_dxp4800gt.h",
+      "sha256": "8f3b520323a18ae48177d0934fe27853c23ab4c2e799e31e0c25752da99062f2",
+      "size": 897
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt-fnos-extension/upstream/tests/test_disk_mapping.c",
+      "sha256": "ff171106f1e51713d18ff71ada867f08221d3b7bd51a6424aeddd82d9bb3e2bd",
+      "size": 67929
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt-fnos-extension/upstream/tests/test_hardware_cli.c",
+      "sha256": "377a02777e53bcf486cff74f17590ccc1fcae22c2d4edbe513f294f703895e5a",
+      "size": 42320
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt-fnos-extension/upstream/tests/test_it55_dxp4800gt.c",
+      "sha256": "00c6951a01a1f70f22535ac03c087f2b41ef01630088c52970d72db90e71d35a",
+      "size": 6171
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt-led-extension/App.Native.UGreenLED/app/server/vendor/ugreen_leds_controller/patches/dxp2800-em26.patch",
+      "sha256": "7c923f16e72f1095c21382b804467a590cf20cc9984b0778adb562fc75849ee4",
+      "size": 642
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt-led-extension/App.Native.UGreenLED/app/server/vendor/ugreen_leds_controller/patches/dxp4800gt-multibus.patch",
+      "sha256": "fae05e4003edf6e76e37d5cb8b2b98fd411b1f7d4220b32544d87380cb5a0660",
+      "size": 6068
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt-led-extension/App.Native.UGreenLED/app/server/vendor/ugreen_leds_controller/patches/idx6012-block.patch",
+      "sha256": "73fbec5666cc2d0e31f49fae1b774f308d0f28649d93622a29215c7efee2f09b",
+      "size": 10511
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt-led-extension/docs/DXP4800GT_LED_SUPPORT.md",
+      "sha256": "898728ab9553ddc47983a3186738ab8287b054f00f2951da9b4968e47a3ab622",
+      "size": 3790
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt-led-extension/scripts/build_led_compat.py",
+      "sha256": "0e19f93f2f865ee8798decd27f40bf70c5df305ccf7653b8fc2dc20d17753b40",
+      "size": 8119
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt-led-extension/scripts/prepare_dxp4800gt.py",
+      "sha256": "c65b117525fb5ab2f918617a6af7c0b231df0d2bb33ef90ac472e9eccc615b31",
+      "size": 4916
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt-led-extension/tests/run_dxp4800gt_runtime.py",
+      "sha256": "277b6b05de909c1ebab7be6c943d0be7fcb48045a246df54ed1507696773f7ba",
+      "size": 3764
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt-led-extension/tests/test_dxp2800_led.c",
+      "sha256": "c877253e8514cc1d787936d1544d297fc96ff48179dc6c93aca2914385d208bb",
+      "size": 3950
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt-led-extension/tests/test_dxp4800gt_bus.c",
+      "sha256": "c9e26695f9651a7dfc2fe244e4a65397f12670e79b6848e081af78a5dea0b986",
+      "size": 1877
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt-led-extension/tests/test_dxp4800gt_discovery.c",
+      "sha256": "4eee9666d90aa13a354eba464ea01d54d72b800ef5f13a9f75a72ffad4615420",
+      "size": 4603
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt-led-extension/tests/test_idx6012_led.c",
+      "sha256": "621ddb2f231174c147f8a594ce8b470194f13f5af05da4b6565a8cfbd95d8ca6",
+      "size": 8124
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/CMakeLists.txt",
+      "sha256": "18f994b597a168d855def18507e52b66ddedbb675ee08fab9e5198aa5762cfa3",
+      "size": 19392
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/application/scripts/prepare_dxp4800gt_hardware.py",
+      "sha256": "56ad153a62c082af8ff32d282caccf983b590b1f669055a46d79a16b456a33aa",
+      "size": 5709
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/application/tests/run_dxp4800gt_hardware_runtime.py",
+      "sha256": "8fe91764fc5f008e26702e4e7ca0e7ffadb933f710777b4c01772899ccd2f606",
+      "size": 1933
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/application/tests/test_dxp4800gt_hardware_runtime.c",
+      "sha256": "614170fc353c70398afa502c75cadff4efc06397bf141622494c656b7253dea3",
+      "size": 4475
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/application/tests/test_dxp4800gt_profile.sh",
+      "sha256": "637e0b9637dcf329c980c10235e92317738a3cdfa16b30eb5c649ccb23fa1416",
+      "size": 1392
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/core/fan_daemon.c",
+      "sha256": "8a0e9b685508e61556366bf495729e1b1abddc157e59ea9ffd9796ea8dcb8a41",
+      "size": 17262
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/core/hardware_cli.c",
+      "sha256": "1fbe0e7d982c1b74119fe93ea31c8154c9233d67de3939755aa78c53668b1a08",
+      "size": 58367
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/core/hardware_cli.h",
+      "sha256": "796e8d85655000a3a8c17dda073f585cb202432b8a386a68bae56dccef54f86e",
+      "size": 1992
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/core/identity.c",
+      "sha256": "443c12f5b4d45b4ba257a3522a0b4714dd558b24c50420ab696f7b57cec410d5",
+      "size": 6337
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/core/identity.h",
+      "sha256": "fd0d59a63ee133e8da1ed86568b75b13b9fb9997daa2a69343d36091dc2de8cb",
+      "size": 1187
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/core/led_compat_main.c",
+      "sha256": "825237a8aa848cc2bbb8f11f89994accf9f44692b06b94e7262aa83ede38d065",
+      "size": 116
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/core/led_daemon_main.c",
+      "sha256": "e9add637221c5613573ccb61d85ad4d3979e46723e8a266118d065f4778dd33f",
+      "size": 2348
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/core/loader.c",
+      "sha256": "f17141b1bfd9ef3da69173e5fae7bf8723bf077016dfe9c05908c10e5a2a4270",
+      "size": 6299
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/core/loader.h",
+      "sha256": "f73eb103132a4b8fff2d5c175ec9ad64f391a0ce8fc8a65c5b9ddcf35abfd5dc",
+      "size": 963
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/core/main.c",
+      "sha256": "2898bc006e22bbbe172efc5c2392acef4e97f45dd568b2f452b319a92e4d82b2",
+      "size": 22119
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/core/wake_cli.c",
+      "sha256": "1970888aada0a5b38b952256736cf9460896b6278f4b901e64c12e10691d9d6a",
+      "size": 8615
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/core/wake_cli.h",
+      "sha256": "0a3abc62659f63a696898a3940ae480d9bafa14581a9943c2602db3265663b22",
+      "size": 188
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/ec/ec.c",
+      "sha256": "811d4d762f5511882bd3421824a32c2d960b9404a8de10307156a20c9f0c59be",
+      "size": 352
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/ec/ec.h",
+      "sha256": "f3b3b4505ef59a5b336df7dea9736b16d1dff3dd832a439367d4df5adba683ec",
+      "size": 128
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/ec/it55_dxp4800gt.c",
+      "sha256": "5e790f0235fc9969448fb21a3f1366748f2a8a5f6e38f295a7b7217063665f8a",
+      "size": 8303
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/ec/it55_dxp4800gt.h",
+      "sha256": "dc048378945b1e6b533e44a3cab3bc382660daa8d6cae865543ef191a0e1cad5",
+      "size": 757
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/fan/it8613_direct.c",
+      "sha256": "41fe99d15b4a9aa5f90113bd40e4bddf60ce5a5c09ab5dbb3ecf33c0f766518d",
+      "size": 5969
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/fan/it8613_direct.h",
+      "sha256": "ff5d58c9cc6c4f4eefa7c2dece07a9399cae892ee8e6783725834c8c5a6fa97d",
+      "size": 1192
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/fan/it8613_dx4600.c",
+      "sha256": "714055011a935c287aa836e0af349f3b7294d1d3f416182e7f6cc967d3d149a0",
+      "size": 1603
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/fan/it8613_dx4600.h",
+      "sha256": "b6fcc4d7092575fd1d02b178f09988e5db0ace24ee3ba3672c4641f7478688c6",
+      "size": 409
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/fan/it8613_dxp2800.c",
+      "sha256": "510b715b587d01a2cbe41235000720fec9fdea4b95597b447c522f008d38d1fa",
+      "size": 2393
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/fan/it8613_dxp2800.h",
+      "sha256": "d2b1b71d706292854e6635fde7bd78505b0d86b23c716ce96717ca05cbc42fc1",
+      "size": 520
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/fan/it8613_dxp4800.c",
+      "sha256": "fc4043eb01e07dccf38e097c97364acd5d46b618c0d8358902b25e386ba7f64a",
+      "size": 1530
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/fan/it8613_dxp4800.h",
+      "sha256": "c62d04e303724c7afa1c9dbb8ba9a0775ce7325cc2a3e1521d8c7d30251922f7",
+      "size": 415
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/fan/it8613_dxp4800s.c",
+      "sha256": "b56aec50d354bda172f255d62af2459b0ded2963ad8f90a1c9d947127e5ed238",
+      "size": 1584
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/fan/it8613_dxp4800s.h",
+      "sha256": "2e10bf015ccbd2d2ff09623eb0171d8031df98d2fa8ff18bd163dc8fc5e3d8f6",
+      "size": 435
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/fan/it8613_dxp480t.c",
+      "sha256": "e7bfd6c97122d855ea2e32cecf6620199113df7d23efd698e0656d05839c186a",
+      "size": 3347
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/fan/it8613_dxp480t.h",
+      "sha256": "85ea7c08feff331048d1c64b8da56e7e444936e5aea06633c309451a997fed51",
+      "size": 461
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/fan/it8613_dxp6800.c",
+      "sha256": "0b3201d7fb3a6b98bcfb8c27c3d4ab28957ad8b5bc85c47b158d6431504b0360",
+      "size": 2825
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/fan/it8613_dxp6800.h",
+      "sha256": "3425e168792d72c06e78561ffda2dc9a604a2856e922390bbd5ea4799af8a4ed",
+      "size": 458
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/fan/it8613_dxp6800plus.c",
+      "sha256": "d0bd947b85422dac259538dd95429cb487f10f9adc883e5ace8f79ed05c1afb6",
+      "size": 2854
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/fan/it8613_dxp6800plus.h",
+      "sha256": "7c9620d5253bce9dba2b8d46aad373b661366a661c26b4fdf2853eba914defa3",
+      "size": 474
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/fan/it8613_dxp6800pro.c",
+      "sha256": "8e3f59737485abd13d67bf5ccf79843b2210bd409836bb3330e3c15bad2bb24d",
+      "size": 2724
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/fan/it8613_dxp6800pro.h",
+      "sha256": "3b9361cc4125ed2579afdc4509be7db7e2e64d45f12b0dd358dc898c3301d5d4",
+      "size": 470
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/fan/it8613_dxp8800pro.c",
+      "sha256": "187e114dac01e57c8b282c7f69dd6304cfa5c688b0ce8670351b6ded208eb7b4",
+      "size": 2935
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/fan/it8613_dxp8800pro.h",
+      "sha256": "ab5aa4c010b9669ee8d58e2bd138ba586aff6fabc4345dbfa0b221b1635ffc4c",
+      "size": 470
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/fan/it8613_fan.c",
+      "sha256": "3f8e7f6470fe68adaba283714c953652ce12865321b1349af7097f68f8253941",
+      "size": 2240
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/fan/it8613_fan.h",
+      "sha256": "3c7029b0722582c939f529d5d4d3e0ac21460eb1679a33fc36c04d8ef20a9a80",
+      "size": 433
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/fan/it8613_hwmon.c",
+      "sha256": "c86d241b4380c4722662e6c7c2a40d9a91b7808dd8f6b9aa10065846520a6444",
+      "size": 15514
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/fan/it8613_hwmon.h",
+      "sha256": "6dad251e862864bf3e3cc14024c3dcb4ca05922c43c63648735ed9ca7e35f571",
+      "size": 749
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/fan/thermal_curve.c",
+      "sha256": "80d1fbf5bed59dae4467248827d4f70e59bbdc418ec6a38ccc314f3fd7139c73",
+      "size": 38759
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/fan/thermal_curve.h",
+      "sha256": "44cbbf068e535cc4ba57ef0f0eefb2544277a8f78c1c74395850f9c4f4317fad",
+      "size": 3925
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/include/ugreenctl.h",
+      "sha256": "2386e31f48eae6ccbcee458efe00f3ce3da82a3b2797c719314fb5325ff8bc47",
+      "size": 3625
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/models/dx4600.c",
+      "sha256": "47eeb6bf0b218fe09680d75d38fcbfa463cd638de118db6ee3379fd92fdbb021",
+      "size": 4487
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/models/dxp2800.c",
+      "sha256": "5448ceb42cfafa3a341a4c3842f48efc35e9bdf7a5c21e699ca39b7064f43105",
+      "size": 2859
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/models/dxp4800.c",
+      "sha256": "ba0680629d3305bec955b81f47e5fffa826c2ecb680cb979179ae85408e16ad4",
+      "size": 4424
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/models/dxp4800gt.c",
+      "sha256": "db4db163f72804d1892ada1de06b87b84abb86ac0a7041c63c4334f437c721c8",
+      "size": 1545
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/models/dxp4800plus.c",
+      "sha256": "eff2f126026b7f829b6c8fefccdd1eeb144ad4be3bfc75ab98d600c69929b6fd",
+      "size": 4329
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/models/dxp4800s.c",
+      "sha256": "ff11cbb2a1d9cbf0138f50a4f5083df146852e7d77dd354764bb800be6138285",
+      "size": 4436
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/models/dxp480tplus.c",
+      "sha256": "0b38b337aa0b8ed3789164b56e9ad9a404677b68ac2ca6914ebad4a0b8335c01",
+      "size": 4208
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/models/dxp6800.c",
+      "sha256": "43f71710e6ee54d6ad6598862ae7bab0cd793c6f41716f88625f5e5488906098",
+      "size": 3575
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/models/dxp6800plus.c",
+      "sha256": "b0f591f1c22b39920e4b4e47a715ae57127bcfd62fdaaa23e732ae89536a2f8b",
+      "size": 4473
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/models/dxp6800pro.c",
+      "sha256": "e7cd4fb68e3512580b674ec2890f50b922456ab941c7b5c4f25efc116c2bb48a",
+      "size": 4471
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/models/dxp8800pro.c",
+      "sha256": "d55234522f7e1ba6d30b679895c901382b662fdf2411fab2eb25e650344347b6",
+      "size": 3603
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/models/led_profiles.c",
+      "sha256": "02dcb86901dac47a83a87b2a70c0f3c4e53d5baa3fcc8d4af1110f570dd63768",
+      "size": 8648
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/models/unsupported_model.c",
+      "sha256": "bb704a4da12e5b732e78f41fd2af5d5c3af228bf879b8ee0d42a22bd9aff3dd1",
+      "size": 1309
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/models/wake_profiles.c",
+      "sha256": "1149077075cc3872271748f7754300274d335b0670dd145030b6be2521a94e73",
+      "size": 4103
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/models/wake_profiles.h",
+      "sha256": "02b801f314cc68f2e78b579b17e93e29878f36d425eebfd2e0bde046fb37687e",
+      "size": 911
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/network/wol.c",
+      "sha256": "ce5d28e00bc62539d3f1c5d44860144f7670b1a116dfb8ec4e37e532a367cb25",
+      "size": 14117
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/network/wol.h",
+      "sha256": "177086414f688a505d73233a3824f853f0f69b806854ae5e95e1d46b3afea117",
+      "size": 1547
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/network/wol_dx4600.c",
+      "sha256": "f7b0861f2adc212bd45665ccf6c3cdd642d91b16e5042c5ab0557f77b839725b",
+      "size": 1558
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/network/wol_dx4600.h",
+      "sha256": "fd37804b616f5aa9a50fd0af922f623f732fc0032a7d24862120df780af2de12",
+      "size": 425
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/network/wol_dxp4800.c",
+      "sha256": "f7bc7de16b2d220278a53bb1751c862a194d108ab59c1ce24bedb92ee8a9b932",
+      "size": 1094
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/network/wol_dxp4800.h",
+      "sha256": "6bb22b5f1a56ce0d3046386e63c06a6e1a4e81b4149503452d425bf2a15ef35a",
+      "size": 432
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/network/wol_dxp4800plus.c",
+      "sha256": "843869c03e5d1330a75e19bbb671ac844ea7e01fae3e87acc6ab9172ce872cad",
+      "size": 1212
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/network/wol_dxp4800plus.h",
+      "sha256": "fcccb4ba7dc9e8df6bfc6d506ab759d605e35c174b1818a61eb2ad15442860f5",
+      "size": 460
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/network/wol_dxp4800s.c",
+      "sha256": "223048c23774bc4346804b0777d3a0d7158c3319ac711631e3af34c6267661ce",
+      "size": 1181
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/network/wol_dxp4800s.h",
+      "sha256": "4e30c1dfe82a7c57d0a6be0cead31ad610e63f515562ab52da206c9f6ee28587",
+      "size": 439
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/network/wol_dxp480tplus.c",
+      "sha256": "e5722a63046a2fa28961532d730a6b075455a4b05fa94f24d32a56eccb51ac2e",
+      "size": 1623
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/network/wol_dxp480tplus.h",
+      "sha256": "750be485ee647223df9e6792fd7d76d6600a2c7164a8d322a986bce3c9f0997a",
+      "size": 460
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/network/wol_dxp6800plus.c",
+      "sha256": "d730ce75d142d9e7d7166f132f52dc074ac07d08745a8dd133ad439c6b15d6b3",
+      "size": 1254
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/network/wol_dxp6800plus.h",
+      "sha256": "11c1b6157357ee7b2754cfc39005576c6af70f21a3bfe9e1bc97b3d95747ecc6",
+      "size": 472
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/network/wol_dxp6800pro.c",
+      "sha256": "2ad82d5840ce24895e9276d178f86e8cc135f5f4774b337bbc7dcdf37792cf18",
+      "size": 1190
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/network/wol_dxp6800pro.h",
+      "sha256": "310c42dc18ad72f6b685cd9d7c7d9942276eb78fc229c9a1d29e399e7313b273",
+      "size": 453
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/network/wol_interface.c",
+      "sha256": "b4bf1e7ef19d76b42706bea34208654e2f7987d2fa608e0ce3587ace5476165d",
+      "size": 6510
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/network/wol_interface.h",
+      "sha256": "868d538f221448dd369c9f015f25eb69c46e67066164beb88648631947bc8dca",
+      "size": 917
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/power/it8613_power.c",
+      "sha256": "c4d84371d63970956902c1abd61b3eb11738a4422622832d5c1c8ac29e5cb9cb",
+      "size": 2430
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/power/it8613_power.h",
+      "sha256": "2d98734ee0060851107a4b02cdd258af93a4985781ce93b39936ae84801bd7bc",
+      "size": 444
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/power/rtc_wake.c",
+      "sha256": "4be23bcf82c220c36b26aeae214c9ebe58d923d4ebb57caba0b1a0cc8e4732ed",
+      "size": 9640
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/power/rtc_wake.h",
+      "sha256": "083580c05791a0b9582942125deb4ee7efdd69988d398253211d05eecba96f3a",
+      "size": 976
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/scripts/package-almighty.py",
+      "sha256": "dea6391a3faf84116d99f48c62fa46950c589dc0a4126e3f018d01488c71c361",
+      "size": 36355
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/superio/it86x.c",
+      "sha256": "1ba98fe8d572e9ad9fc967f0b6ed455664365bf4c3784e9f37a8506fa2d09273",
+      "size": 4456
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/superio/it86x.h",
+      "sha256": "ef943ce952062a259d8b7d4f7da7bb1fa2f83c6c2dfa1bfb7271274f0531606b",
+      "size": 577
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/superio/it86x_unavailable.c",
+      "sha256": "6e13008410b530b4222a8586f03f97f79b43a87b6bff091217f23f2b28d0ed37",
+      "size": 950
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/tests/test_it55_dxp4800gt.c",
+      "sha256": "83c22250c86429559dd88fe45a181b97e8bfe8f83e0d82ebcc34e10eb869850b",
+      "size": 4175
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp4800gt_hardware-extension-source/tests/test_thermal_curve.c",
+      "sha256": "db394a38add560db600c8e75c7386e1f6e6bc1d4785e8b36c059cbe8fb334cb1",
+      "size": 11957
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp6800-extension-source/CMakeLists.txt",
+      "sha256": "a00bc40d1e01801cd1f840aa5257819f69f7424658f281e2a60019b7800b96c8",
+      "size": 18050
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp6800-extension-source/core/fan_daemon.c",
+      "sha256": "1e49b652f9cc04d96290a9d465d4d7d4c4c52e0f7bc88d64debcff27453aff76",
+      "size": 16162
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp6800-extension-source/docs/DXP6800_SUPPORT.zh-CN.md",
+      "sha256": "8cc2853fdf0e297ec6fa5d2ca17b758b120e4bd1d471b2cb7bdf7b6f2ce893fb",
+      "size": 3258
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp6800-extension-source/docs/FAN_CURVE.md",
+      "sha256": "825df7f665b5ec5926a32a6723ed4f48ff46816777fa8576a9cd51361c092dc6",
+      "size": 7930
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp6800-extension-source/fan/it8613_direct.c",
+      "sha256": "41fe99d15b4a9aa5f90113bd40e4bddf60ce5a5c09ab5dbb3ecf33c0f766518d",
+      "size": 5969
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp6800-extension-source/fan/it8613_direct.h",
+      "sha256": "ff5d58c9cc6c4f4eefa7c2dece07a9399cae892ee8e6783725834c8c5a6fa97d",
+      "size": 1192
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp6800-extension-source/fan/it8613_dx4600.c",
+      "sha256": "714055011a935c287aa836e0af349f3b7294d1d3f416182e7f6cc967d3d149a0",
+      "size": 1603
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp6800-extension-source/fan/it8613_dx4600.h",
+      "sha256": "b6fcc4d7092575fd1d02b178f09988e5db0ace24ee3ba3672c4641f7478688c6",
+      "size": 409
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp6800-extension-source/fan/it8613_dxp4800.c",
+      "sha256": "fc4043eb01e07dccf38e097c97364acd5d46b618c0d8358902b25e386ba7f64a",
+      "size": 1530
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp6800-extension-source/fan/it8613_dxp4800.h",
+      "sha256": "c62d04e303724c7afa1c9dbb8ba9a0775ce7325cc2a3e1521d8c7d30251922f7",
+      "size": 415
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp6800-extension-source/fan/it8613_dxp4800s.c",
+      "sha256": "b56aec50d354bda172f255d62af2459b0ded2963ad8f90a1c9d947127e5ed238",
+      "size": 1584
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp6800-extension-source/fan/it8613_dxp4800s.h",
+      "sha256": "2e10bf015ccbd2d2ff09623eb0171d8031df98d2fa8ff18bd163dc8fc5e3d8f6",
+      "size": 435
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp6800-extension-source/fan/it8613_dxp480t.c",
+      "sha256": "e7bfd6c97122d855ea2e32cecf6620199113df7d23efd698e0656d05839c186a",
+      "size": 3347
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp6800-extension-source/fan/it8613_dxp480t.h",
+      "sha256": "85ea7c08feff331048d1c64b8da56e7e444936e5aea06633c309451a997fed51",
+      "size": 461
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp6800-extension-source/fan/it8613_dxp6800.c",
+      "sha256": "0b3201d7fb3a6b98bcfb8c27c3d4ab28957ad8b5bc85c47b158d6431504b0360",
+      "size": 2825
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp6800-extension-source/fan/it8613_dxp6800.h",
+      "sha256": "3425e168792d72c06e78561ffda2dc9a604a2856e922390bbd5ea4799af8a4ed",
+      "size": 458
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp6800-extension-source/fan/it8613_dxp6800plus.c",
+      "sha256": "d0bd947b85422dac259538dd95429cb487f10f9adc883e5ace8f79ed05c1afb6",
+      "size": 2854
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp6800-extension-source/fan/it8613_dxp6800plus.h",
+      "sha256": "7c9620d5253bce9dba2b8d46aad373b661366a661c26b4fdf2853eba914defa3",
+      "size": 474
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp6800-extension-source/fan/it8613_dxp6800pro.c",
+      "sha256": "8e3f59737485abd13d67bf5ccf79843b2210bd409836bb3330e3c15bad2bb24d",
+      "size": 2724
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp6800-extension-source/fan/it8613_dxp6800pro.h",
+      "sha256": "3b9361cc4125ed2579afdc4509be7db7e2e64d45f12b0dd358dc898c3301d5d4",
+      "size": 470
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp6800-extension-source/fan/it8613_fan.c",
+      "sha256": "3f8e7f6470fe68adaba283714c953652ce12865321b1349af7097f68f8253941",
+      "size": 2240
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp6800-extension-source/fan/it8613_fan.h",
+      "sha256": "3c7029b0722582c939f529d5d4d3e0ac21460eb1679a33fc36c04d8ef20a9a80",
+      "size": 433
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp6800-extension-source/fan/it8613_hwmon.c",
+      "sha256": "c86d241b4380c4722662e6c7c2a40d9a91b7808dd8f6b9aa10065846520a6444",
+      "size": 15514
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp6800-extension-source/fan/it8613_hwmon.h",
+      "sha256": "6dad251e862864bf3e3cc14024c3dcb4ca05922c43c63648735ed9ca7e35f571",
+      "size": 749
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp6800-extension-source/fan/thermal_curve.c",
+      "sha256": "33d2031f0287f72e51acac44cd0db552e9822584dc369a39edad4b5071664a6c",
+      "size": 34201
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp6800-extension-source/fan/thermal_curve.h",
+      "sha256": "44cbbf068e535cc4ba57ef0f0eefb2544277a8f78c1c74395850f9c4f4317fad",
+      "size": 3925
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp6800-extension-source/include/ugreenctl.h",
+      "sha256": "2386e31f48eae6ccbcee458efe00f3ce3da82a3b2797c719314fb5325ff8bc47",
+      "size": 3625
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp6800-extension-source/models/dxp6800.c",
+      "sha256": "43f71710e6ee54d6ad6598862ae7bab0cd793c6f41716f88625f5e5488906098",
+      "size": 3575
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp6800-extension-source/power/it8613_power.c",
+      "sha256": "c4d84371d63970956902c1abd61b3eb11738a4422622832d5c1c8ac29e5cb9cb",
+      "size": 2430
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp6800-extension-source/power/it8613_power.h",
+      "sha256": "2d98734ee0060851107a4b02cdd258af93a4985781ce93b39936ae84801bd7bc",
+      "size": 444
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp6800-extension-source/power/rtc_wake.c",
+      "sha256": "4be23bcf82c220c36b26aeae214c9ebe58d923d4ebb57caba0b1a0cc8e4732ed",
+      "size": 9640
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp6800-extension-source/power/rtc_wake.h",
+      "sha256": "083580c05791a0b9582942125deb4ee7efdd69988d398253211d05eecba96f3a",
+      "size": 976
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp6800-extension-source/scripts/prepare-llled-dxp6800.py",
+      "sha256": "bdc3e4e521df852e9a3906c7774925b76e1ae7c8b459fd19fce16f132f038b07",
+      "size": 4839
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp6800-extension-source/superio/it86x.c",
+      "sha256": "1ba98fe8d572e9ad9fc967f0b6ed455664365bf4c3784e9f37a8506fa2d09273",
+      "size": 4456
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp6800-extension-source/superio/it86x.h",
+      "sha256": "ef943ce952062a259d8b7d4f7da7bb1fa2f83c6c2dfa1bfb7271274f0531606b",
+      "size": 577
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp6800-extension-source/superio/it86x_unavailable.c",
+      "sha256": "6e13008410b530b4222a8586f03f97f79b43a87b6bff091217f23f2b28d0ed37",
+      "size": 950
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp6800-extension-source/tests/test_dxp6800_plugin.c",
+      "sha256": "d4d295e12954e521e2cdf3ac10823bd569c27e806a4a57ef65e2f32f9a9b269f",
+      "size": 3020
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp6800-extension-source/tests/test_it8613_dxp6800.c",
+      "sha256": "3f445ae6b994423f55f648148822932495dcc821e2e1ec41e523f0457ce9a56e",
+      "size": 5492
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp6800-extension-source/tests/test_thermal_curve.c",
+      "sha256": "e54585d841404e781e155893e548ef78512939611bf16b2e2854e2e6768dcb39",
+      "size": 8814
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/CMakeLists.txt",
+      "sha256": "4d50696f8ff5397171aae347793b0d5f0771c24f61375d4e48faae5b76846e2b",
+      "size": 18844
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/application/scripts/prepare_dxp8800pro.py",
+      "sha256": "bba3b675f1de5bc403489242381bdd9d688ca7c2bea6912b7ed71534b3b89c9d",
+      "size": 5413
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/application/tests/run_dxp8800pro_runtime.py",
+      "sha256": "4397f4024f2174ea514fb86be450136dbabaef8bc2a6933645fd51815157fee9",
+      "size": 1630
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/application/tests/test_dxp8800pro_runtime.c",
+      "sha256": "6b133a81fedd5b68246fc1cccfb0b148f67e7908345a60f0d4876473ef51169f",
+      "size": 4328
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/core/fan_daemon.c",
+      "sha256": "edaf106bbe0d40582a5a5698511f592d4f215e514f6d24124d0b6bb0db7e995e",
+      "size": 16417
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/core/hardware_cli.c",
+      "sha256": "1fbe0e7d982c1b74119fe93ea31c8154c9233d67de3939755aa78c53668b1a08",
+      "size": 58367
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/core/hardware_cli.h",
+      "sha256": "796e8d85655000a3a8c17dda073f585cb202432b8a386a68bae56dccef54f86e",
+      "size": 1992
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/core/identity.c",
+      "sha256": "443c12f5b4d45b4ba257a3522a0b4714dd558b24c50420ab696f7b57cec410d5",
+      "size": 6337
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/core/identity.h",
+      "sha256": "fd0d59a63ee133e8da1ed86568b75b13b9fb9997daa2a69343d36091dc2de8cb",
+      "size": 1187
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/core/led_compat_main.c",
+      "sha256": "825237a8aa848cc2bbb8f11f89994accf9f44692b06b94e7262aa83ede38d065",
+      "size": 116
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/core/led_daemon_main.c",
+      "sha256": "e9add637221c5613573ccb61d85ad4d3979e46723e8a266118d065f4778dd33f",
+      "size": 2348
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/core/loader.c",
+      "sha256": "f17141b1bfd9ef3da69173e5fae7bf8723bf077016dfe9c05908c10e5a2a4270",
+      "size": 6299
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/core/loader.h",
+      "sha256": "f73eb103132a4b8fff2d5c175ec9ad64f391a0ce8fc8a65c5b9ddcf35abfd5dc",
+      "size": 963
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/core/main.c",
+      "sha256": "2c364863a812f7c1844f1dbc4163eef4f6657ae35865594243a578f68b6dde9b",
+      "size": 21905
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/core/wake_cli.c",
+      "sha256": "1970888aada0a5b38b952256736cf9460896b6278f4b901e64c12e10691d9d6a",
+      "size": 8615
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/core/wake_cli.h",
+      "sha256": "0a3abc62659f63a696898a3940ae480d9bafa14581a9943c2602db3265663b22",
+      "size": 188
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/fan/it8613_direct.c",
+      "sha256": "41fe99d15b4a9aa5f90113bd40e4bddf60ce5a5c09ab5dbb3ecf33c0f766518d",
+      "size": 5969
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/fan/it8613_direct.h",
+      "sha256": "ff5d58c9cc6c4f4eefa7c2dece07a9399cae892ee8e6783725834c8c5a6fa97d",
+      "size": 1192
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/fan/it8613_dx4600.c",
+      "sha256": "714055011a935c287aa836e0af349f3b7294d1d3f416182e7f6cc967d3d149a0",
+      "size": 1603
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/fan/it8613_dx4600.h",
+      "sha256": "b6fcc4d7092575fd1d02b178f09988e5db0ace24ee3ba3672c4641f7478688c6",
+      "size": 409
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/fan/it8613_dxp2800.c",
+      "sha256": "510b715b587d01a2cbe41235000720fec9fdea4b95597b447c522f008d38d1fa",
+      "size": 2393
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/fan/it8613_dxp2800.h",
+      "sha256": "d2b1b71d706292854e6635fde7bd78505b0d86b23c716ce96717ca05cbc42fc1",
+      "size": 520
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/fan/it8613_dxp4800.c",
+      "sha256": "fc4043eb01e07dccf38e097c97364acd5d46b618c0d8358902b25e386ba7f64a",
+      "size": 1530
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/fan/it8613_dxp4800.h",
+      "sha256": "c62d04e303724c7afa1c9dbb8ba9a0775ce7325cc2a3e1521d8c7d30251922f7",
+      "size": 415
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/fan/it8613_dxp4800s.c",
+      "sha256": "b56aec50d354bda172f255d62af2459b0ded2963ad8f90a1c9d947127e5ed238",
+      "size": 1584
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/fan/it8613_dxp4800s.h",
+      "sha256": "2e10bf015ccbd2d2ff09623eb0171d8031df98d2fa8ff18bd163dc8fc5e3d8f6",
+      "size": 435
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/fan/it8613_dxp480t.c",
+      "sha256": "e7bfd6c97122d855ea2e32cecf6620199113df7d23efd698e0656d05839c186a",
+      "size": 3347
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/fan/it8613_dxp480t.h",
+      "sha256": "85ea7c08feff331048d1c64b8da56e7e444936e5aea06633c309451a997fed51",
+      "size": 461
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/fan/it8613_dxp6800.c",
+      "sha256": "0b3201d7fb3a6b98bcfb8c27c3d4ab28957ad8b5bc85c47b158d6431504b0360",
+      "size": 2825
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/fan/it8613_dxp6800.h",
+      "sha256": "3425e168792d72c06e78561ffda2dc9a604a2856e922390bbd5ea4799af8a4ed",
+      "size": 458
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/fan/it8613_dxp6800plus.c",
+      "sha256": "d0bd947b85422dac259538dd95429cb487f10f9adc883e5ace8f79ed05c1afb6",
+      "size": 2854
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/fan/it8613_dxp6800plus.h",
+      "sha256": "7c9620d5253bce9dba2b8d46aad373b661366a661c26b4fdf2853eba914defa3",
+      "size": 474
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/fan/it8613_dxp6800pro.c",
+      "sha256": "8e3f59737485abd13d67bf5ccf79843b2210bd409836bb3330e3c15bad2bb24d",
+      "size": 2724
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/fan/it8613_dxp6800pro.h",
+      "sha256": "3b9361cc4125ed2579afdc4509be7db7e2e64d45f12b0dd358dc898c3301d5d4",
+      "size": 470
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/fan/it8613_dxp8800pro.c",
+      "sha256": "187e114dac01e57c8b282c7f69dd6304cfa5c688b0ce8670351b6ded208eb7b4",
+      "size": 2935
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/fan/it8613_dxp8800pro.h",
+      "sha256": "ab5aa4c010b9669ee8d58e2bd138ba586aff6fabc4345dbfa0b221b1635ffc4c",
+      "size": 470
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/fan/it8613_fan.c",
+      "sha256": "3f8e7f6470fe68adaba283714c953652ce12865321b1349af7097f68f8253941",
+      "size": 2240
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/fan/it8613_fan.h",
+      "sha256": "3c7029b0722582c939f529d5d4d3e0ac21460eb1679a33fc36c04d8ef20a9a80",
+      "size": 433
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/fan/it8613_hwmon.c",
+      "sha256": "c86d241b4380c4722662e6c7c2a40d9a91b7808dd8f6b9aa10065846520a6444",
+      "size": 15514
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/fan/it8613_hwmon.h",
+      "sha256": "6dad251e862864bf3e3cc14024c3dcb4ca05922c43c63648735ed9ca7e35f571",
+      "size": 749
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/fan/thermal_curve.c",
+      "sha256": "e57921cde443a08f278fbac4af330248daa7a4205a2d560a654a95eca57ec06f",
+      "size": 35126
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/fan/thermal_curve.h",
+      "sha256": "44cbbf068e535cc4ba57ef0f0eefb2544277a8f78c1c74395850f9c4f4317fad",
+      "size": 3925
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/include/ugreenctl.h",
+      "sha256": "2386e31f48eae6ccbcee458efe00f3ce3da82a3b2797c719314fb5325ff8bc47",
+      "size": 3625
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/models/dx4600.c",
+      "sha256": "47eeb6bf0b218fe09680d75d38fcbfa463cd638de118db6ee3379fd92fdbb021",
+      "size": 4487
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/models/dxp2800.c",
+      "sha256": "5448ceb42cfafa3a341a4c3842f48efc35e9bdf7a5c21e699ca39b7064f43105",
+      "size": 2859
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/models/dxp4800.c",
+      "sha256": "ba0680629d3305bec955b81f47e5fffa826c2ecb680cb979179ae85408e16ad4",
+      "size": 4424
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/models/dxp4800plus.c",
+      "sha256": "eff2f126026b7f829b6c8fefccdd1eeb144ad4be3bfc75ab98d600c69929b6fd",
+      "size": 4329
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/models/dxp4800s.c",
+      "sha256": "ff11cbb2a1d9cbf0138f50a4f5083df146852e7d77dd354764bb800be6138285",
+      "size": 4436
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/models/dxp480tplus.c",
+      "sha256": "0b38b337aa0b8ed3789164b56e9ad9a404677b68ac2ca6914ebad4a0b8335c01",
+      "size": 4208
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/models/dxp6800.c",
+      "sha256": "43f71710e6ee54d6ad6598862ae7bab0cd793c6f41716f88625f5e5488906098",
+      "size": 3575
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/models/dxp6800plus.c",
+      "sha256": "b0f591f1c22b39920e4b4e47a715ae57127bcfd62fdaaa23e732ae89536a2f8b",
+      "size": 4473
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/models/dxp6800pro.c",
+      "sha256": "e7cd4fb68e3512580b674ec2890f50b922456ab941c7b5c4f25efc116c2bb48a",
+      "size": 4471
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/models/dxp8800pro.c",
+      "sha256": "d55234522f7e1ba6d30b679895c901382b662fdf2411fab2eb25e650344347b6",
+      "size": 3603
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/models/led_profiles.c",
+      "sha256": "02dcb86901dac47a83a87b2a70c0f3c4e53d5baa3fcc8d4af1110f570dd63768",
+      "size": 8648
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/models/unsupported_model.c",
+      "sha256": "bb704a4da12e5b732e78f41fd2af5d5c3af228bf879b8ee0d42a22bd9aff3dd1",
+      "size": 1309
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/models/wake_profiles.c",
+      "sha256": "1149077075cc3872271748f7754300274d335b0670dd145030b6be2521a94e73",
+      "size": 4103
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/models/wake_profiles.h",
+      "sha256": "02b801f314cc68f2e78b579b17e93e29878f36d425eebfd2e0bde046fb37687e",
+      "size": 911
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/network/wol.c",
+      "sha256": "ce5d28e00bc62539d3f1c5d44860144f7670b1a116dfb8ec4e37e532a367cb25",
+      "size": 14117
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/network/wol.h",
+      "sha256": "177086414f688a505d73233a3824f853f0f69b806854ae5e95e1d46b3afea117",
+      "size": 1547
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/network/wol_dx4600.c",
+      "sha256": "f7b0861f2adc212bd45665ccf6c3cdd642d91b16e5042c5ab0557f77b839725b",
+      "size": 1558
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/network/wol_dx4600.h",
+      "sha256": "fd37804b616f5aa9a50fd0af922f623f732fc0032a7d24862120df780af2de12",
+      "size": 425
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/network/wol_dxp4800.c",
+      "sha256": "f7bc7de16b2d220278a53bb1751c862a194d108ab59c1ce24bedb92ee8a9b932",
+      "size": 1094
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/network/wol_dxp4800.h",
+      "sha256": "6bb22b5f1a56ce0d3046386e63c06a6e1a4e81b4149503452d425bf2a15ef35a",
+      "size": 432
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/network/wol_dxp4800plus.c",
+      "sha256": "843869c03e5d1330a75e19bbb671ac844ea7e01fae3e87acc6ab9172ce872cad",
+      "size": 1212
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/network/wol_dxp4800plus.h",
+      "sha256": "fcccb4ba7dc9e8df6bfc6d506ab759d605e35c174b1818a61eb2ad15442860f5",
+      "size": 460
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/network/wol_dxp4800s.c",
+      "sha256": "223048c23774bc4346804b0777d3a0d7158c3319ac711631e3af34c6267661ce",
+      "size": 1181
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/network/wol_dxp4800s.h",
+      "sha256": "4e30c1dfe82a7c57d0a6be0cead31ad610e63f515562ab52da206c9f6ee28587",
+      "size": 439
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/network/wol_dxp480tplus.c",
+      "sha256": "e5722a63046a2fa28961532d730a6b075455a4b05fa94f24d32a56eccb51ac2e",
+      "size": 1623
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/network/wol_dxp480tplus.h",
+      "sha256": "750be485ee647223df9e6792fd7d76d6600a2c7164a8d322a986bce3c9f0997a",
+      "size": 460
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/network/wol_dxp6800plus.c",
+      "sha256": "d730ce75d142d9e7d7166f132f52dc074ac07d08745a8dd133ad439c6b15d6b3",
+      "size": 1254
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/network/wol_dxp6800plus.h",
+      "sha256": "11c1b6157357ee7b2754cfc39005576c6af70f21a3bfe9e1bc97b3d95747ecc6",
+      "size": 472
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/network/wol_dxp6800pro.c",
+      "sha256": "2ad82d5840ce24895e9276d178f86e8cc135f5f4774b337bbc7dcdf37792cf18",
+      "size": 1190
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/network/wol_dxp6800pro.h",
+      "sha256": "310c42dc18ad72f6b685cd9d7c7d9942276eb78fc229c9a1d29e399e7313b273",
+      "size": 453
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/network/wol_interface.c",
+      "sha256": "b4bf1e7ef19d76b42706bea34208654e2f7987d2fa608e0ce3587ace5476165d",
+      "size": 6510
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/network/wol_interface.h",
+      "sha256": "868d538f221448dd369c9f015f25eb69c46e67066164beb88648631947bc8dca",
+      "size": 917
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/power/it8613_power.c",
+      "sha256": "c4d84371d63970956902c1abd61b3eb11738a4422622832d5c1c8ac29e5cb9cb",
+      "size": 2430
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/power/it8613_power.h",
+      "sha256": "2d98734ee0060851107a4b02cdd258af93a4985781ce93b39936ae84801bd7bc",
+      "size": 444
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/power/rtc_wake.c",
+      "sha256": "4be23bcf82c220c36b26aeae214c9ebe58d923d4ebb57caba0b1a0cc8e4732ed",
+      "size": 9640
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/power/rtc_wake.h",
+      "sha256": "083580c05791a0b9582942125deb4ee7efdd69988d398253211d05eecba96f3a",
+      "size": 976
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/scripts/package-almighty.py",
+      "sha256": "bb4c669943a037af0beac06d1f75825608052c3f53d0457f4aa13c92bcaea11b",
+      "size": 36255
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/superio/it86x.c",
+      "sha256": "1ba98fe8d572e9ad9fc967f0b6ed455664365bf4c3784e9f37a8506fa2d09273",
+      "size": 4456
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/superio/it86x.h",
+      "sha256": "ef943ce952062a259d8b7d4f7da7bb1fa2f83c6c2dfa1bfb7271274f0531606b",
+      "size": 577
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/superio/it86x_unavailable.c",
+      "sha256": "6e13008410b530b4222a8586f03f97f79b43a87b6bff091217f23f2b28d0ed37",
+      "size": 950
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/tests/test_dxp8800pro_plugin.c",
+      "sha256": "be0b38cce952a7fdd1f38e9fe5bbfab11eb785323fcf855785cf01d80307257c",
+      "size": 2957
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/tests/test_it8613_dxp8800pro.c",
+      "sha256": "27490be7eb05d85ea1044bb3f9785842164a0e5fa12b8fb9a3f21fab9fea483e",
+      "size": 5552
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/dxp8800pro-extension-source/tests/test_thermal_curve.c",
+      "sha256": "94d305e8d7e3102c7d6847343c36319e26d76388dd7edd6e8e4f936024b06721",
+      "size": 9420
+    },
+    {
       "mode": "0755",
       "path": "usr/local/share/doc/ugreenctl/examples/collect-disk-evidence.sh",
       "sha256": "c70d789a5ba534d7827e4a4799ac810e10c53f5da2e0a195b46062aeda21ef00",
@@ -686,6 +2990,654 @@
     },
     {
       "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012-led-extension/App.Native.UGreenLED/app/server/vendor/ugreen_leds_controller/patches/dxp2800-em26.patch",
+      "sha256": "7c923f16e72f1095c21382b804467a590cf20cc9984b0778adb562fc75849ee4",
+      "size": 642
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012-led-extension/App.Native.UGreenLED/app/server/vendor/ugreen_leds_controller/patches/idx6012-block.patch",
+      "sha256": "73fbec5666cc2d0e31f49fae1b774f308d0f28649d93622a29215c7efee2f09b",
+      "size": 10511
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012-led-extension/docs/IDX6012_LED_SUPPORT.md",
+      "sha256": "40c44beb543f587b8d9746f9eecdc9c73f9ab5379c1e3e885b86c6aca3b40683",
+      "size": 9046
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012-led-extension/scripts/build_led_compat.py",
+      "sha256": "91dc413b8b3df94c00b460e51fb60803e524d41ce71bd5f41dd1372ea087b6f4",
+      "size": 6176
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012-led-extension/scripts/prepare_idx6012.py",
+      "sha256": "03127d145128e0064d210f19ca5045bf2ed7ce2e516a6a3c8c2270b922f9f221",
+      "size": 4931
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012-led-extension/tests/run_idx6012_runtime.py",
+      "sha256": "5c9b3ec642624c1d3c737e1fc4d18a8f3bbc2e03aa2d7ab8b15123481c522d59",
+      "size": 3550
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012-led-extension/tests/test_dxp2800_led.c",
+      "sha256": "c877253e8514cc1d787936d1544d297fc96ff48179dc6c93aca2914385d208bb",
+      "size": 3950
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012-led-extension/tests/test_idx6012_disk_mapping.sh",
+      "sha256": "19d6b1663ab4076b4999453ec02ef655462d3d605bc40083de22ec5d2190e263",
+      "size": 2025
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012-led-extension/tests/test_idx6012_led.c",
+      "sha256": "621ddb2f231174c147f8a594ce8b470194f13f5af05da4b6565a8cfbd95d8ca6",
+      "size": 8124
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012-led-extension/tests/test_idx6012_profile.sh",
+      "sha256": "1dd965afba831493c0f354d6947538716b533b80ce53bf8ca768a2db7addc04d",
+      "size": 1151
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012-led-extension/tests/test_idx6012_startup.sh",
+      "sha256": "7cd94266cd7442d9e47734ac09fef635b4d4680bb4146c8fb1c43a68e6989205",
+      "size": 1505
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/CMakeLists.txt",
+      "sha256": "69d0c1b2a5bf744f345e0008adcef29ddbf52ffbdeef576a331d633a5df3d417",
+      "size": 21032
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/application/scripts/prepare_idx6012_hardware.py",
+      "sha256": "0d95ec8a797107176d1eb42fbaf3342747399baf02918f5ef5d8b17c5968e3f2",
+      "size": 5619
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/application/tests/test_idx6012_fan_profile.sh",
+      "sha256": "12d49fb75d52d072e976191d3db0326a13ea2b4fd1207852189ee98f1fd8465e",
+      "size": 2229
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/core/fan_daemon.c",
+      "sha256": "fd7ef4fd809e99fb3172b8785437a88221b67ba8044bd23a89400c51eeb2610a",
+      "size": 17586
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/core/hardware_cli.c",
+      "sha256": "1fbe0e7d982c1b74119fe93ea31c8154c9233d67de3939755aa78c53668b1a08",
+      "size": 58367
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/core/hardware_cli.h",
+      "sha256": "796e8d85655000a3a8c17dda073f585cb202432b8a386a68bae56dccef54f86e",
+      "size": 1992
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/core/identity.c",
+      "sha256": "ddb1589d51b590c352bc196f989b1ce9c567409f5ad703ed7171d55816f212cf",
+      "size": 6613
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/core/identity.h",
+      "sha256": "219f443bb8de2eb7d2a275dc38a539b5010c146d6ec12b756076302c79794604",
+      "size": 1200
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/core/led_compat_main.c",
+      "sha256": "825237a8aa848cc2bbb8f11f89994accf9f44692b06b94e7262aa83ede38d065",
+      "size": 116
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/core/led_daemon_main.c",
+      "sha256": "e9add637221c5613573ccb61d85ad4d3979e46723e8a266118d065f4778dd33f",
+      "size": 2348
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/core/loader.c",
+      "sha256": "f17141b1bfd9ef3da69173e5fae7bf8723bf077016dfe9c05908c10e5a2a4270",
+      "size": 6299
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/core/loader.h",
+      "sha256": "f73eb103132a4b8fff2d5c175ec9ad64f391a0ce8fc8a65c5b9ddcf35abfd5dc",
+      "size": 963
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/core/main.c",
+      "sha256": "a3d9c050bcf0faa4e22733ec56fd6ef52f31444eeca07178e9e11253b61b7a11",
+      "size": 23297
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/core/wake_cli.c",
+      "sha256": "1970888aada0a5b38b952256736cf9460896b6278f4b901e64c12e10691d9d6a",
+      "size": 8615
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/core/wake_cli.h",
+      "sha256": "0a3abc62659f63a696898a3940ae480d9bafa14581a9943c2602db3265663b22",
+      "size": 188
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/ec/ec.c",
+      "sha256": "811d4d762f5511882bd3421824a32c2d960b9404a8de10307156a20c9f0c59be",
+      "size": 352
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/ec/ec.h",
+      "sha256": "f3b3b4505ef59a5b336df7dea9736b16d1dff3dd832a439367d4df5adba683ec",
+      "size": 128
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/ec/idx6012.c",
+      "sha256": "4957528f7de4838edfb3366444283c8f0ce45b6de3e8153ab12969c38baf35aa",
+      "size": 11021
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/ec/idx6012.h",
+      "sha256": "6185e93e66c512f0127039ed697dbfd506adea544f4f744f2a01842024dffbbc",
+      "size": 812
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/ec/it55_dxp4800gt.c",
+      "sha256": "5e790f0235fc9969448fb21a3f1366748f2a8a5f6e38f295a7b7217063665f8a",
+      "size": 8303
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/ec/it55_dxp4800gt.h",
+      "sha256": "dc048378945b1e6b533e44a3cab3bc382660daa8d6cae865543ef191a0e1cad5",
+      "size": 757
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/fan/it8613_direct.c",
+      "sha256": "41fe99d15b4a9aa5f90113bd40e4bddf60ce5a5c09ab5dbb3ecf33c0f766518d",
+      "size": 5969
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/fan/it8613_direct.h",
+      "sha256": "ff5d58c9cc6c4f4eefa7c2dece07a9399cae892ee8e6783725834c8c5a6fa97d",
+      "size": 1192
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/fan/it8613_dx4600.c",
+      "sha256": "714055011a935c287aa836e0af349f3b7294d1d3f416182e7f6cc967d3d149a0",
+      "size": 1603
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/fan/it8613_dx4600.h",
+      "sha256": "b6fcc4d7092575fd1d02b178f09988e5db0ace24ee3ba3672c4641f7478688c6",
+      "size": 409
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/fan/it8613_dxp2800.c",
+      "sha256": "510b715b587d01a2cbe41235000720fec9fdea4b95597b447c522f008d38d1fa",
+      "size": 2393
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/fan/it8613_dxp2800.h",
+      "sha256": "d2b1b71d706292854e6635fde7bd78505b0d86b23c716ce96717ca05cbc42fc1",
+      "size": 520
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/fan/it8613_dxp4800.c",
+      "sha256": "fc4043eb01e07dccf38e097c97364acd5d46b618c0d8358902b25e386ba7f64a",
+      "size": 1530
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/fan/it8613_dxp4800.h",
+      "sha256": "c62d04e303724c7afa1c9dbb8ba9a0775ce7325cc2a3e1521d8c7d30251922f7",
+      "size": 415
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/fan/it8613_dxp4800s.c",
+      "sha256": "b56aec50d354bda172f255d62af2459b0ded2963ad8f90a1c9d947127e5ed238",
+      "size": 1584
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/fan/it8613_dxp4800s.h",
+      "sha256": "2e10bf015ccbd2d2ff09623eb0171d8031df98d2fa8ff18bd163dc8fc5e3d8f6",
+      "size": 435
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/fan/it8613_dxp480t.c",
+      "sha256": "e7bfd6c97122d855ea2e32cecf6620199113df7d23efd698e0656d05839c186a",
+      "size": 3347
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/fan/it8613_dxp480t.h",
+      "sha256": "85ea7c08feff331048d1c64b8da56e7e444936e5aea06633c309451a997fed51",
+      "size": 461
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/fan/it8613_dxp6800.c",
+      "sha256": "0b3201d7fb3a6b98bcfb8c27c3d4ab28957ad8b5bc85c47b158d6431504b0360",
+      "size": 2825
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/fan/it8613_dxp6800.h",
+      "sha256": "3425e168792d72c06e78561ffda2dc9a604a2856e922390bbd5ea4799af8a4ed",
+      "size": 458
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/fan/it8613_dxp6800plus.c",
+      "sha256": "d0bd947b85422dac259538dd95429cb487f10f9adc883e5ace8f79ed05c1afb6",
+      "size": 2854
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/fan/it8613_dxp6800plus.h",
+      "sha256": "7c9620d5253bce9dba2b8d46aad373b661366a661c26b4fdf2853eba914defa3",
+      "size": 474
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/fan/it8613_dxp6800pro.c",
+      "sha256": "8e3f59737485abd13d67bf5ccf79843b2210bd409836bb3330e3c15bad2bb24d",
+      "size": 2724
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/fan/it8613_dxp6800pro.h",
+      "sha256": "3b9361cc4125ed2579afdc4509be7db7e2e64d45f12b0dd358dc898c3301d5d4",
+      "size": 470
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/fan/it8613_dxp8800pro.c",
+      "sha256": "187e114dac01e57c8b282c7f69dd6304cfa5c688b0ce8670351b6ded208eb7b4",
+      "size": 2935
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/fan/it8613_dxp8800pro.h",
+      "sha256": "ab5aa4c010b9669ee8d58e2bd138ba586aff6fabc4345dbfa0b221b1635ffc4c",
+      "size": 470
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/fan/it8613_fan.c",
+      "sha256": "3f8e7f6470fe68adaba283714c953652ce12865321b1349af7097f68f8253941",
+      "size": 2240
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/fan/it8613_fan.h",
+      "sha256": "3c7029b0722582c939f529d5d4d3e0ac21460eb1679a33fc36c04d8ef20a9a80",
+      "size": 433
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/fan/it8613_hwmon.c",
+      "sha256": "c86d241b4380c4722662e6c7c2a40d9a91b7808dd8f6b9aa10065846520a6444",
+      "size": 15514
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/fan/it8613_hwmon.h",
+      "sha256": "6dad251e862864bf3e3cc14024c3dcb4ca05922c43c63648735ed9ca7e35f571",
+      "size": 749
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/fan/thermal_curve.c",
+      "sha256": "0b3e034484c1046bd6ec85a296369f985861ad0d3ead20b682a7c1f678492f82",
+      "size": 39300
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/fan/thermal_curve.h",
+      "sha256": "44cbbf068e535cc4ba57ef0f0eefb2544277a8f78c1c74395850f9c4f4317fad",
+      "size": 3925
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/include/ugreenctl.h",
+      "sha256": "2386e31f48eae6ccbcee458efe00f3ce3da82a3b2797c719314fb5325ff8bc47",
+      "size": 3625
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/models/dx4600.c",
+      "sha256": "47eeb6bf0b218fe09680d75d38fcbfa463cd638de118db6ee3379fd92fdbb021",
+      "size": 4487
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/models/dxp2800.c",
+      "sha256": "5448ceb42cfafa3a341a4c3842f48efc35e9bdf7a5c21e699ca39b7064f43105",
+      "size": 2859
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/models/dxp4800.c",
+      "sha256": "ba0680629d3305bec955b81f47e5fffa826c2ecb680cb979179ae85408e16ad4",
+      "size": 4424
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/models/dxp4800gt.c",
+      "sha256": "db4db163f72804d1892ada1de06b87b84abb86ac0a7041c63c4334f437c721c8",
+      "size": 1545
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/models/dxp4800plus.c",
+      "sha256": "eff2f126026b7f829b6c8fefccdd1eeb144ad4be3bfc75ab98d600c69929b6fd",
+      "size": 4329
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/models/dxp4800s.c",
+      "sha256": "ff11cbb2a1d9cbf0138f50a4f5083df146852e7d77dd354764bb800be6138285",
+      "size": 4436
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/models/dxp480tplus.c",
+      "sha256": "0b38b337aa0b8ed3789164b56e9ad9a404677b68ac2ca6914ebad4a0b8335c01",
+      "size": 4208
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/models/dxp6800.c",
+      "sha256": "43f71710e6ee54d6ad6598862ae7bab0cd793c6f41716f88625f5e5488906098",
+      "size": 3575
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/models/dxp6800plus.c",
+      "sha256": "b0f591f1c22b39920e4b4e47a715ae57127bcfd62fdaaa23e732ae89536a2f8b",
+      "size": 4473
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/models/dxp6800pro.c",
+      "sha256": "e7cd4fb68e3512580b674ec2890f50b922456ab941c7b5c4f25efc116c2bb48a",
+      "size": 4471
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/models/dxp8800pro.c",
+      "sha256": "d55234522f7e1ba6d30b679895c901382b662fdf2411fab2eb25e650344347b6",
+      "size": 3603
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/models/idx6012.c",
+      "sha256": "6bf69c9b8f35f525e03b917c6ef55660653480ad213e783ee68eb02453cf62a3",
+      "size": 1906
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/models/led_profiles.c",
+      "sha256": "02dcb86901dac47a83a87b2a70c0f3c4e53d5baa3fcc8d4af1110f570dd63768",
+      "size": 8648
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/models/unsupported_model.c",
+      "sha256": "bb704a4da12e5b732e78f41fd2af5d5c3af228bf879b8ee0d42a22bd9aff3dd1",
+      "size": 1309
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/models/wake_profiles.c",
+      "sha256": "786888af36ad28eccddb654c6ecbac76a66bcd916e7862e25749ea00a2ab8067",
+      "size": 4278
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/models/wake_profiles.h",
+      "sha256": "02b801f314cc68f2e78b579b17e93e29878f36d425eebfd2e0bde046fb37687e",
+      "size": 911
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/network/wol.c",
+      "sha256": "ce5d28e00bc62539d3f1c5d44860144f7670b1a116dfb8ec4e37e532a367cb25",
+      "size": 14117
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/network/wol.h",
+      "sha256": "177086414f688a505d73233a3824f853f0f69b806854ae5e95e1d46b3afea117",
+      "size": 1547
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/network/wol_dx4600.c",
+      "sha256": "f7b0861f2adc212bd45665ccf6c3cdd642d91b16e5042c5ab0557f77b839725b",
+      "size": 1558
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/network/wol_dx4600.h",
+      "sha256": "fd37804b616f5aa9a50fd0af922f623f732fc0032a7d24862120df780af2de12",
+      "size": 425
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/network/wol_dxp4800.c",
+      "sha256": "f7bc7de16b2d220278a53bb1751c862a194d108ab59c1ce24bedb92ee8a9b932",
+      "size": 1094
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/network/wol_dxp4800.h",
+      "sha256": "6bb22b5f1a56ce0d3046386e63c06a6e1a4e81b4149503452d425bf2a15ef35a",
+      "size": 432
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/network/wol_dxp4800plus.c",
+      "sha256": "843869c03e5d1330a75e19bbb671ac844ea7e01fae3e87acc6ab9172ce872cad",
+      "size": 1212
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/network/wol_dxp4800plus.h",
+      "sha256": "fcccb4ba7dc9e8df6bfc6d506ab759d605e35c174b1818a61eb2ad15442860f5",
+      "size": 460
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/network/wol_dxp4800s.c",
+      "sha256": "223048c23774bc4346804b0777d3a0d7158c3319ac711631e3af34c6267661ce",
+      "size": 1181
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/network/wol_dxp4800s.h",
+      "sha256": "4e30c1dfe82a7c57d0a6be0cead31ad610e63f515562ab52da206c9f6ee28587",
+      "size": 439
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/network/wol_dxp480tplus.c",
+      "sha256": "e5722a63046a2fa28961532d730a6b075455a4b05fa94f24d32a56eccb51ac2e",
+      "size": 1623
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/network/wol_dxp480tplus.h",
+      "sha256": "750be485ee647223df9e6792fd7d76d6600a2c7164a8d322a986bce3c9f0997a",
+      "size": 460
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/network/wol_dxp6800plus.c",
+      "sha256": "d730ce75d142d9e7d7166f132f52dc074ac07d08745a8dd133ad439c6b15d6b3",
+      "size": 1254
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/network/wol_dxp6800plus.h",
+      "sha256": "11c1b6157357ee7b2754cfc39005576c6af70f21a3bfe9e1bc97b3d95747ecc6",
+      "size": 472
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/network/wol_dxp6800pro.c",
+      "sha256": "2ad82d5840ce24895e9276d178f86e8cc135f5f4774b337bbc7dcdf37792cf18",
+      "size": 1190
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/network/wol_dxp6800pro.h",
+      "sha256": "310c42dc18ad72f6b685cd9d7c7d9942276eb78fc229c9a1d29e399e7313b273",
+      "size": 453
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/network/wol_interface.c",
+      "sha256": "b4bf1e7ef19d76b42706bea34208654e2f7987d2fa608e0ce3587ace5476165d",
+      "size": 6510
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/network/wol_interface.h",
+      "sha256": "868d538f221448dd369c9f015f25eb69c46e67066164beb88648631947bc8dca",
+      "size": 917
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/power/idx6012_power.c",
+      "sha256": "8916fa8a96c6ba444aaa8f9faf3c58510e7771b5b88bdb0cb4a580314a22347d",
+      "size": 5427
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/power/idx6012_power.h",
+      "sha256": "cd3a121edc72e0cab7ecb0b775bd39127039bd7e0e118d4b5a8e2a2ddeceb6c9",
+      "size": 561
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/power/it8613_power.c",
+      "sha256": "c4d84371d63970956902c1abd61b3eb11738a4422622832d5c1c8ac29e5cb9cb",
+      "size": 2430
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/power/it8613_power.h",
+      "sha256": "2d98734ee0060851107a4b02cdd258af93a4985781ce93b39936ae84801bd7bc",
+      "size": 444
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/power/rtc_wake.c",
+      "sha256": "4be23bcf82c220c36b26aeae214c9ebe58d923d4ebb57caba0b1a0cc8e4732ed",
+      "size": 9640
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/power/rtc_wake.h",
+      "sha256": "083580c05791a0b9582942125deb4ee7efdd69988d398253211d05eecba96f3a",
+      "size": 976
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/scripts/package-almighty.py",
+      "sha256": "197dd29aca2caf2c67f8dfcbe6a99a224fd92b1859ec28b6a8bfb7839f294dc2",
+      "size": 36366
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/scripts/probe_idx6012_ec.py",
+      "sha256": "7716f8ab7ed78931ea2595b3b194b2290832d50b7c0aaa486fa7e14bdcf2cbe6",
+      "size": 5109
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/superio/it86x.c",
+      "sha256": "1ba98fe8d572e9ad9fc967f0b6ed455664365bf4c3784e9f37a8506fa2d09273",
+      "size": 4456
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/superio/it86x.h",
+      "sha256": "ef943ce952062a259d8b7d4f7da7bb1fa2f83c6c2dfa1bfb7271274f0531606b",
+      "size": 577
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/superio/it86x_unavailable.c",
+      "sha256": "6e13008410b530b4222a8586f03f97f79b43a87b6bff091217f23f2b28d0ed37",
+      "size": 950
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/tests/test_idx6012.c",
+      "sha256": "1d64e56626b5e08600cccacfb276834e395a828a4f7b82ce44df53798426095c",
+      "size": 5288
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/tests/test_idx6012_curve.c",
+      "sha256": "cf4428a6640a6631a6c03b001f10cec41faacf59b48c7c749cb357b10817aeb2",
+      "size": 2361
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/tests/test_idx6012_power.c",
+      "sha256": "29db9a4225b70c34ac86746d2587a5c12701adc3661584d2cd4610ebd5d2bc1c",
+      "size": 1680
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/idx6012_hardware-extension-source/tests/test_wake_profiles.c",
+      "sha256": "7de0c59668803f6db9accb474d8f055e2491bfd74ffbc4b64c1a21d1de99a5dc",
+      "size": 7200
+    },
+    {
+      "mode": "0644",
       "path": "usr/local/share/doc/ugreenctl/integration/llled/ac-recovery/README.zh-CN.md",
       "sha256": "e519cb5ac9d401c6d2d85a06639729512500b64983c940b78156b5b11087ac58",
       "size": 2003
@@ -711,8 +3663,14 @@
     {
       "mode": "0644",
       "path": "usr/local/share/doc/ugreenctl/models/compatibility.json",
-      "sha256": "8ab1ebffb00f0664768346b8acdffc95b22122c39454ad091f892fa366978912",
-      "size": 44139
+      "sha256": "7db0359de0e8c027abcec2069272c5302bb83f803daaa1414b3892bc298e3c81",
+      "size": 81263
+    },
+    {
+      "mode": "0644",
+      "path": "usr/local/share/doc/ugreenctl/models/dxp4800gt-fan-curve.json",
+      "sha256": "ebb7be859b1c5e52d4bc2d02fe54c27144cab34b8ca0d5cb0f2faec08aaa52e1",
+      "size": 445
     },
     {
       "mode": "0644",
@@ -745,18 +3703,757 @@
       "size": 2854
     }
   ],
-  "full_suite": "26/26 passed",
-  "full_suite_artifacts": {
-    "aarch64": {
-      "path": "firmware-inbox/work/almighty-n76-direct-20261027/accepted-ctest-aarch64.log",
-      "sha256": "49cd2aecfa6d16ac720afc22ca8d9e36d3e31c7c47d6f111b46b34248c7e53d0"
+  "install_prefix": "/usr/local",
+  "local_extension": {
+    "base_archive_sha256": "ffea8b0c07669cb4523b44231e07eac4db3a82f08e3228f98464e498124a812d",
+    "base_local_extension": {
+      "base_archive_sha256": "e40bf7a53458eeb2d4229e4c5853ffd560a79d40a29309638123e26da529ddd6",
+      "base_local_extension": {
+        "base_archive_sha256": "11861b29db5604d940dd467ae71d774c9f98cf73d9769e256c98719ec8212eca",
+        "base_local_extension": {
+          "base_archive_sha256": "25a6ce719e96f613911bd849980114d0c88485c862d2ea4458d806053d425248",
+          "base_local_extension": {
+            "base_archive_sha256": "8ac9219304dcf0cfe26788da94a316ea69c68980c55d84c614c5959491e7bcd2",
+            "base_local_extension": {
+              "base_archive_sha256": "1abed4d28eb579d1ae5a996f5a1373c08dbfff885821f73d5aac9975a708c212",
+              "base_local_extension": {
+                "base_archive_sha256": "02210d9c7ed659ee48eeadcc037c65ff76fb7ac313e26f3b320c9dc63569d3fc",
+                "base_local_extension": {
+                  "base_archive_sha256": "08a74ce4acee7f5db0d09380347e5a3e9eb2664c5a885fbd90ee0aafb0e108cc",
+                  "base_local_extension": {
+                    "base_archive_sha256": "9827b4f1c0f0f251634bf07041c6ff2f9b6504e5e212c3ff1520174ad95389c1",
+                    "base_full_suite": "26/26 passed",
+                    "base_full_suite_artifacts": {
+                      "aarch64": {
+                        "path": "firmware-inbox/work/almighty-n76-direct-20261027/accepted-ctest-aarch64.log",
+                        "sha256": "49cd2aecfa6d16ac720afc22ca8d9e36d3e31c7c47d6f111b46b34248c7e53d0"
+                      },
+                      "x86_64": {
+                        "path": "firmware-inbox/work/almighty-n76-direct-20261027/accepted-ctest-x86_64.log",
+                        "sha256": "3b6cc4d0c4d9151a9e967abfdf351c9bf2f58235f9f4d815c8c018fed52d37ac"
+                      }
+                    },
+                    "base_verification_sha256": "76aa71383cebdc048aac074ea5ad95e99fde4ec5db468f51bfff8cd4fee4de49",
+                    "changed_payloads": [
+                      "usr/local/bin/ugreenctl-fand",
+                      "usr/local/lib/ugreenctl/models/dxp6800.so"
+                    ],
+                    "id": "dxp6800-20261028",
+                    "physical_validation": "not-performed",
+                    "source_sha256": {
+                      "CMakeLists.txt": "a00bc40d1e01801cd1f840aa5257819f69f7424658f281e2a60019b7800b96c8",
+                      "core/fan_daemon.c": "1e49b652f9cc04d96290a9d465d4d7d4c4c52e0f7bc88d64debcff27453aff76",
+                      "docs/DXP6800_SUPPORT.zh-CN.md": "8cc2853fdf0e297ec6fa5d2ca17b758b120e4bd1d471b2cb7bdf7b6f2ce893fb",
+                      "docs/FAN_CURVE.md": "825df7f665b5ec5926a32a6723ed4f48ff46816777fa8576a9cd51361c092dc6",
+                      "fan/it8613_direct.c": "41fe99d15b4a9aa5f90113bd40e4bddf60ce5a5c09ab5dbb3ecf33c0f766518d",
+                      "fan/it8613_direct.h": "ff5d58c9cc6c4f4eefa7c2dece07a9399cae892ee8e6783725834c8c5a6fa97d",
+                      "fan/it8613_dx4600.c": "714055011a935c287aa836e0af349f3b7294d1d3f416182e7f6cc967d3d149a0",
+                      "fan/it8613_dx4600.h": "b6fcc4d7092575fd1d02b178f09988e5db0ace24ee3ba3672c4641f7478688c6",
+                      "fan/it8613_dxp4800.c": "fc4043eb01e07dccf38e097c97364acd5d46b618c0d8358902b25e386ba7f64a",
+                      "fan/it8613_dxp4800.h": "c62d04e303724c7afa1c9dbb8ba9a0775ce7325cc2a3e1521d8c7d30251922f7",
+                      "fan/it8613_dxp4800s.c": "b56aec50d354bda172f255d62af2459b0ded2963ad8f90a1c9d947127e5ed238",
+                      "fan/it8613_dxp4800s.h": "2e10bf015ccbd2d2ff09623eb0171d8031df98d2fa8ff18bd163dc8fc5e3d8f6",
+                      "fan/it8613_dxp480t.c": "e7bfd6c97122d855ea2e32cecf6620199113df7d23efd698e0656d05839c186a",
+                      "fan/it8613_dxp480t.h": "85ea7c08feff331048d1c64b8da56e7e444936e5aea06633c309451a997fed51",
+                      "fan/it8613_dxp6800.c": "0b3201d7fb3a6b98bcfb8c27c3d4ab28957ad8b5bc85c47b158d6431504b0360",
+                      "fan/it8613_dxp6800.h": "3425e168792d72c06e78561ffda2dc9a604a2856e922390bbd5ea4799af8a4ed",
+                      "fan/it8613_dxp6800plus.c": "d0bd947b85422dac259538dd95429cb487f10f9adc883e5ace8f79ed05c1afb6",
+                      "fan/it8613_dxp6800plus.h": "7c9620d5253bce9dba2b8d46aad373b661366a661c26b4fdf2853eba914defa3",
+                      "fan/it8613_dxp6800pro.c": "8e3f59737485abd13d67bf5ccf79843b2210bd409836bb3330e3c15bad2bb24d",
+                      "fan/it8613_dxp6800pro.h": "3b9361cc4125ed2579afdc4509be7db7e2e64d45f12b0dd358dc898c3301d5d4",
+                      "fan/it8613_fan.c": "3f8e7f6470fe68adaba283714c953652ce12865321b1349af7097f68f8253941",
+                      "fan/it8613_fan.h": "3c7029b0722582c939f529d5d4d3e0ac21460eb1679a33fc36c04d8ef20a9a80",
+                      "fan/it8613_hwmon.c": "c86d241b4380c4722662e6c7c2a40d9a91b7808dd8f6b9aa10065846520a6444",
+                      "fan/it8613_hwmon.h": "6dad251e862864bf3e3cc14024c3dcb4ca05922c43c63648735ed9ca7e35f571",
+                      "fan/thermal_curve.c": "33d2031f0287f72e51acac44cd0db552e9822584dc369a39edad4b5071664a6c",
+                      "fan/thermal_curve.h": "44cbbf068e535cc4ba57ef0f0eefb2544277a8f78c1c74395850f9c4f4317fad",
+                      "include/ugreenctl.h": "2386e31f48eae6ccbcee458efe00f3ce3da82a3b2797c719314fb5325ff8bc47",
+                      "models/dxp6800.c": "43f71710e6ee54d6ad6598862ae7bab0cd793c6f41716f88625f5e5488906098",
+                      "power/it8613_power.c": "c4d84371d63970956902c1abd61b3eb11738a4422622832d5c1c8ac29e5cb9cb",
+                      "power/it8613_power.h": "2d98734ee0060851107a4b02cdd258af93a4985781ce93b39936ae84801bd7bc",
+                      "power/rtc_wake.c": "4be23bcf82c220c36b26aeae214c9ebe58d923d4ebb57caba0b1a0cc8e4732ed",
+                      "power/rtc_wake.h": "083580c05791a0b9582942125deb4ee7efdd69988d398253211d05eecba96f3a",
+                      "scripts/prepare-llled-dxp6800.py": "bdc3e4e521df852e9a3906c7774925b76e1ae7c8b459fd19fce16f132f038b07",
+                      "superio/it86x.c": "1ba98fe8d572e9ad9fc967f0b6ed455664365bf4c3784e9f37a8506fa2d09273",
+                      "superio/it86x.h": "ef943ce952062a259d8b7d4f7da7bb1fa2f83c6c2dfa1bfb7271274f0531606b",
+                      "superio/it86x_unavailable.c": "6e13008410b530b4222a8586f03f97f79b43a87b6bff091217f23f2b28d0ed37",
+                      "tests/test_dxp6800_plugin.c": "d4d295e12954e521e2cdf3ac10823bd569c27e806a4a57ef65e2f32f9a9b269f",
+                      "tests/test_it8613_dxp6800.c": "3f445ae6b994423f55f648148822932495dcc821e2e1ec41e523f0457ce9a56e",
+                      "tests/test_thermal_curve.c": "e54585d841404e781e155893e548ef78512939611bf16b2e2854e2e6768dcb39"
+                    }
+                  },
+                  "changed_payloads": [
+                    "usr/local/bin/ugreen_leds_cli",
+                    "usr/local/bin/ugreenctl",
+                    "usr/local/bin/ugreenctl-fand",
+                    "usr/local/lib/ugreenctl/models/dxp2800.so"
+                  ],
+                  "id": "dxp2800-em26-20261101",
+                  "led_build": {
+                    "binary_sha256": "a1bf8f3b0088b9dd278b75d1ac91b0739cf8f1d3d83d9791c2d08fd93e63f472",
+                    "patch_sha256": "7c923f16e72f1095c21382b804467a590cf20cc9984b0778adb562fc75849ee4",
+                    "physical_validation": "not-performed",
+                    "source_revision": "aff7991ee58709ad34b5afbc2787f0d21300368d"
+                  },
+                  "physical_validation": "not-performed",
+                  "source_sha256": {
+                    "application/App.Native.UGreenLED/app/server/vendor/ugreen_leds_controller/patches/dxp2800-em26.patch": "7c923f16e72f1095c21382b804467a590cf20cc9984b0778adb562fc75849ee4",
+                    "application/docs/DXP2800_EM26_SUPPORT.md": "1716d2f9c42a4531899781590fa75149ae2c3c99e34cc9179614a8cce997a303",
+                    "application/scripts/build_led_compat.py": "2bcb68270bd7302022e5e08137f5dd29d758c2a1cf5867439b7665b25265594a",
+                    "application/scripts/prepare_dxp2800.py": "434a3364ce7410b7c42c495d9abb25048a51f389913b44c98601011727899fd7",
+                    "application/tests/run_dxp2800_runtime.py": "ccfdbf168f06cfd8de3e8f62a34d2a239d726979b0fb589e4188bc4c1b68ee64",
+                    "application/tests/test_dxp2800_led.c": "c877253e8514cc1d787936d1544d297fc96ff48179dc6c93aca2914385d208bb",
+                    "application/tests/test_dxp2800_runtime.c": "a55cf79e305c907584e299685253b3e57497927617b38011bf693749e4d94968",
+                    "hardware/CMakeLists.txt": "591709839ee9a8e41b7c1f3fb89e9aedddf06d74b582068db883e491faf94caa",
+                    "hardware/core/fan_daemon.c": "9c7956201560806713d1dbfe8cdcec656d2144454ec2e8d12fd807f8dd8f79b0",
+                    "hardware/core/hardware_cli.c": "1fbe0e7d982c1b74119fe93ea31c8154c9233d67de3939755aa78c53668b1a08",
+                    "hardware/core/hardware_cli.h": "796e8d85655000a3a8c17dda073f585cb202432b8a386a68bae56dccef54f86e",
+                    "hardware/core/identity.c": "443c12f5b4d45b4ba257a3522a0b4714dd558b24c50420ab696f7b57cec410d5",
+                    "hardware/core/identity.h": "fd0d59a63ee133e8da1ed86568b75b13b9fb9997daa2a69343d36091dc2de8cb",
+                    "hardware/core/led_compat_main.c": "825237a8aa848cc2bbb8f11f89994accf9f44692b06b94e7262aa83ede38d065",
+                    "hardware/core/led_daemon_main.c": "e9add637221c5613573ccb61d85ad4d3979e46723e8a266118d065f4778dd33f",
+                    "hardware/core/loader.c": "f17141b1bfd9ef3da69173e5fae7bf8723bf077016dfe9c05908c10e5a2a4270",
+                    "hardware/core/loader.h": "f73eb103132a4b8fff2d5c175ec9ad64f391a0ce8fc8a65c5b9ddcf35abfd5dc",
+                    "hardware/core/main.c": "2c364863a812f7c1844f1dbc4163eef4f6657ae35865594243a578f68b6dde9b",
+                    "hardware/core/wake_cli.c": "1970888aada0a5b38b952256736cf9460896b6278f4b901e64c12e10691d9d6a",
+                    "hardware/core/wake_cli.h": "0a3abc62659f63a696898a3940ae480d9bafa14581a9943c2602db3265663b22",
+                    "hardware/disk/disk.c": "5d29b9786b5d3555574d49d7ba177a8d28e3fe215f056ad2e92201ff7da3f314",
+                    "hardware/disk/disk.h": "49d357f0c60a0b9113f7618aeacf9dcd19c6ef811c82fc11ab4c2d7d145128f5",
+                    "hardware/disk/firmware_profiles.c": "6a1c2bb1842f31c15c83e1f6ac33ca0b5d2f15dcb166932bb8a143c751668399",
+                    "hardware/disk/firmware_profiles.h": "0be8210c779e8e5d650d1b536b5577435fe09bd7ab46b5810f505321961c35f1",
+                    "hardware/docs/DXP2800_EM26_SUPPORT.md": "87a039f5dfef80b84f8381dbda274327bef8ad4af575badeb5c3bd503640c290",
+                    "hardware/ec/ec.c": "811d4d762f5511882bd3421824a32c2d960b9404a8de10307156a20c9f0c59be",
+                    "hardware/ec/ec.h": "f3b3b4505ef59a5b336df7dea9736b16d1dff3dd832a439367d4df5adba683ec",
+                    "hardware/fan/it8613_direct.c": "41fe99d15b4a9aa5f90113bd40e4bddf60ce5a5c09ab5dbb3ecf33c0f766518d",
+                    "hardware/fan/it8613_direct.h": "ff5d58c9cc6c4f4eefa7c2dece07a9399cae892ee8e6783725834c8c5a6fa97d",
+                    "hardware/fan/it8613_dx4600.c": "714055011a935c287aa836e0af349f3b7294d1d3f416182e7f6cc967d3d149a0",
+                    "hardware/fan/it8613_dx4600.h": "b6fcc4d7092575fd1d02b178f09988e5db0ace24ee3ba3672c4641f7478688c6",
+                    "hardware/fan/it8613_dxp2800.c": "510b715b587d01a2cbe41235000720fec9fdea4b95597b447c522f008d38d1fa",
+                    "hardware/fan/it8613_dxp2800.h": "d2b1b71d706292854e6635fde7bd78505b0d86b23c716ce96717ca05cbc42fc1",
+                    "hardware/fan/it8613_dxp4800.c": "fc4043eb01e07dccf38e097c97364acd5d46b618c0d8358902b25e386ba7f64a",
+                    "hardware/fan/it8613_dxp4800.h": "c62d04e303724c7afa1c9dbb8ba9a0775ce7325cc2a3e1521d8c7d30251922f7",
+                    "hardware/fan/it8613_dxp4800s.c": "b56aec50d354bda172f255d62af2459b0ded2963ad8f90a1c9d947127e5ed238",
+                    "hardware/fan/it8613_dxp4800s.h": "2e10bf015ccbd2d2ff09623eb0171d8031df98d2fa8ff18bd163dc8fc5e3d8f6",
+                    "hardware/fan/it8613_dxp480t.c": "e7bfd6c97122d855ea2e32cecf6620199113df7d23efd698e0656d05839c186a",
+                    "hardware/fan/it8613_dxp480t.h": "85ea7c08feff331048d1c64b8da56e7e444936e5aea06633c309451a997fed51",
+                    "hardware/fan/it8613_dxp6800.c": "0b3201d7fb3a6b98bcfb8c27c3d4ab28957ad8b5bc85c47b158d6431504b0360",
+                    "hardware/fan/it8613_dxp6800.h": "3425e168792d72c06e78561ffda2dc9a604a2856e922390bbd5ea4799af8a4ed",
+                    "hardware/fan/it8613_dxp6800plus.c": "d0bd947b85422dac259538dd95429cb487f10f9adc883e5ace8f79ed05c1afb6",
+                    "hardware/fan/it8613_dxp6800plus.h": "7c9620d5253bce9dba2b8d46aad373b661366a661c26b4fdf2853eba914defa3",
+                    "hardware/fan/it8613_dxp6800pro.c": "8e3f59737485abd13d67bf5ccf79843b2210bd409836bb3330e3c15bad2bb24d",
+                    "hardware/fan/it8613_dxp6800pro.h": "3b9361cc4125ed2579afdc4509be7db7e2e64d45f12b0dd358dc898c3301d5d4",
+                    "hardware/fan/it8613_fan.c": "3f8e7f6470fe68adaba283714c953652ce12865321b1349af7097f68f8253941",
+                    "hardware/fan/it8613_fan.h": "3c7029b0722582c939f529d5d4d3e0ac21460eb1679a33fc36c04d8ef20a9a80",
+                    "hardware/fan/it8613_hwmon.c": "c86d241b4380c4722662e6c7c2a40d9a91b7808dd8f6b9aa10065846520a6444",
+                    "hardware/fan/it8613_hwmon.h": "6dad251e862864bf3e3cc14024c3dcb4ca05922c43c63648735ed9ca7e35f571",
+                    "hardware/fan/thermal_curve.c": "33d2031f0287f72e51acac44cd0db552e9822584dc369a39edad4b5071664a6c",
+                    "hardware/fan/thermal_curve.h": "44cbbf068e535cc4ba57ef0f0eefb2544277a8f78c1c74395850f9c4f4317fad",
+                    "hardware/include/ugreenctl.h": "2386e31f48eae6ccbcee458efe00f3ce3da82a3b2797c719314fb5325ff8bc47",
+                    "hardware/led/led.c": "085dd5863850fb0f149f3dcff82041ac3e1d9b2df2f694b124269df7109fa204",
+                    "hardware/led/led.h": "4ab26b5ddbbef5cf77c02f23a17e11b0920567f3af0f6ff71d2680594cb2f33e",
+                    "hardware/led/led_cs201x.c": "8f36539539128cc77f7df079f15e6e8979156766f99a50ea7b9d687b1924a319",
+                    "hardware/led/led_cs201x.h": "d4ad1e52beb3596e1ae66edfc8d5a5f21cb0c397cf1cf77bce7e401ba7229dfd",
+                    "hardware/led/led_gpio.c": "f1d7e35bec26d79173b0c7dd14d0d6f244dedb9b0531767abab072f5ec9ce526",
+                    "hardware/led/led_gpio.h": "c82082a19e91e9b81b1d0e881f7e6bc090e8b98250760cacd3e603e9663486e2",
+                    "hardware/led/led_n76_protocol.c": "58db4c39011414a8b05e2eeaaff7871a4ae330790c4a83edeedfdd9b5d18db0e",
+                    "hardware/led/led_n76_protocol.h": "33eed8e7bd4ddbd03d3e2804f166eac90bbe49abbbb3312cf747172f6bddfc92",
+                    "hardware/led/led_protocol.c": "b5cc858798b4d783e16403fe7183cbbed3884d880fe1ea10d668a79d353be709",
+                    "hardware/led/led_protocol.h": "6732e325c6611ce7f4ee824f22f1361b7ad769b12bcc3c6f078a642655faa91e",
+                    "hardware/led/led_service.c": "74f7745d47dcc5e865da115b7967ee8c8058074fbe97f5d4318ebfee4b7e742b",
+                    "hardware/led/led_service.h": "dac8baadcf58046dbc96286e0c2261c9f0dca4e9a40d3aa85ae72ff59683cd27",
+                    "hardware/led/led_service_test.h": "8772b5b45a62244c52dbbcf21851e8886440e0805401d24edee74d2b35af810a",
+                    "hardware/led/led_sysfs.c": "7a20af1be127c12cb9cb221c48407ff2a31ba8950f148a9a8ac2b8a52671b72f",
+                    "hardware/led/led_sysfs.h": "e66a06334f5e58663986864e2a056bddaa6f92fb28f271e8eafa6aa22446aa3b",
+                    "hardware/led/led_test.h": "5a59f56f32e4aeca4e110ac3340fe025a9c4801ebe4d6a9e3aa4ca4397c74339",
+                    "hardware/models/compatibility.json": "71c433816ba8502596da9264406c15cd80e132c6fb92de6505a9a0a86a18c843",
+                    "hardware/models/dx4600.c": "47eeb6bf0b218fe09680d75d38fcbfa463cd638de118db6ee3379fd92fdbb021",
+                    "hardware/models/dxp2800.c": "5448ceb42cfafa3a341a4c3842f48efc35e9bdf7a5c21e699ca39b7064f43105",
+                    "hardware/models/dxp4800.c": "ba0680629d3305bec955b81f47e5fffa826c2ecb680cb979179ae85408e16ad4",
+                    "hardware/models/dxp4800plus.c": "eff2f126026b7f829b6c8fefccdd1eeb144ad4be3bfc75ab98d600c69929b6fd",
+                    "hardware/models/dxp4800s.c": "ff11cbb2a1d9cbf0138f50a4f5083df146852e7d77dd354764bb800be6138285",
+                    "hardware/models/dxp480tplus.c": "0b38b337aa0b8ed3789164b56e9ad9a404677b68ac2ca6914ebad4a0b8335c01",
+                    "hardware/models/dxp6800.c": "43f71710e6ee54d6ad6598862ae7bab0cd793c6f41716f88625f5e5488906098",
+                    "hardware/models/dxp6800plus.c": "b0f591f1c22b39920e4b4e47a715ae57127bcfd62fdaaa23e732ae89536a2f8b",
+                    "hardware/models/dxp6800pro.c": "e7cd4fb68e3512580b674ec2890f50b922456ab941c7b5c4f25efc116c2bb48a",
+                    "hardware/models/led_profiles.c": "02dcb86901dac47a83a87b2a70c0f3c4e53d5baa3fcc8d4af1110f570dd63768",
+                    "hardware/models/unsupported_model.c": "bb704a4da12e5b732e78f41fd2af5d5c3af228bf879b8ee0d42a22bd9aff3dd1",
+                    "hardware/models/wake_profiles.c": "1149077075cc3872271748f7754300274d335b0670dd145030b6be2521a94e73",
+                    "hardware/models/wake_profiles.h": "02b801f314cc68f2e78b579b17e93e29878f36d425eebfd2e0bde046fb37687e",
+                    "hardware/network/wol.c": "ce5d28e00bc62539d3f1c5d44860144f7670b1a116dfb8ec4e37e532a367cb25",
+                    "hardware/network/wol.h": "177086414f688a505d73233a3824f853f0f69b806854ae5e95e1d46b3afea117",
+                    "hardware/network/wol_dx4600.c": "f7b0861f2adc212bd45665ccf6c3cdd642d91b16e5042c5ab0557f77b839725b",
+                    "hardware/network/wol_dx4600.h": "fd37804b616f5aa9a50fd0af922f623f732fc0032a7d24862120df780af2de12",
+                    "hardware/network/wol_dxp4800.c": "f7bc7de16b2d220278a53bb1751c862a194d108ab59c1ce24bedb92ee8a9b932",
+                    "hardware/network/wol_dxp4800.h": "6bb22b5f1a56ce0d3046386e63c06a6e1a4e81b4149503452d425bf2a15ef35a",
+                    "hardware/network/wol_dxp4800plus.c": "843869c03e5d1330a75e19bbb671ac844ea7e01fae3e87acc6ab9172ce872cad",
+                    "hardware/network/wol_dxp4800plus.h": "fcccb4ba7dc9e8df6bfc6d506ab759d605e35c174b1818a61eb2ad15442860f5",
+                    "hardware/network/wol_dxp4800s.c": "223048c23774bc4346804b0777d3a0d7158c3319ac711631e3af34c6267661ce",
+                    "hardware/network/wol_dxp4800s.h": "4e30c1dfe82a7c57d0a6be0cead31ad610e63f515562ab52da206c9f6ee28587",
+                    "hardware/network/wol_dxp480tplus.c": "e5722a63046a2fa28961532d730a6b075455a4b05fa94f24d32a56eccb51ac2e",
+                    "hardware/network/wol_dxp480tplus.h": "750be485ee647223df9e6792fd7d76d6600a2c7164a8d322a986bce3c9f0997a",
+                    "hardware/network/wol_dxp6800plus.c": "d730ce75d142d9e7d7166f132f52dc074ac07d08745a8dd133ad439c6b15d6b3",
+                    "hardware/network/wol_dxp6800plus.h": "11c1b6157357ee7b2754cfc39005576c6af70f21a3bfe9e1bc97b3d95747ecc6",
+                    "hardware/network/wol_dxp6800pro.c": "2ad82d5840ce24895e9276d178f86e8cc135f5f4774b337bbc7dcdf37792cf18",
+                    "hardware/network/wol_dxp6800pro.h": "310c42dc18ad72f6b685cd9d7c7d9942276eb78fc229c9a1d29e399e7313b273",
+                    "hardware/network/wol_interface.c": "b4bf1e7ef19d76b42706bea34208654e2f7987d2fa608e0ce3587ace5476165d",
+                    "hardware/network/wol_interface.h": "868d538f221448dd369c9f015f25eb69c46e67066164beb88648631947bc8dca",
+                    "hardware/power/it8613_power.c": "c4d84371d63970956902c1abd61b3eb11738a4422622832d5c1c8ac29e5cb9cb",
+                    "hardware/power/it8613_power.h": "2d98734ee0060851107a4b02cdd258af93a4985781ce93b39936ae84801bd7bc",
+                    "hardware/power/rtc_wake.c": "4be23bcf82c220c36b26aeae214c9ebe58d923d4ebb57caba0b1a0cc8e4732ed",
+                    "hardware/power/rtc_wake.h": "083580c05791a0b9582942125deb4ee7efdd69988d398253211d05eecba96f3a",
+                    "hardware/superio/it86x.c": "1ba98fe8d572e9ad9fc967f0b6ed455664365bf4c3784e9f37a8506fa2d09273",
+                    "hardware/superio/it86x.h": "ef943ce952062a259d8b7d4f7da7bb1fa2f83c6c2dfa1bfb7271274f0531606b",
+                    "hardware/superio/it86x_unavailable.c": "6e13008410b530b4222a8586f03f97f79b43a87b6bff091217f23f2b28d0ed37",
+                    "hardware/tests/test_dxp2800_plugin.c": "f9b4e9834518c26748df1546cf702135e4a73e55d0b449afc4280091ee0a40ae",
+                    "hardware/tests/test_it8613_dxp2800.c": "cd2eb583aefaef725d4936fa824ff7fc63b05d9b1e9fa06138b6680b600c2e2f"
+                  }
+                },
+                "changed_payloads": [
+                  "usr/local/bin/ugreenctl",
+                  "usr/local/bin/ugreenctl-fand",
+                  "usr/local/lib/ugreenctl/models/dxp8800pro.so"
+                ],
+                "id": "dxp8800pro-20261104",
+                "led_binary_sha256": "a1bf8f3b0088b9dd278b75d1ac91b0739cf8f1d3d83d9791c2d08fd93e63f472",
+                "physical_validation": "not-performed",
+                "source_sha256": {
+                  "CMakeLists.txt": "4d50696f8ff5397171aae347793b0d5f0771c24f61375d4e48faae5b76846e2b",
+                  "application/scripts/prepare_dxp8800pro.py": "bba3b675f1de5bc403489242381bdd9d688ca7c2bea6912b7ed71534b3b89c9d",
+                  "application/tests/run_dxp8800pro_runtime.py": "4397f4024f2174ea514fb86be450136dbabaef8bc2a6933645fd51815157fee9",
+                  "application/tests/test_dxp8800pro_runtime.c": "6b133a81fedd5b68246fc1cccfb0b148f67e7908345a60f0d4876473ef51169f",
+                  "core/fan_daemon.c": "edaf106bbe0d40582a5a5698511f592d4f215e514f6d24124d0b6bb0db7e995e",
+                  "core/hardware_cli.c": "1fbe0e7d982c1b74119fe93ea31c8154c9233d67de3939755aa78c53668b1a08",
+                  "core/hardware_cli.h": "796e8d85655000a3a8c17dda073f585cb202432b8a386a68bae56dccef54f86e",
+                  "core/identity.c": "443c12f5b4d45b4ba257a3522a0b4714dd558b24c50420ab696f7b57cec410d5",
+                  "core/identity.h": "fd0d59a63ee133e8da1ed86568b75b13b9fb9997daa2a69343d36091dc2de8cb",
+                  "core/led_compat_main.c": "825237a8aa848cc2bbb8f11f89994accf9f44692b06b94e7262aa83ede38d065",
+                  "core/led_daemon_main.c": "e9add637221c5613573ccb61d85ad4d3979e46723e8a266118d065f4778dd33f",
+                  "core/loader.c": "f17141b1bfd9ef3da69173e5fae7bf8723bf077016dfe9c05908c10e5a2a4270",
+                  "core/loader.h": "f73eb103132a4b8fff2d5c175ec9ad64f391a0ce8fc8a65c5b9ddcf35abfd5dc",
+                  "core/main.c": "2c364863a812f7c1844f1dbc4163eef4f6657ae35865594243a578f68b6dde9b",
+                  "core/wake_cli.c": "1970888aada0a5b38b952256736cf9460896b6278f4b901e64c12e10691d9d6a",
+                  "core/wake_cli.h": "0a3abc62659f63a696898a3940ae480d9bafa14581a9943c2602db3265663b22",
+                  "docs/DXP8800_PRO_AUDIT.zh-CN.md": "10d09a45861db03c4afc0b8765dd26794e038b5d0401d4aa9bef3bc532b511d1",
+                  "docs/FAN_CURVE.md": "e5ef7e0e0a48cf9b44447a12b0ebc333618e99026bf186b4e2ae3516e2d2f07c",
+                  "docs/HARDWARE_SUPPORT.md": "85af77cdde727d59b2ae5bc797c0b6e099f25e31f25feb32e20dab8b0206d286",
+                  "fan/it8613_direct.c": "41fe99d15b4a9aa5f90113bd40e4bddf60ce5a5c09ab5dbb3ecf33c0f766518d",
+                  "fan/it8613_direct.h": "ff5d58c9cc6c4f4eefa7c2dece07a9399cae892ee8e6783725834c8c5a6fa97d",
+                  "fan/it8613_dx4600.c": "714055011a935c287aa836e0af349f3b7294d1d3f416182e7f6cc967d3d149a0",
+                  "fan/it8613_dx4600.h": "b6fcc4d7092575fd1d02b178f09988e5db0ace24ee3ba3672c4641f7478688c6",
+                  "fan/it8613_dxp2800.c": "510b715b587d01a2cbe41235000720fec9fdea4b95597b447c522f008d38d1fa",
+                  "fan/it8613_dxp2800.h": "d2b1b71d706292854e6635fde7bd78505b0d86b23c716ce96717ca05cbc42fc1",
+                  "fan/it8613_dxp4800.c": "fc4043eb01e07dccf38e097c97364acd5d46b618c0d8358902b25e386ba7f64a",
+                  "fan/it8613_dxp4800.h": "c62d04e303724c7afa1c9dbb8ba9a0775ce7325cc2a3e1521d8c7d30251922f7",
+                  "fan/it8613_dxp4800s.c": "b56aec50d354bda172f255d62af2459b0ded2963ad8f90a1c9d947127e5ed238",
+                  "fan/it8613_dxp4800s.h": "2e10bf015ccbd2d2ff09623eb0171d8031df98d2fa8ff18bd163dc8fc5e3d8f6",
+                  "fan/it8613_dxp480t.c": "e7bfd6c97122d855ea2e32cecf6620199113df7d23efd698e0656d05839c186a",
+                  "fan/it8613_dxp480t.h": "85ea7c08feff331048d1c64b8da56e7e444936e5aea06633c309451a997fed51",
+                  "fan/it8613_dxp6800.c": "0b3201d7fb3a6b98bcfb8c27c3d4ab28957ad8b5bc85c47b158d6431504b0360",
+                  "fan/it8613_dxp6800.h": "3425e168792d72c06e78561ffda2dc9a604a2856e922390bbd5ea4799af8a4ed",
+                  "fan/it8613_dxp6800plus.c": "d0bd947b85422dac259538dd95429cb487f10f9adc883e5ace8f79ed05c1afb6",
+                  "fan/it8613_dxp6800plus.h": "7c9620d5253bce9dba2b8d46aad373b661366a661c26b4fdf2853eba914defa3",
+                  "fan/it8613_dxp6800pro.c": "8e3f59737485abd13d67bf5ccf79843b2210bd409836bb3330e3c15bad2bb24d",
+                  "fan/it8613_dxp6800pro.h": "3b9361cc4125ed2579afdc4509be7db7e2e64d45f12b0dd358dc898c3301d5d4",
+                  "fan/it8613_dxp8800pro.c": "187e114dac01e57c8b282c7f69dd6304cfa5c688b0ce8670351b6ded208eb7b4",
+                  "fan/it8613_dxp8800pro.h": "ab5aa4c010b9669ee8d58e2bd138ba586aff6fabc4345dbfa0b221b1635ffc4c",
+                  "fan/it8613_fan.c": "3f8e7f6470fe68adaba283714c953652ce12865321b1349af7097f68f8253941",
+                  "fan/it8613_fan.h": "3c7029b0722582c939f529d5d4d3e0ac21460eb1679a33fc36c04d8ef20a9a80",
+                  "fan/it8613_hwmon.c": "c86d241b4380c4722662e6c7c2a40d9a91b7808dd8f6b9aa10065846520a6444",
+                  "fan/it8613_hwmon.h": "6dad251e862864bf3e3cc14024c3dcb4ca05922c43c63648735ed9ca7e35f571",
+                  "fan/thermal_curve.c": "e57921cde443a08f278fbac4af330248daa7a4205a2d560a654a95eca57ec06f",
+                  "fan/thermal_curve.h": "44cbbf068e535cc4ba57ef0f0eefb2544277a8f78c1c74395850f9c4f4317fad",
+                  "include/ugreenctl.h": "2386e31f48eae6ccbcee458efe00f3ce3da82a3b2797c719314fb5325ff8bc47",
+                  "models/compatibility.json": "25b137c88dd733671dcd7041e938e79ce1ec1451406bc99c963a553270cc7f09",
+                  "models/dx4600.c": "47eeb6bf0b218fe09680d75d38fcbfa463cd638de118db6ee3379fd92fdbb021",
+                  "models/dxp2800.c": "5448ceb42cfafa3a341a4c3842f48efc35e9bdf7a5c21e699ca39b7064f43105",
+                  "models/dxp4800.c": "ba0680629d3305bec955b81f47e5fffa826c2ecb680cb979179ae85408e16ad4",
+                  "models/dxp4800plus.c": "eff2f126026b7f829b6c8fefccdd1eeb144ad4be3bfc75ab98d600c69929b6fd",
+                  "models/dxp4800s.c": "ff11cbb2a1d9cbf0138f50a4f5083df146852e7d77dd354764bb800be6138285",
+                  "models/dxp480tplus.c": "0b38b337aa0b8ed3789164b56e9ad9a404677b68ac2ca6914ebad4a0b8335c01",
+                  "models/dxp6800.c": "43f71710e6ee54d6ad6598862ae7bab0cd793c6f41716f88625f5e5488906098",
+                  "models/dxp6800plus.c": "b0f591f1c22b39920e4b4e47a715ae57127bcfd62fdaaa23e732ae89536a2f8b",
+                  "models/dxp6800pro.c": "e7cd4fb68e3512580b674ec2890f50b922456ab941c7b5c4f25efc116c2bb48a",
+                  "models/dxp8800pro.c": "d55234522f7e1ba6d30b679895c901382b662fdf2411fab2eb25e650344347b6",
+                  "models/led_profiles.c": "02dcb86901dac47a83a87b2a70c0f3c4e53d5baa3fcc8d4af1110f570dd63768",
+                  "models/unsupported_model.c": "bb704a4da12e5b732e78f41fd2af5d5c3af228bf879b8ee0d42a22bd9aff3dd1",
+                  "models/wake_profiles.c": "1149077075cc3872271748f7754300274d335b0670dd145030b6be2521a94e73",
+                  "models/wake_profiles.h": "02b801f314cc68f2e78b579b17e93e29878f36d425eebfd2e0bde046fb37687e",
+                  "network/wol.c": "ce5d28e00bc62539d3f1c5d44860144f7670b1a116dfb8ec4e37e532a367cb25",
+                  "network/wol.h": "177086414f688a505d73233a3824f853f0f69b806854ae5e95e1d46b3afea117",
+                  "network/wol_dx4600.c": "f7b0861f2adc212bd45665ccf6c3cdd642d91b16e5042c5ab0557f77b839725b",
+                  "network/wol_dx4600.h": "fd37804b616f5aa9a50fd0af922f623f732fc0032a7d24862120df780af2de12",
+                  "network/wol_dxp4800.c": "f7bc7de16b2d220278a53bb1751c862a194d108ab59c1ce24bedb92ee8a9b932",
+                  "network/wol_dxp4800.h": "6bb22b5f1a56ce0d3046386e63c06a6e1a4e81b4149503452d425bf2a15ef35a",
+                  "network/wol_dxp4800plus.c": "843869c03e5d1330a75e19bbb671ac844ea7e01fae3e87acc6ab9172ce872cad",
+                  "network/wol_dxp4800plus.h": "fcccb4ba7dc9e8df6bfc6d506ab759d605e35c174b1818a61eb2ad15442860f5",
+                  "network/wol_dxp4800s.c": "223048c23774bc4346804b0777d3a0d7158c3319ac711631e3af34c6267661ce",
+                  "network/wol_dxp4800s.h": "4e30c1dfe82a7c57d0a6be0cead31ad610e63f515562ab52da206c9f6ee28587",
+                  "network/wol_dxp480tplus.c": "e5722a63046a2fa28961532d730a6b075455a4b05fa94f24d32a56eccb51ac2e",
+                  "network/wol_dxp480tplus.h": "750be485ee647223df9e6792fd7d76d6600a2c7164a8d322a986bce3c9f0997a",
+                  "network/wol_dxp6800plus.c": "d730ce75d142d9e7d7166f132f52dc074ac07d08745a8dd133ad439c6b15d6b3",
+                  "network/wol_dxp6800plus.h": "11c1b6157357ee7b2754cfc39005576c6af70f21a3bfe9e1bc97b3d95747ecc6",
+                  "network/wol_dxp6800pro.c": "2ad82d5840ce24895e9276d178f86e8cc135f5f4774b337bbc7dcdf37792cf18",
+                  "network/wol_dxp6800pro.h": "310c42dc18ad72f6b685cd9d7c7d9942276eb78fc229c9a1d29e399e7313b273",
+                  "network/wol_interface.c": "b4bf1e7ef19d76b42706bea34208654e2f7987d2fa608e0ce3587ace5476165d",
+                  "network/wol_interface.h": "868d538f221448dd369c9f015f25eb69c46e67066164beb88648631947bc8dca",
+                  "power/it8613_power.c": "c4d84371d63970956902c1abd61b3eb11738a4422622832d5c1c8ac29e5cb9cb",
+                  "power/it8613_power.h": "2d98734ee0060851107a4b02cdd258af93a4985781ce93b39936ae84801bd7bc",
+                  "power/rtc_wake.c": "4be23bcf82c220c36b26aeae214c9ebe58d923d4ebb57caba0b1a0cc8e4732ed",
+                  "power/rtc_wake.h": "083580c05791a0b9582942125deb4ee7efdd69988d398253211d05eecba96f3a",
+                  "scripts/package-almighty.py": "bb4c669943a037af0beac06d1f75825608052c3f53d0457f4aa13c92bcaea11b",
+                  "superio/it86x.c": "1ba98fe8d572e9ad9fc967f0b6ed455664365bf4c3784e9f37a8506fa2d09273",
+                  "superio/it86x.h": "ef943ce952062a259d8b7d4f7da7bb1fa2f83c6c2dfa1bfb7271274f0531606b",
+                  "superio/it86x_unavailable.c": "6e13008410b530b4222a8586f03f97f79b43a87b6bff091217f23f2b28d0ed37",
+                  "tests/test_dxp8800pro_plugin.c": "be0b38cce952a7fdd1f38e9fe5bbfab11eb785323fcf855785cf01d80307257c",
+                  "tests/test_it8613_dxp8800pro.c": "27490be7eb05d85ea1044bb3f9785842164a0e5fa12b8fb9a3f21fab9fea483e",
+                  "tests/test_thermal_curve.c": "94d305e8d7e3102c7d6847343c36319e26d76388dd7edd6e8e4f936024b06721"
+                }
+              },
+              "changed_payloads": [
+                "usr/local/bin/ugreen_leds_cli"
+              ],
+              "id": "idx6012-led-20261106",
+              "led_build": {
+                "binary_sha256": "54b55bb3ac5a059b745ca9f11749e80bba0be4474ab9ecf8bd4a3b6f36451a16",
+                "patch_sha256": "7c923f16e72f1095c21382b804467a590cf20cc9984b0778adb562fc75849ee4",
+                "patches": {
+                  "dxp2800-em26.patch": "7c923f16e72f1095c21382b804467a590cf20cc9984b0778adb562fc75849ee4",
+                  "idx6012-block.patch": "73fbec5666cc2d0e31f49fae1b774f308d0f28649d93622a29215c7efee2f09b"
+                },
+                "physical_validation": "not-performed",
+                "source_revision": "aff7991ee58709ad34b5afbc2787f0d21300368d",
+                "source_sha256": {
+                  "App.Native.UGreenLED/app/server/vendor/ugreen_leds_controller/patches/dxp2800-em26.patch": "7c923f16e72f1095c21382b804467a590cf20cc9984b0778adb562fc75849ee4",
+                  "App.Native.UGreenLED/app/server/vendor/ugreen_leds_controller/patches/idx6012-block.patch": "73fbec5666cc2d0e31f49fae1b774f308d0f28649d93622a29215c7efee2f09b",
+                  "scripts/build_led_compat.py": "91dc413b8b3df94c00b460e51fb60803e524d41ce71bd5f41dd1372ea087b6f4",
+                  "tests/test_dxp2800_led.c": "c877253e8514cc1d787936d1544d297fc96ff48179dc6c93aca2914385d208bb",
+                  "tests/test_idx6012_led.c": "621ddb2f231174c147f8a594ce8b470194f13f5af05da4b6565a8cfbd95d8ca6"
+                },
+                "tests": {
+                  "test-dxp2800-led": "b15ab542c76e8fc67ec76eda11224f3811899526cafd8707e3f8a77421eaf9f2",
+                  "test-idx6012-led": "73490d026b8f0ace03d951593219b612e78d16f8737b4ebf00526d74bde69a88"
+                }
+              },
+              "physical_validation": "not-performed",
+              "runtime_tests": {
+                "binary_sha256": "54b55bb3ac5a059b745ca9f11749e80bba0be4474ab9ecf8bd4a3b6f36451a16",
+                "cases": 12,
+                "physical_validation": "not-performed",
+                "test_source_sha256": "5c9b3ec642624c1d3c737e1fc4d18a8f3bbc2e03aa2d7ab8b15123481c522d59"
+              },
+              "source_sha256": {
+                "App.Native.UGreenLED/app/server/vendor/ugreen_leds_controller/patches/dxp2800-em26.patch": "7c923f16e72f1095c21382b804467a590cf20cc9984b0778adb562fc75849ee4",
+                "App.Native.UGreenLED/app/server/vendor/ugreen_leds_controller/patches/idx6012-block.patch": "73fbec5666cc2d0e31f49fae1b774f308d0f28649d93622a29215c7efee2f09b",
+                "docs/IDX6012_LED_SUPPORT.md": "40c44beb543f587b8d9746f9eecdc9c73f9ab5379c1e3e885b86c6aca3b40683",
+                "scripts/build_led_compat.py": "91dc413b8b3df94c00b460e51fb60803e524d41ce71bd5f41dd1372ea087b6f4",
+                "scripts/prepare_idx6012.py": "03127d145128e0064d210f19ca5045bf2ed7ce2e516a6a3c8c2270b922f9f221",
+                "tests/run_idx6012_runtime.py": "5c9b3ec642624c1d3c737e1fc4d18a8f3bbc2e03aa2d7ab8b15123481c522d59",
+                "tests/test_dxp2800_led.c": "c877253e8514cc1d787936d1544d297fc96ff48179dc6c93aca2914385d208bb",
+                "tests/test_idx6012_disk_mapping.sh": "19d6b1663ab4076b4999453ec02ef655462d3d605bc40083de22ec5d2190e263",
+                "tests/test_idx6012_led.c": "621ddb2f231174c147f8a594ce8b470194f13f5af05da4b6565a8cfbd95d8ca6",
+                "tests/test_idx6012_profile.sh": "1dd965afba831493c0f354d6947538716b533b80ce53bf8ca768a2db7addc04d",
+                "tests/test_idx6012_startup.sh": "7cd94266cd7442d9e47734ac09fef635b4d4680bb4146c8fb1c43a68e6989205"
+              }
+            },
+            "changed_payloads": [
+              "usr/local/bin/ugreen_leds_cli"
+            ],
+            "id": "dxp4800gt-led-20261114",
+            "led_build": {
+              "binary_sha256": "39f74bb27e21e1d14a5f41d7ad2a640684a2aaaed0c9406176bf6cf36104a5b2",
+              "patch_sha256": "7c923f16e72f1095c21382b804467a590cf20cc9984b0778adb562fc75849ee4",
+              "patches": {
+                "dxp2800-em26.patch": "7c923f16e72f1095c21382b804467a590cf20cc9984b0778adb562fc75849ee4",
+                "dxp4800gt-multibus.patch": "fae05e4003edf6e76e37d5cb8b2b98fd411b1f7d4220b32544d87380cb5a0660",
+                "idx6012-block.patch": "73fbec5666cc2d0e31f49fae1b774f308d0f28649d93622a29215c7efee2f09b"
+              },
+              "physical_validation": "not-performed",
+              "source_revision": "aff7991ee58709ad34b5afbc2787f0d21300368d",
+              "source_sha256": {
+                "App.Native.UGreenLED/app/server/vendor/ugreen_leds_controller/patches/dxp2800-em26.patch": "7c923f16e72f1095c21382b804467a590cf20cc9984b0778adb562fc75849ee4",
+                "App.Native.UGreenLED/app/server/vendor/ugreen_leds_controller/patches/dxp4800gt-multibus.patch": "fae05e4003edf6e76e37d5cb8b2b98fd411b1f7d4220b32544d87380cb5a0660",
+                "App.Native.UGreenLED/app/server/vendor/ugreen_leds_controller/patches/idx6012-block.patch": "73fbec5666cc2d0e31f49fae1b774f308d0f28649d93622a29215c7efee2f09b",
+                "scripts/build_led_compat.py": "0e19f93f2f865ee8798decd27f40bf70c5df305ccf7653b8fc2dc20d17753b40",
+                "tests/test_dxp2800_led.c": "c877253e8514cc1d787936d1544d297fc96ff48179dc6c93aca2914385d208bb",
+                "tests/test_dxp4800gt_bus.c": "c9e26695f9651a7dfc2fe244e4a65397f12670e79b6848e081af78a5dea0b986",
+                "tests/test_dxp4800gt_discovery.c": "4eee9666d90aa13a354eba464ea01d54d72b800ef5f13a9f75a72ffad4615420",
+                "tests/test_idx6012_led.c": "621ddb2f231174c147f8a594ce8b470194f13f5af05da4b6565a8cfbd95d8ca6"
+              },
+              "tests": {
+                "test-dxp2800-led": "0c52224034360bd2e228ab78856be151c66269c69dcd436b054dfd6f583f252b",
+                "test-dxp4800gt-bus": "535c7df85fc37c34e7a03d6be8670f6e115c671a8e80394b4ce108dd8f6e0eee",
+                "test-dxp4800gt-discovery": "ab06ed893fb7973f36201cf71c3186a69bb15aed9759602058694ec8b1a46357",
+                "test-idx6012-led": "20ef64461098818b647c0e2851b15cddfe94220e831a7520298982a9d22cbc10"
+              }
+            },
+            "physical_validation": "not-performed",
+            "runtime_tests": {
+              "binary_sha256": "39f74bb27e21e1d14a5f41d7ad2a640684a2aaaed0c9406176bf6cf36104a5b2",
+              "cases": 14,
+              "physical_validation": "not-performed",
+              "test_source_sha256": "277b6b05de909c1ebab7be6c943d0be7fcb48045a246df54ed1507696773f7ba"
+            },
+            "source_sha256": {
+              "App.Native.UGreenLED/app/server/vendor/ugreen_leds_controller/patches/dxp2800-em26.patch": "7c923f16e72f1095c21382b804467a590cf20cc9984b0778adb562fc75849ee4",
+              "App.Native.UGreenLED/app/server/vendor/ugreen_leds_controller/patches/dxp4800gt-multibus.patch": "fae05e4003edf6e76e37d5cb8b2b98fd411b1f7d4220b32544d87380cb5a0660",
+              "App.Native.UGreenLED/app/server/vendor/ugreen_leds_controller/patches/idx6012-block.patch": "73fbec5666cc2d0e31f49fae1b774f308d0f28649d93622a29215c7efee2f09b",
+              "docs/DXP4800GT_LED_SUPPORT.md": "898728ab9553ddc47983a3186738ab8287b054f00f2951da9b4968e47a3ab622",
+              "scripts/build_led_compat.py": "0e19f93f2f865ee8798decd27f40bf70c5df305ccf7653b8fc2dc20d17753b40",
+              "scripts/prepare_dxp4800gt.py": "c65b117525fb5ab2f918617a6af7c0b231df0d2bb33ef90ac472e9eccc615b31",
+              "tests/run_dxp4800gt_runtime.py": "277b6b05de909c1ebab7be6c943d0be7fcb48045a246df54ed1507696773f7ba",
+              "tests/test_dxp2800_led.c": "c877253e8514cc1d787936d1544d297fc96ff48179dc6c93aca2914385d208bb",
+              "tests/test_dxp4800gt_bus.c": "c9e26695f9651a7dfc2fe244e4a65397f12670e79b6848e081af78a5dea0b986",
+              "tests/test_dxp4800gt_discovery.c": "4eee9666d90aa13a354eba464ea01d54d72b800ef5f13a9f75a72ffad4615420",
+              "tests/test_idx6012_led.c": "621ddb2f231174c147f8a594ce8b470194f13f5af05da4b6565a8cfbd95d8ca6"
+            }
+          },
+          "changed_payloads": [
+            "usr/local/bin/ugreenctl",
+            "usr/local/bin/ugreenctl-fand",
+            "usr/local/lib/ugreenctl/models/dxp4800gt.so"
+          ],
+          "id": "dxp4800gt-hardware-20261114",
+          "led_binary_sha256": "39f74bb27e21e1d14a5f41d7ad2a640684a2aaaed0c9406176bf6cf36104a5b2",
+          "physical_validation": "not-performed",
+          "source_sha256": {
+            "CMakeLists.txt": "18f994b597a168d855def18507e52b66ddedbb675ee08fab9e5198aa5762cfa3",
+            "application/scripts/prepare_dxp4800gt_hardware.py": "56ad153a62c082af8ff32d282caccf983b590b1f669055a46d79a16b456a33aa",
+            "application/tests/run_dxp4800gt_hardware_runtime.py": "8fe91764fc5f008e26702e4e7ca0e7ffadb933f710777b4c01772899ccd2f606",
+            "application/tests/test_dxp4800gt_hardware_runtime.c": "614170fc353c70398afa502c75cadff4efc06397bf141622494c656b7253dea3",
+            "application/tests/test_dxp4800gt_profile.sh": "637e0b9637dcf329c980c10235e92317738a3cdfa16b30eb5c649ccb23fa1416",
+            "core/fan_daemon.c": "8a0e9b685508e61556366bf495729e1b1abddc157e59ea9ffd9796ea8dcb8a41",
+            "core/hardware_cli.c": "1fbe0e7d982c1b74119fe93ea31c8154c9233d67de3939755aa78c53668b1a08",
+            "core/hardware_cli.h": "796e8d85655000a3a8c17dda073f585cb202432b8a386a68bae56dccef54f86e",
+            "core/identity.c": "443c12f5b4d45b4ba257a3522a0b4714dd558b24c50420ab696f7b57cec410d5",
+            "core/identity.h": "fd0d59a63ee133e8da1ed86568b75b13b9fb9997daa2a69343d36091dc2de8cb",
+            "core/led_compat_main.c": "825237a8aa848cc2bbb8f11f89994accf9f44692b06b94e7262aa83ede38d065",
+            "core/led_daemon_main.c": "e9add637221c5613573ccb61d85ad4d3979e46723e8a266118d065f4778dd33f",
+            "core/loader.c": "f17141b1bfd9ef3da69173e5fae7bf8723bf077016dfe9c05908c10e5a2a4270",
+            "core/loader.h": "f73eb103132a4b8fff2d5c175ec9ad64f391a0ce8fc8a65c5b9ddcf35abfd5dc",
+            "core/main.c": "2898bc006e22bbbe172efc5c2392acef4e97f45dd568b2f452b319a92e4d82b2",
+            "core/wake_cli.c": "1970888aada0a5b38b952256736cf9460896b6278f4b901e64c12e10691d9d6a",
+            "core/wake_cli.h": "0a3abc62659f63a696898a3940ae480d9bafa14581a9943c2602db3265663b22",
+            "docs/DXP4800GT_HARDWARE_AUDIT.zh-CN.md": "79b37165667485c98b9ae00528fd9a442cb8a8e2d6977c6d0784aaa1ddc6fa7c",
+            "docs/FAN_CURVE.md": "f7ed0363a5912e7879d2900ba44182d5115127a27840cb2f61a5fd52e7795342",
+            "docs/HARDWARE_SUPPORT.md": "04402cbaedfce115235dd3dabd79d303d7c3e4f37be37fb7f3cd2a70adef89aa",
+            "ec/ec.c": "811d4d762f5511882bd3421824a32c2d960b9404a8de10307156a20c9f0c59be",
+            "ec/ec.h": "f3b3b4505ef59a5b336df7dea9736b16d1dff3dd832a439367d4df5adba683ec",
+            "ec/it55_dxp4800gt.c": "5e790f0235fc9969448fb21a3f1366748f2a8a5f6e38f295a7b7217063665f8a",
+            "ec/it55_dxp4800gt.h": "dc048378945b1e6b533e44a3cab3bc382660daa8d6cae865543ef191a0e1cad5",
+            "fan/it8613_direct.c": "41fe99d15b4a9aa5f90113bd40e4bddf60ce5a5c09ab5dbb3ecf33c0f766518d",
+            "fan/it8613_direct.h": "ff5d58c9cc6c4f4eefa7c2dece07a9399cae892ee8e6783725834c8c5a6fa97d",
+            "fan/it8613_dx4600.c": "714055011a935c287aa836e0af349f3b7294d1d3f416182e7f6cc967d3d149a0",
+            "fan/it8613_dx4600.h": "b6fcc4d7092575fd1d02b178f09988e5db0ace24ee3ba3672c4641f7478688c6",
+            "fan/it8613_dxp2800.c": "510b715b587d01a2cbe41235000720fec9fdea4b95597b447c522f008d38d1fa",
+            "fan/it8613_dxp2800.h": "d2b1b71d706292854e6635fde7bd78505b0d86b23c716ce96717ca05cbc42fc1",
+            "fan/it8613_dxp4800.c": "fc4043eb01e07dccf38e097c97364acd5d46b618c0d8358902b25e386ba7f64a",
+            "fan/it8613_dxp4800.h": "c62d04e303724c7afa1c9dbb8ba9a0775ce7325cc2a3e1521d8c7d30251922f7",
+            "fan/it8613_dxp4800s.c": "b56aec50d354bda172f255d62af2459b0ded2963ad8f90a1c9d947127e5ed238",
+            "fan/it8613_dxp4800s.h": "2e10bf015ccbd2d2ff09623eb0171d8031df98d2fa8ff18bd163dc8fc5e3d8f6",
+            "fan/it8613_dxp480t.c": "e7bfd6c97122d855ea2e32cecf6620199113df7d23efd698e0656d05839c186a",
+            "fan/it8613_dxp480t.h": "85ea7c08feff331048d1c64b8da56e7e444936e5aea06633c309451a997fed51",
+            "fan/it8613_dxp6800.c": "0b3201d7fb3a6b98bcfb8c27c3d4ab28957ad8b5bc85c47b158d6431504b0360",
+            "fan/it8613_dxp6800.h": "3425e168792d72c06e78561ffda2dc9a604a2856e922390bbd5ea4799af8a4ed",
+            "fan/it8613_dxp6800plus.c": "d0bd947b85422dac259538dd95429cb487f10f9adc883e5ace8f79ed05c1afb6",
+            "fan/it8613_dxp6800plus.h": "7c9620d5253bce9dba2b8d46aad373b661366a661c26b4fdf2853eba914defa3",
+            "fan/it8613_dxp6800pro.c": "8e3f59737485abd13d67bf5ccf79843b2210bd409836bb3330e3c15bad2bb24d",
+            "fan/it8613_dxp6800pro.h": "3b9361cc4125ed2579afdc4509be7db7e2e64d45f12b0dd358dc898c3301d5d4",
+            "fan/it8613_dxp8800pro.c": "187e114dac01e57c8b282c7f69dd6304cfa5c688b0ce8670351b6ded208eb7b4",
+            "fan/it8613_dxp8800pro.h": "ab5aa4c010b9669ee8d58e2bd138ba586aff6fabc4345dbfa0b221b1635ffc4c",
+            "fan/it8613_fan.c": "3f8e7f6470fe68adaba283714c953652ce12865321b1349af7097f68f8253941",
+            "fan/it8613_fan.h": "3c7029b0722582c939f529d5d4d3e0ac21460eb1679a33fc36c04d8ef20a9a80",
+            "fan/it8613_hwmon.c": "c86d241b4380c4722662e6c7c2a40d9a91b7808dd8f6b9aa10065846520a6444",
+            "fan/it8613_hwmon.h": "6dad251e862864bf3e3cc14024c3dcb4ca05922c43c63648735ed9ca7e35f571",
+            "fan/thermal_curve.c": "80d1fbf5bed59dae4467248827d4f70e59bbdc418ec6a38ccc314f3fd7139c73",
+            "fan/thermal_curve.h": "44cbbf068e535cc4ba57ef0f0eefb2544277a8f78c1c74395850f9c4f4317fad",
+            "include/ugreenctl.h": "2386e31f48eae6ccbcee458efe00f3ce3da82a3b2797c719314fb5325ff8bc47",
+            "models/compatibility.json": "427e8432939bafb96c587151bdeec957247c37d9f87f38d41f0d177985df79bf",
+            "models/dx4600.c": "47eeb6bf0b218fe09680d75d38fcbfa463cd638de118db6ee3379fd92fdbb021",
+            "models/dxp2800.c": "5448ceb42cfafa3a341a4c3842f48efc35e9bdf7a5c21e699ca39b7064f43105",
+            "models/dxp4800.c": "ba0680629d3305bec955b81f47e5fffa826c2ecb680cb979179ae85408e16ad4",
+            "models/dxp4800gt-fan-curve.json": "ebb7be859b1c5e52d4bc2d02fe54c27144cab34b8ca0d5cb0f2faec08aaa52e1",
+            "models/dxp4800gt.c": "db4db163f72804d1892ada1de06b87b84abb86ac0a7041c63c4334f437c721c8",
+            "models/dxp4800plus.c": "eff2f126026b7f829b6c8fefccdd1eeb144ad4be3bfc75ab98d600c69929b6fd",
+            "models/dxp4800s.c": "ff11cbb2a1d9cbf0138f50a4f5083df146852e7d77dd354764bb800be6138285",
+            "models/dxp480tplus.c": "0b38b337aa0b8ed3789164b56e9ad9a404677b68ac2ca6914ebad4a0b8335c01",
+            "models/dxp6800.c": "43f71710e6ee54d6ad6598862ae7bab0cd793c6f41716f88625f5e5488906098",
+            "models/dxp6800plus.c": "b0f591f1c22b39920e4b4e47a715ae57127bcfd62fdaaa23e732ae89536a2f8b",
+            "models/dxp6800pro.c": "e7cd4fb68e3512580b674ec2890f50b922456ab941c7b5c4f25efc116c2bb48a",
+            "models/dxp8800pro.c": "d55234522f7e1ba6d30b679895c901382b662fdf2411fab2eb25e650344347b6",
+            "models/led_profiles.c": "02dcb86901dac47a83a87b2a70c0f3c4e53d5baa3fcc8d4af1110f570dd63768",
+            "models/unsupported_model.c": "bb704a4da12e5b732e78f41fd2af5d5c3af228bf879b8ee0d42a22bd9aff3dd1",
+            "models/wake_profiles.c": "1149077075cc3872271748f7754300274d335b0670dd145030b6be2521a94e73",
+            "models/wake_profiles.h": "02b801f314cc68f2e78b579b17e93e29878f36d425eebfd2e0bde046fb37687e",
+            "network/wol.c": "ce5d28e00bc62539d3f1c5d44860144f7670b1a116dfb8ec4e37e532a367cb25",
+            "network/wol.h": "177086414f688a505d73233a3824f853f0f69b806854ae5e95e1d46b3afea117",
+            "network/wol_dx4600.c": "f7b0861f2adc212bd45665ccf6c3cdd642d91b16e5042c5ab0557f77b839725b",
+            "network/wol_dx4600.h": "fd37804b616f5aa9a50fd0af922f623f732fc0032a7d24862120df780af2de12",
+            "network/wol_dxp4800.c": "f7bc7de16b2d220278a53bb1751c862a194d108ab59c1ce24bedb92ee8a9b932",
+            "network/wol_dxp4800.h": "6bb22b5f1a56ce0d3046386e63c06a6e1a4e81b4149503452d425bf2a15ef35a",
+            "network/wol_dxp4800plus.c": "843869c03e5d1330a75e19bbb671ac844ea7e01fae3e87acc6ab9172ce872cad",
+            "network/wol_dxp4800plus.h": "fcccb4ba7dc9e8df6bfc6d506ab759d605e35c174b1818a61eb2ad15442860f5",
+            "network/wol_dxp4800s.c": "223048c23774bc4346804b0777d3a0d7158c3319ac711631e3af34c6267661ce",
+            "network/wol_dxp4800s.h": "4e30c1dfe82a7c57d0a6be0cead31ad610e63f515562ab52da206c9f6ee28587",
+            "network/wol_dxp480tplus.c": "e5722a63046a2fa28961532d730a6b075455a4b05fa94f24d32a56eccb51ac2e",
+            "network/wol_dxp480tplus.h": "750be485ee647223df9e6792fd7d76d6600a2c7164a8d322a986bce3c9f0997a",
+            "network/wol_dxp6800plus.c": "d730ce75d142d9e7d7166f132f52dc074ac07d08745a8dd133ad439c6b15d6b3",
+            "network/wol_dxp6800plus.h": "11c1b6157357ee7b2754cfc39005576c6af70f21a3bfe9e1bc97b3d95747ecc6",
+            "network/wol_dxp6800pro.c": "2ad82d5840ce24895e9276d178f86e8cc135f5f4774b337bbc7dcdf37792cf18",
+            "network/wol_dxp6800pro.h": "310c42dc18ad72f6b685cd9d7c7d9942276eb78fc229c9a1d29e399e7313b273",
+            "network/wol_interface.c": "b4bf1e7ef19d76b42706bea34208654e2f7987d2fa608e0ce3587ace5476165d",
+            "network/wol_interface.h": "868d538f221448dd369c9f015f25eb69c46e67066164beb88648631947bc8dca",
+            "power/it8613_power.c": "c4d84371d63970956902c1abd61b3eb11738a4422622832d5c1c8ac29e5cb9cb",
+            "power/it8613_power.h": "2d98734ee0060851107a4b02cdd258af93a4985781ce93b39936ae84801bd7bc",
+            "power/rtc_wake.c": "4be23bcf82c220c36b26aeae214c9ebe58d923d4ebb57caba0b1a0cc8e4732ed",
+            "power/rtc_wake.h": "083580c05791a0b9582942125deb4ee7efdd69988d398253211d05eecba96f3a",
+            "scripts/package-almighty.py": "dea6391a3faf84116d99f48c62fa46950c589dc0a4126e3f018d01488c71c361",
+            "superio/it86x.c": "1ba98fe8d572e9ad9fc967f0b6ed455664365bf4c3784e9f37a8506fa2d09273",
+            "superio/it86x.h": "ef943ce952062a259d8b7d4f7da7bb1fa2f83c6c2dfa1bfb7271274f0531606b",
+            "superio/it86x_unavailable.c": "6e13008410b530b4222a8586f03f97f79b43a87b6bff091217f23f2b28d0ed37",
+            "tests/test_it55_dxp4800gt.c": "83c22250c86429559dd88fe45a181b97e8bfe8f83e0d82ebcc34e10eb869850b",
+            "tests/test_thermal_curve.c": "db394a38add560db600c8e75c7386e1f6e6bc1d4785e8b36c059cbe8fb334cb1"
+          }
+        },
+        "changed_payloads": [
+          "usr/local/bin/ugreenctl",
+          "usr/local/bin/ugreenctl-fand",
+          "usr/local/lib/ugreenctl/models/idx6012.so"
+        ],
+        "id": "idx6012-hardware-20261115",
+        "led_binary_sha256": "39f74bb27e21e1d14a5f41d7ad2a640684a2aaaed0c9406176bf6cf36104a5b2",
+        "physical_validation": "fan PWM 150 and auto restore verified 2026-11-15",
+        "source_sha256": {
+          "CMakeLists.txt": "69d0c1b2a5bf744f345e0008adcef29ddbf52ffbdeef576a331d633a5df3d417",
+          "application/scripts/prepare_idx6012_hardware.py": "0d95ec8a797107176d1eb42fbaf3342747399baf02918f5ef5d8b17c5968e3f2",
+          "application/tests/test_idx6012_fan_profile.sh": "12d49fb75d52d072e976191d3db0326a13ea2b4fd1207852189ee98f1fd8465e",
+          "core/fan_daemon.c": "fd7ef4fd809e99fb3172b8785437a88221b67ba8044bd23a89400c51eeb2610a",
+          "core/hardware_cli.c": "1fbe0e7d982c1b74119fe93ea31c8154c9233d67de3939755aa78c53668b1a08",
+          "core/hardware_cli.h": "796e8d85655000a3a8c17dda073f585cb202432b8a386a68bae56dccef54f86e",
+          "core/identity.c": "ddb1589d51b590c352bc196f989b1ce9c567409f5ad703ed7171d55816f212cf",
+          "core/identity.h": "219f443bb8de2eb7d2a275dc38a539b5010c146d6ec12b756076302c79794604",
+          "core/led_compat_main.c": "825237a8aa848cc2bbb8f11f89994accf9f44692b06b94e7262aa83ede38d065",
+          "core/led_daemon_main.c": "e9add637221c5613573ccb61d85ad4d3979e46723e8a266118d065f4778dd33f",
+          "core/loader.c": "f17141b1bfd9ef3da69173e5fae7bf8723bf077016dfe9c05908c10e5a2a4270",
+          "core/loader.h": "f73eb103132a4b8fff2d5c175ec9ad64f391a0ce8fc8a65c5b9ddcf35abfd5dc",
+          "core/main.c": "a3d9c050bcf0faa4e22733ec56fd6ef52f31444eeca07178e9e11253b61b7a11",
+          "core/wake_cli.c": "1970888aada0a5b38b952256736cf9460896b6278f4b901e64c12e10691d9d6a",
+          "core/wake_cli.h": "0a3abc62659f63a696898a3940ae480d9bafa14581a9943c2602db3265663b22",
+          "docs/FAN_CURVE.md": "7cd944598b3bf248c625dd4351d59c77e772a473aef5a6a41356649fbb77c73f",
+          "docs/HARDWARE_SUPPORT.md": "04402cbaedfce115235dd3dabd79d303d7c3e4f37be37fb7f3cd2a70adef89aa",
+          "docs/IDX6012_EC_INTAKE.zh-CN.md": "b9d0374c7500e1c9a5441b2788096e9f47ff92c7536b01be5e846a5487833f46",
+          "ec/ec.c": "811d4d762f5511882bd3421824a32c2d960b9404a8de10307156a20c9f0c59be",
+          "ec/ec.h": "f3b3b4505ef59a5b336df7dea9736b16d1dff3dd832a439367d4df5adba683ec",
+          "ec/idx6012.c": "4957528f7de4838edfb3366444283c8f0ce45b6de3e8153ab12969c38baf35aa",
+          "ec/idx6012.h": "6185e93e66c512f0127039ed697dbfd506adea544f4f744f2a01842024dffbbc",
+          "ec/it55_dxp4800gt.c": "5e790f0235fc9969448fb21a3f1366748f2a8a5f6e38f295a7b7217063665f8a",
+          "ec/it55_dxp4800gt.h": "dc048378945b1e6b533e44a3cab3bc382660daa8d6cae865543ef191a0e1cad5",
+          "fan/it8613_direct.c": "41fe99d15b4a9aa5f90113bd40e4bddf60ce5a5c09ab5dbb3ecf33c0f766518d",
+          "fan/it8613_direct.h": "ff5d58c9cc6c4f4eefa7c2dece07a9399cae892ee8e6783725834c8c5a6fa97d",
+          "fan/it8613_dx4600.c": "714055011a935c287aa836e0af349f3b7294d1d3f416182e7f6cc967d3d149a0",
+          "fan/it8613_dx4600.h": "b6fcc4d7092575fd1d02b178f09988e5db0ace24ee3ba3672c4641f7478688c6",
+          "fan/it8613_dxp2800.c": "510b715b587d01a2cbe41235000720fec9fdea4b95597b447c522f008d38d1fa",
+          "fan/it8613_dxp2800.h": "d2b1b71d706292854e6635fde7bd78505b0d86b23c716ce96717ca05cbc42fc1",
+          "fan/it8613_dxp4800.c": "fc4043eb01e07dccf38e097c97364acd5d46b618c0d8358902b25e386ba7f64a",
+          "fan/it8613_dxp4800.h": "c62d04e303724c7afa1c9dbb8ba9a0775ce7325cc2a3e1521d8c7d30251922f7",
+          "fan/it8613_dxp4800s.c": "b56aec50d354bda172f255d62af2459b0ded2963ad8f90a1c9d947127e5ed238",
+          "fan/it8613_dxp4800s.h": "2e10bf015ccbd2d2ff09623eb0171d8031df98d2fa8ff18bd163dc8fc5e3d8f6",
+          "fan/it8613_dxp480t.c": "e7bfd6c97122d855ea2e32cecf6620199113df7d23efd698e0656d05839c186a",
+          "fan/it8613_dxp480t.h": "85ea7c08feff331048d1c64b8da56e7e444936e5aea06633c309451a997fed51",
+          "fan/it8613_dxp6800.c": "0b3201d7fb3a6b98bcfb8c27c3d4ab28957ad8b5bc85c47b158d6431504b0360",
+          "fan/it8613_dxp6800.h": "3425e168792d72c06e78561ffda2dc9a604a2856e922390bbd5ea4799af8a4ed",
+          "fan/it8613_dxp6800plus.c": "d0bd947b85422dac259538dd95429cb487f10f9adc883e5ace8f79ed05c1afb6",
+          "fan/it8613_dxp6800plus.h": "7c9620d5253bce9dba2b8d46aad373b661366a661c26b4fdf2853eba914defa3",
+          "fan/it8613_dxp6800pro.c": "8e3f59737485abd13d67bf5ccf79843b2210bd409836bb3330e3c15bad2bb24d",
+          "fan/it8613_dxp6800pro.h": "3b9361cc4125ed2579afdc4509be7db7e2e64d45f12b0dd358dc898c3301d5d4",
+          "fan/it8613_dxp8800pro.c": "187e114dac01e57c8b282c7f69dd6304cfa5c688b0ce8670351b6ded208eb7b4",
+          "fan/it8613_dxp8800pro.h": "ab5aa4c010b9669ee8d58e2bd138ba586aff6fabc4345dbfa0b221b1635ffc4c",
+          "fan/it8613_fan.c": "3f8e7f6470fe68adaba283714c953652ce12865321b1349af7097f68f8253941",
+          "fan/it8613_fan.h": "3c7029b0722582c939f529d5d4d3e0ac21460eb1679a33fc36c04d8ef20a9a80",
+          "fan/it8613_hwmon.c": "c86d241b4380c4722662e6c7c2a40d9a91b7808dd8f6b9aa10065846520a6444",
+          "fan/it8613_hwmon.h": "6dad251e862864bf3e3cc14024c3dcb4ca05922c43c63648735ed9ca7e35f571",
+          "fan/thermal_curve.c": "0b3e034484c1046bd6ec85a296369f985861ad0d3ead20b682a7c1f678492f82",
+          "fan/thermal_curve.h": "44cbbf068e535cc4ba57ef0f0eefb2544277a8f78c1c74395850f9c4f4317fad",
+          "include/ugreenctl.h": "2386e31f48eae6ccbcee458efe00f3ce3da82a3b2797c719314fb5325ff8bc47",
+          "models/compatibility.json": "7db0359de0e8c027abcec2069272c5302bb83f803daaa1414b3892bc298e3c81",
+          "models/dx4600.c": "47eeb6bf0b218fe09680d75d38fcbfa463cd638de118db6ee3379fd92fdbb021",
+          "models/dxp2800.c": "5448ceb42cfafa3a341a4c3842f48efc35e9bdf7a5c21e699ca39b7064f43105",
+          "models/dxp4800.c": "ba0680629d3305bec955b81f47e5fffa826c2ecb680cb979179ae85408e16ad4",
+          "models/dxp4800gt.c": "db4db163f72804d1892ada1de06b87b84abb86ac0a7041c63c4334f437c721c8",
+          "models/dxp4800plus.c": "eff2f126026b7f829b6c8fefccdd1eeb144ad4be3bfc75ab98d600c69929b6fd",
+          "models/dxp4800s.c": "ff11cbb2a1d9cbf0138f50a4f5083df146852e7d77dd354764bb800be6138285",
+          "models/dxp480tplus.c": "0b38b337aa0b8ed3789164b56e9ad9a404677b68ac2ca6914ebad4a0b8335c01",
+          "models/dxp6800.c": "43f71710e6ee54d6ad6598862ae7bab0cd793c6f41716f88625f5e5488906098",
+          "models/dxp6800plus.c": "b0f591f1c22b39920e4b4e47a715ae57127bcfd62fdaaa23e732ae89536a2f8b",
+          "models/dxp6800pro.c": "e7cd4fb68e3512580b674ec2890f50b922456ab941c7b5c4f25efc116c2bb48a",
+          "models/dxp8800pro.c": "d55234522f7e1ba6d30b679895c901382b662fdf2411fab2eb25e650344347b6",
+          "models/idx6012.c": "6bf69c9b8f35f525e03b917c6ef55660653480ad213e783ee68eb02453cf62a3",
+          "models/led_profiles.c": "02dcb86901dac47a83a87b2a70c0f3c4e53d5baa3fcc8d4af1110f570dd63768",
+          "models/unsupported_model.c": "bb704a4da12e5b732e78f41fd2af5d5c3af228bf879b8ee0d42a22bd9aff3dd1",
+          "models/wake_profiles.c": "786888af36ad28eccddb654c6ecbac76a66bcd916e7862e25749ea00a2ab8067",
+          "models/wake_profiles.h": "02b801f314cc68f2e78b579b17e93e29878f36d425eebfd2e0bde046fb37687e",
+          "network/wol.c": "ce5d28e00bc62539d3f1c5d44860144f7670b1a116dfb8ec4e37e532a367cb25",
+          "network/wol.h": "177086414f688a505d73233a3824f853f0f69b806854ae5e95e1d46b3afea117",
+          "network/wol_dx4600.c": "f7b0861f2adc212bd45665ccf6c3cdd642d91b16e5042c5ab0557f77b839725b",
+          "network/wol_dx4600.h": "fd37804b616f5aa9a50fd0af922f623f732fc0032a7d24862120df780af2de12",
+          "network/wol_dxp4800.c": "f7bc7de16b2d220278a53bb1751c862a194d108ab59c1ce24bedb92ee8a9b932",
+          "network/wol_dxp4800.h": "6bb22b5f1a56ce0d3046386e63c06a6e1a4e81b4149503452d425bf2a15ef35a",
+          "network/wol_dxp4800plus.c": "843869c03e5d1330a75e19bbb671ac844ea7e01fae3e87acc6ab9172ce872cad",
+          "network/wol_dxp4800plus.h": "fcccb4ba7dc9e8df6bfc6d506ab759d605e35c174b1818a61eb2ad15442860f5",
+          "network/wol_dxp4800s.c": "223048c23774bc4346804b0777d3a0d7158c3319ac711631e3af34c6267661ce",
+          "network/wol_dxp4800s.h": "4e30c1dfe82a7c57d0a6be0cead31ad610e63f515562ab52da206c9f6ee28587",
+          "network/wol_dxp480tplus.c": "e5722a63046a2fa28961532d730a6b075455a4b05fa94f24d32a56eccb51ac2e",
+          "network/wol_dxp480tplus.h": "750be485ee647223df9e6792fd7d76d6600a2c7164a8d322a986bce3c9f0997a",
+          "network/wol_dxp6800plus.c": "d730ce75d142d9e7d7166f132f52dc074ac07d08745a8dd133ad439c6b15d6b3",
+          "network/wol_dxp6800plus.h": "11c1b6157357ee7b2754cfc39005576c6af70f21a3bfe9e1bc97b3d95747ecc6",
+          "network/wol_dxp6800pro.c": "2ad82d5840ce24895e9276d178f86e8cc135f5f4774b337bbc7dcdf37792cf18",
+          "network/wol_dxp6800pro.h": "310c42dc18ad72f6b685cd9d7c7d9942276eb78fc229c9a1d29e399e7313b273",
+          "network/wol_interface.c": "b4bf1e7ef19d76b42706bea34208654e2f7987d2fa608e0ce3587ace5476165d",
+          "network/wol_interface.h": "868d538f221448dd369c9f015f25eb69c46e67066164beb88648631947bc8dca",
+          "power/idx6012_power.c": "8916fa8a96c6ba444aaa8f9faf3c58510e7771b5b88bdb0cb4a580314a22347d",
+          "power/idx6012_power.h": "cd3a121edc72e0cab7ecb0b775bd39127039bd7e0e118d4b5a8e2a2ddeceb6c9",
+          "power/it8613_power.c": "c4d84371d63970956902c1abd61b3eb11738a4422622832d5c1c8ac29e5cb9cb",
+          "power/it8613_power.h": "2d98734ee0060851107a4b02cdd258af93a4985781ce93b39936ae84801bd7bc",
+          "power/rtc_wake.c": "4be23bcf82c220c36b26aeae214c9ebe58d923d4ebb57caba0b1a0cc8e4732ed",
+          "power/rtc_wake.h": "083580c05791a0b9582942125deb4ee7efdd69988d398253211d05eecba96f3a",
+          "scripts/package-almighty.py": "197dd29aca2caf2c67f8dfcbe6a99a224fd92b1859ec28b6a8bfb7839f294dc2",
+          "scripts/probe_idx6012_ec.py": "7716f8ab7ed78931ea2595b3b194b2290832d50b7c0aaa486fa7e14bdcf2cbe6",
+          "superio/it86x.c": "1ba98fe8d572e9ad9fc967f0b6ed455664365bf4c3784e9f37a8506fa2d09273",
+          "superio/it86x.h": "ef943ce952062a259d8b7d4f7da7bb1fa2f83c6c2dfa1bfb7271274f0531606b",
+          "superio/it86x_unavailable.c": "6e13008410b530b4222a8586f03f97f79b43a87b6bff091217f23f2b28d0ed37",
+          "tests/test_idx6012.c": "1d64e56626b5e08600cccacfb276834e395a828a4f7b82ce44df53798426095c",
+          "tests/test_idx6012_curve.c": "cf4428a6640a6631a6c03b001f10cec41faacf59b48c7c749cb357b10817aeb2",
+          "tests/test_idx6012_power.c": "29db9a4225b70c34ac86746d2587a5c12701adc3661584d2cd4610ebd5d2bc1c",
+          "tests/test_wake_profiles.c": "7de0c59668803f6db9accb474d8f055e2491bfd74ffbc4b64c1a21d1de99a5dc"
+        }
+      },
+      "changed_payloads": [
+        "usr/local/bin/ugreen_leds_cli",
+        "usr/local/lib/ugreenctl/models/dxp4800gt.so"
+      ],
+      "id": "dxp4800gt-diagnostics-20261115",
+      "led_build": {
+        "binary_sha256": "aa65811ffcccb80b903429601e97150012f0b962b02631be8d30a124e0aab120",
+        "patch_sha256": "7c923f16e72f1095c21382b804467a590cf20cc9984b0778adb562fc75849ee4",
+        "patches": {
+          "dxp2800-em26.patch": "7c923f16e72f1095c21382b804467a590cf20cc9984b0778adb562fc75849ee4",
+          "dxp4800gt-multibus.patch": "17adc9a0089932d325efe090e9f6a5c07bc623cfc4081a2e3f8012188f225780",
+          "idx6012-block.patch": "73fbec5666cc2d0e31f49fae1b774f308d0f28649d93622a29215c7efee2f09b"
+        },
+        "physical_validation": "not-performed",
+        "source_revision": "aff7991ee58709ad34b5afbc2787f0d21300368d",
+        "source_sha256": {
+          "App.Native.UGreenLED/app/server/vendor/ugreen_leds_controller/patches/dxp2800-em26.patch": "7c923f16e72f1095c21382b804467a590cf20cc9984b0778adb562fc75849ee4",
+          "App.Native.UGreenLED/app/server/vendor/ugreen_leds_controller/patches/dxp4800gt-multibus.patch": "17adc9a0089932d325efe090e9f6a5c07bc623cfc4081a2e3f8012188f225780",
+          "App.Native.UGreenLED/app/server/vendor/ugreen_leds_controller/patches/idx6012-block.patch": "73fbec5666cc2d0e31f49fae1b774f308d0f28649d93622a29215c7efee2f09b",
+          "scripts/build_led_compat.py": "0e19f93f2f865ee8798decd27f40bf70c5df305ccf7653b8fc2dc20d17753b40",
+          "tests/test_dxp2800_led.c": "c877253e8514cc1d787936d1544d297fc96ff48179dc6c93aca2914385d208bb",
+          "tests/test_dxp4800gt_bus.c": "c9e26695f9651a7dfc2fe244e4a65397f12670e79b6848e081af78a5dea0b986",
+          "tests/test_dxp4800gt_discovery.c": "4eee9666d90aa13a354eba464ea01d54d72b800ef5f13a9f75a72ffad4615420",
+          "tests/test_idx6012_led.c": "621ddb2f231174c147f8a594ce8b470194f13f5af05da4b6565a8cfbd95d8ca6"
+        },
+        "tests": {
+          "test-dxp2800-led": "548805fe21755ffd054fe6e6647db8ff423b3a328fcc6c076a9db46bbca3a9a2",
+          "test-dxp4800gt-bus": "535c7df85fc37c34e7a03d6be8670f6e115c671a8e80394b4ce108dd8f6e0eee",
+          "test-dxp4800gt-discovery": "22b8dc1cfcb1d9c15ad7a50cce1b712da37738b15b6563c3165a5e3bb108d6ab",
+          "test-idx6012-led": "0ef18b3e37dade14f577f17dea0cf56adb3d85e1d31becdceeddd5e83d72096e"
+        }
+      },
+      "physical_validation": "not-performed",
+      "runtime_tests": {
+        "binary_sha256": "aa65811ffcccb80b903429601e97150012f0b962b02631be8d30a124e0aab120",
+        "cases": 14,
+        "physical_validation": "not-performed",
+        "test_source_sha256": "277b6b05de909c1ebab7be6c943d0be7fcb48045a246df54ed1507696773f7ba"
+      },
+      "source_sha256": {
+        "App.Native.UGreenLED/app/server/vendor/ugreen_leds_controller/patches/dxp2800-em26.patch": "7c923f16e72f1095c21382b804467a590cf20cc9984b0778adb562fc75849ee4",
+        "App.Native.UGreenLED/app/server/vendor/ugreen_leds_controller/patches/dxp4800gt-multibus.patch": "17adc9a0089932d325efe090e9f6a5c07bc623cfc4081a2e3f8012188f225780",
+        "App.Native.UGreenLED/app/server/vendor/ugreen_leds_controller/patches/idx6012-block.patch": "73fbec5666cc2d0e31f49fae1b774f308d0f28649d93622a29215c7efee2f09b",
+        "docs/DXP4800GT_LED_SUPPORT.md": "898728ab9553ddc47983a3186738ab8287b054f00f2951da9b4968e47a3ab622",
+        "scripts/build_led_compat.py": "0e19f93f2f865ee8798decd27f40bf70c5df305ccf7653b8fc2dc20d17753b40",
+        "scripts/prepare_dxp4800gt_diagnostics.py": "ebe664875a5393e18dfe21563b6e870ae5f2ae495afe994cf6f098aac02b50fe",
+        "tests/run_dxp4800gt_runtime.py": "277b6b05de909c1ebab7be6c943d0be7fcb48045a246df54ed1507696773f7ba",
+        "tests/test_dxp2800_led.c": "c877253e8514cc1d787936d1544d297fc96ff48179dc6c93aca2914385d208bb",
+        "tests/test_dxp4800gt_bus.c": "c9e26695f9651a7dfc2fe244e4a65397f12670e79b6848e081af78a5dea0b986",
+        "tests/test_dxp4800gt_discovery.c": "4eee9666d90aa13a354eba464ea01d54d72b800ef5f13a9f75a72ffad4615420",
+        "tests/test_idx6012_led.c": "621ddb2f231174c147f8a594ce8b470194f13f5af05da4b6565a8cfbd95d8ca6",
+        "upstream/ec/it55_dxp4800gt.c": "bb62f902b3cab7a13f3c8843a1409098804afae9617f848bed3f756bdce56554",
+        "upstream/ec/it55_dxp4800gt.h": "dc048378945b1e6b533e44a3cab3bc382660daa8d6cae865543ef191a0e1cad5",
+        "upstream/tests/test_it55_dxp4800gt.c": "5a7f2ddc101607f1b7ff3bab04c0bdaf1501998d3a381c85070fd6f9077ae119"
+      }
     },
-    "x86_64": {
-      "path": "firmware-inbox/work/almighty-n76-direct-20261027/accepted-ctest-x86_64.log",
-      "sha256": "3b6cc4d0c4d9151a9e967abfdf351c9bf2f58235f9f4d815c8c018fed52d37ac"
+    "changed_payloads": [
+      "usr/local/bin/ugreen_leds_cli",
+      "usr/local/bin/ugreenctl",
+      "usr/local/lib/ugreenctl/models/dxp4800gt.so"
+    ],
+    "id": "dxp4800gt-fnos-20261116",
+    "led_build": {
+      "binary_sha256": "797cc7fdb2994eabdd78932d2e04434013cbf3a43a43475a16210105e0795b5e",
+      "patch_sha256": "7c923f16e72f1095c21382b804467a590cf20cc9984b0778adb562fc75849ee4",
+      "patches": {
+        "dxp2800-em26.patch": "7c923f16e72f1095c21382b804467a590cf20cc9984b0778adb562fc75849ee4",
+        "dxp4800gt-multibus.patch": "4b3994de46ba8c2f9d7da617795786f698621ac6510bef59bd767670e3f4916e",
+        "idx6012-block.patch": "73fbec5666cc2d0e31f49fae1b774f308d0f28649d93622a29215c7efee2f09b",
+        "mcu-i2c-resilience.patch": "d596476fe50b2d283ea6ae8ee8ec9e5a0b7085926286dd1d1548d539b8c079e8"
+      },
+      "physical_validation": "not-performed",
+      "source_revision": "aff7991ee58709ad34b5afbc2787f0d21300368d",
+      "source_sha256": {
+        "App.Native.UGreenLED/app/server/vendor/ugreen_leds_controller/patches/dxp2800-em26.patch": "7c923f16e72f1095c21382b804467a590cf20cc9984b0778adb562fc75849ee4",
+        "App.Native.UGreenLED/app/server/vendor/ugreen_leds_controller/patches/dxp4800gt-multibus.patch": "4b3994de46ba8c2f9d7da617795786f698621ac6510bef59bd767670e3f4916e",
+        "App.Native.UGreenLED/app/server/vendor/ugreen_leds_controller/patches/idx6012-block.patch": "73fbec5666cc2d0e31f49fae1b774f308d0f28649d93622a29215c7efee2f09b",
+        "App.Native.UGreenLED/app/server/vendor/ugreen_leds_controller/patches/mcu-i2c-resilience.patch": "d596476fe50b2d283ea6ae8ee8ec9e5a0b7085926286dd1d1548d539b8c079e8",
+        "scripts/build_led_compat.py": "8e46dcb14bee7c4163935ba7762b1bc2d1082b3504b7d3de2829b983141f2367",
+        "tests/test_dxp2800_led.c": "c877253e8514cc1d787936d1544d297fc96ff48179dc6c93aca2914385d208bb",
+        "tests/test_dxp4800gt_bus.c": "21866dbe16f1d6b05c9bd39145d7f6791952c37f5e463c138f0484d9b93efbd5",
+        "tests/test_dxp4800gt_discovery.c": "09882cd4b62c59aed7e459c00a1adb5cd4319ea72f00335cae0953d77d9b6e00",
+        "tests/test_idx6012_led.c": "621ddb2f231174c147f8a594ce8b470194f13f5af05da4b6565a8cfbd95d8ca6",
+        "tests/test_led_mcu_resilience.c": "8f9ac5eff457ba861988c44fd470a630e83e09684343b1534a5d64aebf3a2620"
+      },
+      "tests": {
+        "test-dxp2800-led": "ecca13ae33c38ffe346cc4213a6f4d9ee09b458b1572edf6eceb7f5ba05c38f0",
+        "test-dxp4800gt-bus": "73db9e13aa8dda4f2264331a027c6da29621ab5e03784f281ceb94bd46f4e95a",
+        "test-dxp4800gt-discovery": "50db1814c3f15f3d165ca57b10f35423cd3f7a6a1bb782993645118c11216c70",
+        "test-idx6012-led": "76a3f7f77431dbab0a0fd256f928aec354066e7c563e02ed8147a1ba74cea2e5",
+        "test-led-mcu-resilience": "612681ec3ea7c4752018eb3cc2e7bb16510fd194f2d47ac842df437281d1c5e5"
+      }
+    },
+    "physical_validation": "not-performed",
+    "runtime_tests": {
+      "binary_sha256": "797cc7fdb2994eabdd78932d2e04434013cbf3a43a43475a16210105e0795b5e",
+      "cases": 18,
+      "physical_validation": "not-performed",
+      "test_source_sha256": "09a1ec2d0a4f41e9a749888ac379cec1db15589eb132cbd2f6a9af335210bd72"
+    },
+    "source_sha256": {
+      "App.Native.UGreenLED/app/server/vendor/ugreen_leds_controller/patches/dxp2800-em26.patch": "7c923f16e72f1095c21382b804467a590cf20cc9984b0778adb562fc75849ee4",
+      "App.Native.UGreenLED/app/server/vendor/ugreen_leds_controller/patches/dxp4800gt-multibus.patch": "4b3994de46ba8c2f9d7da617795786f698621ac6510bef59bd767670e3f4916e",
+      "App.Native.UGreenLED/app/server/vendor/ugreen_leds_controller/patches/idx6012-block.patch": "73fbec5666cc2d0e31f49fae1b774f308d0f28649d93622a29215c7efee2f09b",
+      "App.Native.UGreenLED/app/server/vendor/ugreen_leds_controller/patches/mcu-i2c-resilience.patch": "d596476fe50b2d283ea6ae8ee8ec9e5a0b7085926286dd1d1548d539b8c079e8",
+      "docs/DXP4800GT_LED_SUPPORT.md": "34b69c7c602ec04c2c3034eb3dc9d58d64e564a21d3fe9ffc45106c5e1dd0a95",
+      "scripts/build_led_compat.py": "8e46dcb14bee7c4163935ba7762b1bc2d1082b3504b7d3de2829b983141f2367",
+      "scripts/prepare_dxp4800gt_diagnostics.py": "8d1e6d2c23d6127ba55357b547cfcbfc5410493ee8d9a944db950fc4285d4ccc",
+      "tests/run_dxp4800gt_runtime.py": "09a1ec2d0a4f41e9a749888ac379cec1db15589eb132cbd2f6a9af335210bd72",
+      "tests/test_dxp2800_led.c": "c877253e8514cc1d787936d1544d297fc96ff48179dc6c93aca2914385d208bb",
+      "tests/test_dxp4800gt_bus.c": "21866dbe16f1d6b05c9bd39145d7f6791952c37f5e463c138f0484d9b93efbd5",
+      "tests/test_dxp4800gt_discovery.c": "09882cd4b62c59aed7e459c00a1adb5cd4319ea72f00335cae0953d77d9b6e00",
+      "tests/test_idx6012_led.c": "621ddb2f231174c147f8a594ce8b470194f13f5af05da4b6565a8cfbd95d8ca6",
+      "tests/test_led_mcu_resilience.c": "8f9ac5eff457ba861988c44fd470a630e83e09684343b1534a5d64aebf3a2620",
+      "upstream/core/hardware_cli.c": "894e7056e5384b6ebffb0b3cc3306c63b3898f55fb3e819aa5a0f9962dad08fe",
+      "upstream/core/hardware_cli.h": "cd4f1aa124bea7fc064e5e70837880d9c6458991d538dfcf4ecbb3f5f299d41d",
+      "upstream/core/main.c": "22111de06d53a85186b48d707a3c320323b2adee94e58eca417983bb662bc4fe",
+      "upstream/disk/disk.c": "2b7359754c44deb114a5ece64dbed4a7bbdf91cdeef0f9940bf5919c026ab520",
+      "upstream/disk/firmware_profiles.c": "7a8c0f6c2b0278031199d3a25d043c102d8a470ec4cba662eb442866e2477b0c",
+      "upstream/docs/ALL_MODELS_DISK_EVIDENCE.zh-CN.md": "f25f3a2f104b573f753fee4fb60498ccd0303d07539590d04227e331f39b66df",
+      "upstream/docs/DXP4800GT_HARDWARE_AUDIT.zh-CN.md": "0801f16f3a22d40f4205daf0a61ccfb0847c53b6229d18a5b59f9ccb5864093c",
+      "upstream/ec/it55_dxp4800gt.c": "b42f0e86594eee6f6ae22a76f41526f14e93005216f9687b879b70e47674fbb9",
+      "upstream/ec/it55_dxp4800gt.h": "8f3b520323a18ae48177d0934fe27853c23ab4c2e799e31e0c25752da99062f2",
+      "upstream/tests/test_disk_mapping.c": "ff171106f1e51713d18ff71ada867f08221d3b7bd51a6424aeddd82d9bb3e2bd",
+      "upstream/tests/test_hardware_cli.c": "377a02777e53bcf486cff74f17590ccc1fcae22c2d4edbe513f294f703895e5a",
+      "upstream/tests/test_it55_dxp4800gt.c": "00c6951a01a1f70f22535ac03c087f2b41ef01630088c52970d72db90e71d35a"
     }
   },
-  "install_prefix": "/usr/local",
   "package": "ugreenctl-almighty-0.2.0-linux-x86_64-preview",
   "physical_validation": "not performed",
   "plugin_directory": "/usr/local/lib/ugreenctl/models",
@@ -1209,8 +4906,7 @@
     "tools/toolchains/zigcc-linux-x86_64.cmd": "ea441062b2ad3cfabe6de58940b9c5a64843e4e853b80a1c06629962d2b100f8",
     "tools/toolchains/zigranlib.cmd": "527cc7b2ddc9aab899b2e026ae3ccb4d515eb66b3f240daa7ea883ebeceb7a30"
   },
-  "status": "experimental-incomplete",
+  "status": "experimental-local-dxp4800gt-fnos",
   "verification_complete": false,
-  "verification_sha256": "76aa71383cebdc048aac074ea5ad95e99fde4ec5db468f51bfff8cd4fee4de49",
   "version": "0.2.0"
 }

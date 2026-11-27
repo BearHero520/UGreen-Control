@@ -131,6 +131,10 @@ class PolicyTests(unittest.TestCase):
         runtime.verify_payload(ROOT / "app")
         self.assertEqual((ROOT / "app/server/bin/ugreen_leds_cli").read_bytes(),
                          (ROOT.parent / "App.Native.UGreenLED/app/server/bin/ugreen_leds_cli").read_bytes())
+        canonical_compat = ROOT.parent / "App.Native.UGreenLED/app/server/bin/ugreen_leds_cli.compat"
+        if canonical_compat.is_file():
+            self.assertEqual((ROOT / "app/server/bin/ugreen_leds_cli.compat").read_bytes(),
+                             canonical_compat.read_bytes())
 
     def test_payload_tampering_is_rejected(self):
         with tempfile.TemporaryDirectory() as directory:

@@ -1,0 +1,140 @@
+--- a/led/led.c
++++ b/led/led.c
+@@ -7,6 +7,7 @@
+ #include "led/led_service.h"
+ #include "led/led_cs201x.h"
+ #include "core/identity.h"
++#include "led/led_gt_bus.h"
+ 
+ #include <ctype.h>
+ #include <dirent.h>
+@@ -464,6 +465,43 @@
+     return 0;
+ }
+ 
++static int gt_open_candidate(struct ugreenctl_led_session *session, unsigned int bus)
++{
++    struct stat st;
++    unsigned long functions = 0;
++    int result;
++    session->bus_number = bus;
++    (void)snprintf(session->bus, sizeof(session->bus), "/dev/i2c-%u", bus);
++    result = verify_session_identity(session, NULL, 0);
++    if (!result) result = session->io.owners(session->opaque);
++    if (result < 0) return result;
++    session->fd = open(session->bus, O_RDWR | O_CLOEXEC | O_NOFOLLOW);
++    if (session->fd < 0) return -errno;
++    if (fstat(session->fd, &st) < 0) return -errno;
++    if (!S_ISCHR(st.st_mode) || major(st.st_rdev) != 89 || minor(st.st_rdev) != bus)
++        return -ENODEV;
++    if (ioctl(session->fd, I2C_FUNCS, &functions) < 0) return -errno;
++    if (!(functions & I2C_FUNC_SMBUS_READ_WORD_DATA)) return -EOPNOTSUPP;
++    if (ioctl(session->fd, I2C_SLAVE, 0x3a) < 0) return -errno;
++    return 0;
++}
++
++static int gt_probe_candidate(void *opaque, unsigned int bus)
++{
++    struct ugreenctl_led_session *session = opaque;
++    uint16_t chip = 0;
++    int result = gt_open_candidate(session, bus);
++    if (!result) {
++        result = session->io.read_chip_id(session->opaque, &chip);
++        /* Only a target NACK or a returned nonmatching ID means absent.
++         * Timeouts, permission errors and busy ownership remain fatal. */
++        if (result == -ENXIO || result == -EREMOTEIO) result = 0;
++        else if (!result) result = chip == 0xc5b2 ? 1 : 0;
++    }
++    if (session->fd >= 0) { close(session->fd); session->fd = -1; }
++    return result;
++}
++
+ /* Only enumerate the adapter family documented by each current profile.
+  * Do not probe arbitrary devices, issue SMBus quick commands or guess bus 1. */
+ static int find_bus(struct ugreenctl_led_session *session, char *error, size_t error_size)
+@@ -471,6 +509,10 @@
+     DIR *directory = opendir("/sys/class/i2c-dev");
+     struct dirent *entry;
+     unsigned int found = 0;
++    unsigned int candidates[32], selected = 0;
++    size_t candidate_count = 0;
++    bool gt = !strcmp(session->identity.product_name, "DXP4800 GT") &&
++              !strcmp(session->identity.profile->id, "dxp4800gt-block");
+     int result = 0;
+     if (directory == NULL)
+         return fail(error, error_size, -errno,
+@@ -486,6 +528,12 @@
+             result = read_text(path, name, sizeof(name));
+         }
+         if (result < 0) break;
++        if (gt) {
++            if (!gt_bus_name(name)) continue;
++            if (candidate_count == 32) { result = -EOVERFLOW; break; }
++            candidates[candidate_count++] = number;
++            continue;
++        }
+         if (session->identity.profile->bus_prefix == NULL ||
+             strncmp(name, session->identity.profile->bus_prefix,
+                     strlen(session->identity.profile->bus_prefix)) != 0) continue;
+@@ -495,12 +543,23 @@
+     }
+     (void)closedir(directory);
+     if (result < 0) return fail(error, error_size, result, "cannot inspect I2C adapters: %s", strerror(-result));
+-    if (found != 1) return fail(error, error_size, -ENOTSUP,
++    if (gt) {
++        uint16_t chip = 0;
++        result = gt_select_bus(candidates, candidate_count, gt_probe_candidate, session, &selected);
++        if (result < 0) return fail(error, error_size, result,
++            "DXP4800 GT LED discovery requires one verified 0x3a/0xc5b2 controller (last candidate %s): %s", session->bus, strerror(-result));
++        result = gt_open_candidate(session, selected);
++        if (!result) result = session->io.read_chip_id(session->opaque, &chip);
++        if (!result && chip != 0xc5b2) result = -ESTALE;
++        if (result < 0) return fail(error, error_size, result, "DXP4800 GT selected controller changed or is unavailable");
++        /* Common capability checks below still gate all protocol operations. */
++    }
++    if (!gt && found != 1) return fail(error, error_size, -ENOTSUP,
+                                "expected exactly one documented '%s' adapter, found %u",
+                                session->identity.profile->bus_prefix, found);
+     result = session->io.owners(session->opaque);
+     if (result < 0) return fail(error, error_size, result, "LED controller has a driver/process owner or ownership is unreadable");
+-    session->fd = open(session->bus, O_RDWR | O_CLOEXEC | O_NOFOLLOW);
++    if (!gt) session->fd = open(session->bus, O_RDWR | O_CLOEXEC | O_NOFOLLOW);
+     if (session->fd < 0) return fail(error, error_size, -errno, "cannot open %s: %s", session->bus, strerror(errno));
+     {
+         unsigned long functions = 0;
+--- /dev/null
++++ b/led/led_gt_bus.h
+@@ -0,0 +1,33 @@
++/* DXP4800 GT: stock leds-mcu 1.21.1.0016 reads 0x3a:0x5a
++ * across SMBus/Synopsys adapters and expects 0xc5b2. No data writes.
++ * This application-owned CLI extension deliberately rejects ambiguity. */
++#ifndef LED_GT_BUS_H
++#define LED_GT_BUS_H
++#include <errno.h>
++#include <stddef.h>
++#include <string.h>
++
++static int gt_bus_name(const char *name)
++{
++    return !strncmp(name, "SMBus PIIX4 adapter ", 20) ||
++           !strcmp(name, "Synopsys DesignWare I2C adapter");
++}
++
++/* Callback: 1 = verified ID, 0 = absent/wrong ID, negative = fatal.
++ * Inaccessible/busy candidates prevent proving uniqueness and fail closed. */
++static int gt_select_bus(const unsigned int *buses, size_t count,
++                         int (*probe_bus)(void *, unsigned int), void *opaque,
++                         unsigned int *selected)
++{
++    unsigned int matches = 0, winner = 0;
++    for (size_t i = 0; i < count; ++i) {
++        int result = probe_bus(opaque, buses[i]);
++        if (result < 0) return result;
++        if (result > 0) { ++matches; winner = buses[i]; }
++    }
++    if (!matches) return -ENODEV;
++    if (matches != 1) return -ENOTUNIQ;
++    *selected = winner;
++    return 0;
++}
++#endif

@@ -6,6 +6,7 @@
 *.json text eol=lf
 app/server/bin/ugreenctl* binary
 app/server/bin/ugreen_leds_cli binary
+app/server/bin/ugreen_leds_cli.compat binary
 app/server/lib/ugreenctl/models/*.so binary
 app/server/lib/ugreenctl/release-manifest.json -text
 app/server/lib/ugreenctl/upstream/** -text -whitespace

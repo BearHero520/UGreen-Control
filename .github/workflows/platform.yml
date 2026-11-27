@@ -41,7 +41,7 @@ jobs:
           set -euo pipefail
           sudo mkdir -p "$RUNNER_TEMP/native-results"
           native_args=(--rm --user 0:0 --cap-drop ALL --cap-add CHOWN --cap-add DAC_OVERRIDE --cap-add SETUID --cap-add SETGID --cap-add KILL --security-opt no-new-privileges:true)
-          native_args+=(--mount "type=bind,src=$PWD/dist/UGreenToolbox-3.0.1-1005-x86_64.spk,dst=/spk/input.spk,readonly")
+          native_args+=(--mount "type=bind,src=$PWD/dist/UGreenToolbox-3.0.1-1006-x86_64.spk,dst=/spk/input.spk,readonly")
           native_args+=(--mount "type=bind,src=$PWD/linux/tests/native_spk_smoke.py,dst=/lab.py,readonly")
           native_args+=(--mount "type=bind,src=$RUNNER_TEMP/native-results,dst=/results")
           for name in llled-hardware.lock ugreenctl-led-mcu.lock ugreenctl-it8613.lock ugreenctl-fand.lock ugreenctl-wol.lock ugreenctl-rtc.lock; do

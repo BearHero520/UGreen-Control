@@ -80,6 +80,6 @@ DSM / TrueNAS 的实际 ACL、服务框架、机型检测和每种硬件写入�
 
 ## 来源与许可证
 
-保留 `SOURCE.json` 中的迁移来源记录。硬件载荷继续锁定 Almighty
-`almighty-20261027-n76-direct`，不修改 `server/bin` 与上游插件、文档的原始字节。
+保留 `SOURCE.json` 中的迁移来源记录。硬件载荷同步至与标准应用一致的固定发布版
+`local-dxp4800gt-fnos-20261116`（见 `scripts/hardware-release.json`），不修改 `server/bin` 与上游插件、文档的原始字节。
 应用采用 AGPL-3.0-only，第三方许可见 `LICENSE` 和 `app/server/lib/ugreenctl/upstream/`。

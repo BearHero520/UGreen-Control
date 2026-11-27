@@ -82,6 +82,10 @@ class SpkTests(unittest.TestCase):
         with tarfile.open(fileobj=io.BytesIO(self.package['native-payload.tgz']),mode='r:gz') as archive:
             cli=archive.extractfile('app/server/bin/ugreen_leds_cli').read()
             self.assertEqual(cli,(ROOT.parent/'App.Native.UGreenLED/app/server/bin/ugreen_leds_cli').read_bytes())
+            canonical_compat=ROOT.parent/'App.Native.UGreenLED/app/server/bin/ugreen_leds_cli.compat'
+            if canonical_compat.is_file():
+                compat=archive.extractfile('app/server/bin/ugreen_leds_cli.compat').read()
+                self.assertEqual(compat,canonical_compat.read_bytes())
             self.assertIn('app/server/native_runtime.py',archive.getnames())
             self.assertNotIn('Dockerfile',archive.getnames())
         self.assertNotIn(b'ContainerManager',self.members['INFO'][0])

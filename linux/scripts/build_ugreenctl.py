@@ -13,11 +13,12 @@ import tempfile
 import urllib.request
 
 ROOT = Path(__file__).resolve().parent.parent
+REPO_ROOT = ROOT.parent
 SERVER = ROOT / 'app/server'
-SOURCE = ROOT.parent.parent / 'UGREEN-NAS-Hardware'
+SOURCE = REPO_ROOT.parent / 'UGREEN-NAS-Hardware'
 LOCK_FILE = Path(__file__).with_name('hardware-release.json')
 PROGRAMS = ('ugreenctl', 'ugreenctl-fand', 'ugreen_leds_cli', 'ugreenctl-ledd')
-MODELS = ('dx4600', 'dxp2800', 'dxp4800', 'dxp4800plus', 'dxp4800s', 'dxp480tplus', 'dxp6800pro', 'dxp6800plus', 'dxp8800plus')
+MODELS = ('dx4600', 'dxp2800', 'dxp4800', 'dxp4800plus', 'dxp4800s', 'dxp480tplus', 'dxp6800pro', 'dxp6800plus', 'dxp6800', 'dxp8800plus', 'dxp8800pro', 'dxp4800gt', 'idx6012')
 
 def digest(data):
     return hashlib.sha256(data).hexdigest()
@@ -28,7 +29,7 @@ def checked(path, expected):
         raise ValueError(f'SHA256 mismatch: {path.name}')
     return data
 
-def validate_release(directory, lock):
+def validate_release(directory, lock, *, models=MODELS):
     checked(directory / lock['archive'], lock['archive_sha256'])
     raw = checked(directory / lock['manifest'], lock['manifest_sha256'])
     sums = checked(directory / 'SHA256SUMS', lock['checksums_sha256']).decode('ascii')
@@ -58,7 +59,7 @@ def validate_release(directory, lock):
         data = files.get(item['path'])
         if data is None or len(data) != item['size'] or digest(data) != item['sha256']:
             raise ValueError(f'Payload mismatch: {item["path"]}')
-    for name in [*(f'usr/local/bin/{p}' for p in PROGRAMS), *(f'usr/local/lib/ugreenctl/models/{m}.so' for m in MODELS)]:
+    for name in [*(f'usr/local/bin/{p}' for p in PROGRAMS), *(f'usr/local/lib/ugreenctl/models/{m}.so' for m in models)]:
         if name not in listed:
             raise ValueError(f'Missing required artifact: {name}')
         data = files[name]
@@ -90,7 +91,7 @@ def smoke_test(files, runtime_root):
             return result.stdout + result.stderr
         models = run('ugreenctl', ['--plugin-dir', '/work/models' if os.name == 'nt' else str(stage / 'models'), 'models'])
         if set(MODELS) - {line.split()[0] for line in models.splitlines() if line.strip()}:
-            raise ValueError('Not all nine plugins loaded')
+            raise ValueError('Not all required plugins loaded')
         if '--apply' not in run('ugreen_leds_cli', ['--help']):
             raise ValueError('Unexpected LED compatibility CLI')
         run('ugreenctl-ledd', ['--help'])
@@ -101,13 +102,29 @@ def install_release(manifest, files, lock, server=SERVER):
     record = {'branch': 'Almighty', 'revision': lock['commit'], 'release_tag': lock['tag'],
               'archive_sha256': lock['archive_sha256'], 'architecture': 'x86_64',
               'status': manifest['status'], 'files': {}}
+    if lock.get('source_type') in ('local-artifact', 'application-local-artifact'):
+        extension = manifest['local_extension']
+        record['base_revision'] = lock['commit']
+        record['revision'] = 'local-source-sha256:' + digest(
+            json.dumps(extension['source_sha256'], sort_keys=True).encode('utf-8'))
     for key in ('repository', 'source_type', 'artifact_commit', 'artifact_path'):
         if key in lock:
             record[key] = lock[key]
     payloads = {}
+    existing_cli = server / 'bin/ugreen_leds_cli'
+    compat_wrapper = b''
+    if existing_cli.is_file():
+        candidate = existing_cli.read_bytes().replace(b'\r\n', b'\n')
+        if candidate.startswith(b'#!/bin/bash\n# Compatibility entry point'):
+            compat_wrapper = candidate
     for program in PROGRAMS:
         payloads[f'bin/{program}'] = files[f'usr/local/bin/{program}']
         record['files'][program] = digest(payloads[f'bin/{program}'])
+    if compat_wrapper:
+        payloads['bin/ugreen_leds_cli.compat'] = payloads['bin/ugreen_leds_cli']
+        payloads['bin/ugreen_leds_cli'] = compat_wrapper
+        record['files']['ugreen_leds_cli'] = digest(compat_wrapper)
+        record['files']['ugreen_leds_cli.compat'] = digest(payloads['bin/ugreen_leds_cli.compat'])
     for model in MODELS:
         name = f'models/{model}.so'
         payloads[f'lib/ugreenctl/{name}'] = files[f'usr/local/lib/ugreenctl/{name}']
@@ -130,7 +147,14 @@ def install_release(manifest, files, lock, server=SERVER):
     (server / 'lib/ugreenctl/build-info.json').write_text(json.dumps(record, indent=2) + '\n', encoding='utf-8')
 
 def download_assets(lock, directory):
-    if lock.get('source_type') == 'git-artifact':
+    if lock.get('source_type') in ('local-artifact', 'application-local-artifact'):
+        owner = REPO_ROOT if lock['source_type'] == 'application-local-artifact' else SOURCE
+        source = (owner / lock['artifact_path']).resolve()
+        if not source.is_relative_to(owner.resolve()):
+            raise ValueError('Local artifact path escapes its owning repository')
+        for name in (lock['archive'], lock['manifest'], 'SHA256SUMS'):
+            (directory / name).write_bytes((source / name).read_bytes())
+    elif lock.get('source_type') == 'git-artifact':
         # Read immutable Git content, never the moving branch head.
         for name in (lock['archive'], lock['manifest'], 'SHA256SUMS'):
             url = f"https://raw.githubusercontent.com/{lock['repository']}/{lock['artifact_commit']}/{lock['artifact_path']}/{name}"
@@ -157,7 +181,7 @@ def main():
         smoke_test(files, args.runtime_root)
         if not args.check_only:
             install_release(manifest, files, lock)
-        print(f'Validated {lock["tag"]}: four programs, nine plugins, all manifest payload hashes')
+        print(f'Validated {lock["tag"]}: {len(PROGRAMS)} programs, {len(MODELS)} plugins, all manifest payload hashes')
 
 if __name__ == '__main__':
     main()

@@ -19,7 +19,7 @@ from portable_runtime import verify_payload
 
 PACKAGE = "UGreenToolbox"
 ACCOUNT = "ugreen-toolbox"
-VERSION = "3.0.1-1005"
+VERSION = "3.0.1-1006"
 DESKTOP_APP = "SYNO.SDS.App.UGreenToolbox.Instance"
 
 
@@ -39,6 +39,9 @@ def payload_files():
     canonical = REPOSITORY / "App.Native.UGreenLED/app/server/bin/ugreen_leds_cli"
     if canonical.read_bytes() != (ROOT / "app/server/bin/ugreen_leds_cli").read_bytes():
         raise ValueError("LED CLI must match the canonical application bundle")
+    canonical_compat = REPOSITORY / "App.Native.UGreenLED/app/server/bin/ugreen_leds_cli.compat"
+    if canonical_compat.is_file() and canonical_compat.read_bytes() != (ROOT / "app/server/bin/ugreen_leds_cli.compat").read_bytes():
+        raise ValueError("LED compatibility ELF must match the canonical application bundle")
     files = {}
     for path in (ROOT / "app").rglob("*"):
         if not path.is_file() or "__pycache__" in path.parts:

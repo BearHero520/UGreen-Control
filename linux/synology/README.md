@@ -36,7 +36,7 @@ root 日志服务在网页启动前校验安装请求并原子保存到 root 所
 python linux/scripts/build_spk.py
 ```
 
-产物和 SHA256 写入仓库根 `dist/`。SPK 的 DSM 版本号为 `3.0.1-1005`，应用内部版本保持独立。
+产物和 SHA256 写入仓库根 `dist/`。SPK 的 DSM 版本号为 `3.0.1-1006`，应用内部版本保持独立。
 默认使用 DSM 的 `/usr/bin/python3`（至少 3.8），不依赖额外 Python3 套件；
 官方 DSM 7.2.2-72806 / DS3622xs+ 固件中已确认该路径指向 root 所有的 Python 3.8.15。
 可在构建时通过 `--python` 指定受信任的绝对路径。
